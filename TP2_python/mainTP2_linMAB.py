@@ -33,11 +33,22 @@ nb_simu = 50 # you may want to change this!
 
 regret = np.zeros((nb_simu, T))
 norm_dist = np.zeros((nb_simu, T))
+alpha = 1 # not optimized value
+lambda_ = 1e-3 #neither
 
 for k in tqdm(range(nb_simu), desc="Simulating {}".format(alg_name)):
+    theta_hat = np.zeros(d)
+    phi = np.zeros((n_a, d, T))
+    estimated_mean_reward = np.zeros((n_a, T))
 
     for t in range(T):
-        a_t = ...  # algorithm picks the action
+        beta = np.zeros(n_a)
+        for a in range(n_a):
+            Z = phi[a, :, t-1]
+            RLS = np.linalg.inv(Z.T.dot(Z) + lambda_ * np.eye(d))
+            beta[a] = alpha*np.sqrt(phi[a].T.dot(RLS).dot(phi[a]))
+
+        a_t = np.argmin()...  # algorithm picks the action
         r_t = model.reward(a_t) # get the reward
 
         # do something (update algorithm)
