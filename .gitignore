@@ -1,3 +1,8 @@
 .ipynb_checkpoints/
 __pycache__/
 .DS_Store
+Icon?
+*.png
+*.pdf
+*.zip
+*.tex
