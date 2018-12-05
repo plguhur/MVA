@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from numpy.linalg import det, inv
+from numpy.linalg import det, inv, norm
 from matplotlib.collections import EllipseCollection
 from IPython.display import clear_output, display
 
@@ -28,20 +28,14 @@ class GaussianHiddenMarkovModel():
     # EXPECTATION STEP
     def compute_likelihood(self, observations):
         diff = observations[:, None, :] - self.means
-#         exponents = np.sum(
-#             np.einsum('nki,kij->nkj', diff, inv(self.covariances)) * diff, axis=-1)
+#         self.precisions = inv(self.covariances) # makes sense for me but does not work
         exponents = np.sum(
             np.einsum('nki,kij->nkj', diff, self.precisions) * diff, axis=-1)
         return np.exp(-0.5 * exponents) / np.sqrt(det(self.covariances) * (2 * np.pi) ** self.n_features)
         
-    def compute_alpha_beta(self, observations):
-        """
-        Implementation of the $\alpha$ and  $\beta$ recusions to estimate posterior distributions of hidden states
-        """        
+    def compute_alpha(self, observations, likelihoods):
         N = len(observations)
-        likelihoods = self.compute_likelihood(observations)
         alphas = np.zeros((N, self.K))
-#         betas = np.zeros((N, self.K))
         constants = np.zeros(N)
         
         alpha = self.pi * likelihoods[0]
@@ -52,28 +46,34 @@ class GaussianHiddenMarkovModel():
             constants[i+1] = alpha.sum()
             alphas[i+1] = alpha / alpha.sum()
 
-        beta = np.ones(self.K)
-        betas = [beta]
+        return alphas, constants
+    
+    def compute_beta(self, observations, likelihoods, constants):
+        N = len(observations)
+        betas = np.zeros((N, self.K))
+        i = N - 1
+        betas[i] = np.ones(self.K)
         for likelihood, constant in zip(likelihoods[-1:0:-1], constants[-1:0:-1]):
-            beta = self.transition_matrix @ (likelihood * betas[0]) / constant
-            betas.insert(0, beta)
+            betas[i-1] = self.transition_matrix @ (likelihood * betas[i]) / constant
+            i -= 1
 
-        return alphas, np.asarray(betas)
+        return betas
 
     
     def expectation_step(self, observations):        
         likelihoods = self.compute_likelihood(observations)
-        alphas, betas = self.compute_alpha_beta(observations)
+        alphas, constants = self.compute_alpha(observations, likelihoods)
+        betas = self.compute_beta(observations, likelihoods, constants)
         posterior = alphas * betas #/ np.sum(alphas*betas)
-        transition = self.transition_matrix * likelihoods[1:, None, :] * betas[1:, None, :] * alphas[:-1, :, None]   
-        return posterior, transition
+        unn_transition = self.transition_matrix * likelihoods[1:, None, :] * betas[1:, None, :] * alphas[:-1, :, None]   
+        self.transition_matrix = np.sum(unn_transition, axis=0) / np.sum(unn_transition, axis=(0, 2))
+        return posterior
     
     
     # MAXIMIZATION STEP 
-    def maximization_step(self, observations, posterior, proba_transition):
+    def maximization_step(self, observations, posterior):
         """ Maximization step given the observations, P(q_{t,:}/\theta), P(u_t|u_{t-1})"""
         self.pi = posterior[0] / np.sum(posterior[0])
-        self.transition_matrix = np.sum(proba_transition, axis=0) / np.sum(proba_transition, axis=(0, 2))
         Nk = np.sum(posterior, axis=0)
         self.means = (observations.T @ posterior / Nk).T
         diffs = observations[:, None, :] - self.means
@@ -109,8 +109,6 @@ class GaussianHiddenMarkovModel():
         plt.grid()
         plt.draw()
         if self.n > 0:
-#             loss = self.estimate_log_likelihood(observations, posteriors)
-#             plt.title(f"Gaussian HMM, loss {loss}")
             plt.title(f"Gaussian HMM, step {self.n}")
         self.n += 1
         display(plt.gcf(), display_id=True)
@@ -122,30 +120,23 @@ class GaussianHiddenMarkovModel():
         """
         perform EM algorithm with Gaussian emission probabilities
         """
-        theta_old = np.hstack((self.pi.ravel(), self.transition_matrix.ravel()))
+        theta_old = norm(self.transition_matrix)
         for i in range(n_iter):
-            posterior, transition = self.expectation_step(observations)
-            self.maximization_step(observations, posterior, transition)
+            posterior = self.expectation_step(observations)
+            self.maximization_step(observations, posterior)
             
             if plotting == "all" or (plotting == "last" and i == n_iter - 1):
                 self.plot(observations, posterior)
                 
-            theta = np.hstack((self.pi.ravel(), self.transition_matrix.ravel()))
-            if np.allclose(theta, theta_old):
+            theta = norm(self.transition_matrix)
+            if np.max(theta - theta_old) < 5e-2:
                 break
-            else:
-                theta = theta_old
-#             theta = np.hstack((self.pi.ravel(), self.transition_matrix.ravel()))
-#             if np.max(theta_old - theta) < 1e-2:
-#                 break
-#             theta_old = theta.copy()
-            
+            theta = theta_old
+
         if plotting == "last":
             self.plot(observations, posterior)
             
-        forwards, backwards = self.compute_alpha_beta(observations)
-        posteriors = np.asarray(forwards) * np.asarray(backwards)
-        return posteriors
+        return posterior
 
     
     
