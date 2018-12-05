@@ -117,8 +117,8 @@ def plot_em(X, pi, mu, var, colors, n=-1):
     plt.axis('equal')
     pzx = _em_expectation(X, pi, mu, var)
     c = pzx.T.dot(colors[:K])
-    for i in range(N):
-        plt.plot(X[i,0], X[i,1], ".", color=c[i])
+#     for i in range(N):
+    plt.scatter(X[:,0], X[:,1], color=c, s=1)
     for k in range(K):
         plt.plot(mu[k,0], mu[k,1], "k*")
         plot_ellipse(mu[k], var[k], ax,alpha=0.3, color=colors[k])
