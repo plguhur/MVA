@@ -1,0 +1,2334 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{A2\_GUHUR\_Pierre-Louis}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    Object recognition and computer vision 2018/2019
+
+Jean Ponce, Ivan Laptev, Cordelia Schmid and Josef Sivic
+
+Assignment 2: Neural networks
+
+Adapted from practicals from Nicolas le Roux, Andrea Vedaldi and Andrew
+Zisserman and Rob Fergus by Gul Varol and Ignacio Rocco
+
+Figure 1
+
+    \textbf{STUDENT}: Pierre-Louis Guhur
+
+\textbf{EMAIL}: pierre-louis.guhur@ens-paris-saclay.fr
+
+    \hypertarget{goal}{%
+\section{Goal}\label{goal}}
+
+    The goal of this assignment is to get basic knowledge and hands-on
+experience with training and using neural networks. In Part 1 of the
+assignment you will implement and experiment with the training and
+testing of a simple two layer fully-connected neural network, similar to
+the one depicted in Figure 1 above. In Part 2 you will learn about
+convolutional neural networks, their motivation, building blocks, and
+how they are trained. Finally, in part 3 you will train a CNN for
+classification using the CIFAR-10 dataset.
+
+    \hypertarget{part-1---training-a-fully-connected-neural-network}{%
+\section{Part 1 - Training a fully connected neural
+network}\label{part-1---training-a-fully-connected-neural-network}}
+
+    \hypertarget{getting-started}{%
+\subsection{Getting started}\label{getting-started}}
+
+    You will be working with a two layer neural network of the following
+form
+
+\begin{equation}
+H=\text{ReLU}(W_i X+B_i)\\
+Y=W_oH+B_o
+\tag{1}
+\end{equation}
+
+where \(X\) is the input, \(Y\) is the output, \(H\) is the hidden
+layer, and \(W_i\), \(W_o\), \(B_i\) and \(B_o\) are the network
+parameters that need to be trained. Here the subscripts \(i\) and \(o\)
+stand for the \emph{input} and \emph{output} layer, respectively. This
+network was also discussed in the class and is illustrated in the above
+figure where the input units are shown in green, the hidden units in
+blue and the output in yellow. This network is implemented in the
+function \texttt{nnet\_forward\_logloss}.
+
+You will train the parameters of the network from labelled training data
+\(\{X^n,Y^n\}\) where \(X^n\) are points in \(\mathbb{R}^2\) and
+\(Y^n\in\{-1,1\}\) are labels for each point. You will use the
+stochastic gradient descent algorithm discussed in the class to minimize
+the loss of the network on the training data given by
+
+\begin{equation}
+L=\sum_n s(Y^n,\bar{Y}(X^n))
+\tag{2}
+\end{equation}
+
+where \(Y^n\) is the target label for the n-th example and
+\(\bar{Y}(X^n)\) is the network's output for the n-th example \(X^n\).
+The skeleton of the training procedure is provided in the
+\texttt{train\_loop} function.
+
+We will use the logistic loss, which has the following form:
+
+\begin{equation}
+s(Y, \bar{Y}(X))=\log(1+\exp(-Y. \bar{Y}(X))
+\tag{3}
+\end{equation}
+
+where \(Y\) is the target label and \(\bar{Y}(X)\) is the output of the
+network for input example \(X\). With the logistic loss, the output of
+the network can be interpreted as a probability
+\(P(\text{class}=1|X) =\sigma(X)\) , where \(\sigma(X) =1/(1+\exp(-X))\)
+is the sigmoid function. Note also that
+\(P(\text{class}=-1|X)=1-P(\text{class}=1|X)\).
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}26}]:} \PY{k+kn}{from} \PY{n+nn}{IPython} \PY{k}{import} \PY{n}{display}
+         \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+         \PY{k+kn}{import} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{io} \PY{k}{as} \PY{n+nn}{sio}
+         \PY{c+c1}{\PYZsh{}\PYZpc{}matplotlib notebook}
+         
+         
+         \PY{k}{def} \PY{n+nf}{decision\PYZus{}boundary\PYZus{}nnet}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{p}{)}\PY{p}{:}
+             \PY{n}{x\PYZus{}min}\PY{p}{,} \PY{n}{x\PYZus{}max} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{4}
+             \PY{n}{y\PYZus{}min}\PY{p}{,} \PY{n}{y\PYZus{}max} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{3}
+             \PY{n}{xx}\PY{p}{,} \PY{n}{yy} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{meshgrid}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{x\PYZus{}min}\PY{p}{,} \PY{n}{x\PYZus{}max}\PY{p}{,} \PY{o}{.}\PY{l+m+mi}{05}\PY{p}{)}\PY{p}{,}
+                              \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{y\PYZus{}min}\PY{p}{,} \PY{n}{y\PYZus{}max}\PY{p}{,} \PY{o}{.}\PY{l+m+mi}{05}\PY{p}{)}\PY{p}{)}
+         
+             \PY{n}{XX} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{vstack}\PY{p}{(}\PY{p}{(}\PY{n}{xx}\PY{o}{.}\PY{n}{ravel}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{yy}\PY{o}{.}\PY{n}{ravel}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{T}
+             \PY{n}{input\PYZus{}hidden} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{XX}\PY{p}{,} \PY{n}{Wi}\PY{p}{)} \PY{o}{+} \PY{n}{bi}
+             \PY{n}{hidden} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{maximum}\PY{p}{(}\PY{n}{input\PYZus{}hidden}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}
+             \PY{n}{Z} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{hidden}\PY{p}{,} \PY{n}{Wo}\PY{p}{)} \PY{o}{+} \PY{n}{bo}
+         
+             \PY{c+c1}{\PYZsh{} Put the result into a color plot}
+             \PY{n}{Z} \PY{o}{=} \PY{n}{Z}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{n}{xx}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+             \PY{n}{plt}\PY{o}{.}\PY{n}{contourf}\PY{p}{(}\PY{n}{xx}\PY{p}{,} \PY{n}{yy}\PY{p}{,} \PY{n}{Z} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{n}{plt}\PY{o}{.}\PY{n}{cm}\PY{o}{.}\PY{n}{Paired}\PY{p}{)}
+             \PY{n}{plt}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{off}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+             \PY{c+c1}{\PYZsh{} Plot also the training points}
+             \PY{n}{plt}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{n}{X}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{n}{X}\PY{p}{[}\PY{p}{:}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{c}\PY{o}{=}\PY{n}{Y}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{winter}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+             \PY{n}{plt}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{4}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+             \PY{n}{plt}\PY{o}{.}\PY{n}{draw}\PY{p}{(}\PY{p}{)}
+         
+         
+         \PY{k}{def} \PY{n+nf}{sigm}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{:}
+             \PY{c+c1}{\PYZsh{} Returns the sigmoid of x.}
+             \PY{n}{small\PYZus{}x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{where}\PY{p}{(}\PY{n}{x} \PY{o}{\PYZlt{}} \PY{o}{\PYZhy{}}\PY{l+m+mi}{20}\PY{p}{)}  \PY{c+c1}{\PYZsh{} Avoid overflows.}
+             \PY{n}{sigm\PYZus{}x} \PY{o}{=} \PY{l+m+mi}{1}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+             \PY{k}{if} \PY{n+nb}{type}\PY{p}{(}\PY{n}{sigm\PYZus{}x}\PY{p}{)} \PY{o+ow}{is} \PY{n}{np}\PY{o}{.}\PY{n}{ndarray}\PY{p}{:}
+                 \PY{n}{sigm\PYZus{}x}\PY{p}{[}\PY{n}{small\PYZus{}x}\PY{p}{]} \PY{o}{=} \PY{l+m+mf}{0.0}
+             \PY{k}{return} \PY{n}{sigm\PYZus{}x}
+         
+         
+         \PY{k}{def} \PY{n+nf}{nnet\PYZus{}forward\PYZus{}logloss}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{p}{)}\PY{p}{:}
+             \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+         \PY{l+s+sd}{    Compute the output Po, Yo and the loss of the network for the input X}
+         \PY{l+s+sd}{    This is a 2 layer (1 hidden layer network)}
+         
+         \PY{l+s+sd}{    Input:}
+         \PY{l+s+sd}{        X ... (in R\PYZca{}2) set of input points, one per column}
+         \PY{l+s+sd}{        Y ... \PYZob{}\PYZhy{}1,1\PYZcb{} the target values for the set of points X}
+         \PY{l+s+sd}{        Wi, bi, Wo, bo ... parameters of the network}
+         
+         \PY{l+s+sd}{    Output: }
+         \PY{l+s+sd}{       Po ... probabilisitc output of the network P(class=1 | x) }
+         \PY{l+s+sd}{                  Po is in \PYZlt{}0 1\PYZgt{}. }
+         \PY{l+s+sd}{                  Note: P(class=\PYZhy{}1 | x ) = 1 \PYZhy{} Po}
+         \PY{l+s+sd}{       Yo ... output of the network Yo is in \PYZlt{}\PYZhy{}inf +inf\PYZgt{}}
+         \PY{l+s+sd}{       loss ... logistic loss of the network on examples X with ground target}
+         \PY{l+s+sd}{                    values Y in \PYZob{}\PYZhy{}1,1\PYZcb{}}
+         \PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+             \PY{c+c1}{\PYZsh{} Hidden layer}
+             \PY{n}{hidden} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{maximum}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Wi}\PY{p}{)} \PY{o}{+} \PY{n}{bi}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}
+             \PY{c+c1}{\PYZsh{} Output of the network}
+             \PY{n}{Yo} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{hidden}\PY{p}{,} \PY{n}{Wo}\PY{p}{)} \PY{o}{+} \PY{n}{bo}
+             \PY{c+c1}{\PYZsh{} Probabilistic output}
+             \PY{n}{Po} \PY{o}{=} \PY{n}{sigm}\PY{p}{(}\PY{n}{Yo}\PY{p}{)}
+             \PY{c+c1}{\PYZsh{} Logistic loss}
+             \PY{n}{loss} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{log}\PY{p}{(}\PY{l+m+mi}{1} \PY{o}{+} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(} \PY{o}{\PYZhy{}}\PY{n}{Y} \PY{o}{*} \PY{n}{Yo}\PY{p}{)}\PY{p}{)} 
+             \PY{k}{return} \PY{n}{Po}\PY{p}{,} \PY{n}{Yo}\PY{p}{,} \PY{n}{loss}
+         
+         
+         \PY{c+c1}{\PYZsh{} Load the training data}
+         \PY{c+c1}{\PYZsh{} !wget \PYZhy{}q http://www.di.ens.fr/willow/teaching/recvis18/assignment2/double\PYZus{}moon\PYZus{}train1000.mat}
+         \PY{n}{train\PYZus{}data} \PY{o}{=} \PY{n}{sio}\PY{o}{.}\PY{n}{loadmat}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./double\PYZus{}moon\PYZus{}train1000.mat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{squeeze\PYZus{}me}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n}{Xtr} \PY{o}{=} \PY{n}{train\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         \PY{n}{Ytr} \PY{o}{=} \PY{n}{train\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         \PY{c+c1}{\PYZsh{} Load the validation data}
+         \PY{c+c1}{\PYZsh{} !wget \PYZhy{}q http://www.di.ens.fr/willow/teaching/recvis18/assignment2/double\PYZus{}moon\PYZus{}val1000.mat}
+         \PY{n}{val\PYZus{}data} \PY{o}{=} \PY{n}{sio}\PY{o}{.}\PY{n}{loadmat}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{./double\PYZus{}moon\PYZus{}val1000.mat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{squeeze\PYZus{}me}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+         \PY{n}{Xval} \PY{o}{=} \PY{n}{val\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{X}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+         \PY{n}{Yval} \PY{o}{=} \PY{n}{val\PYZus{}data}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Y}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+\end{Verbatim}
+
+
+    \hypertarget{computing-gradients-of-the-loss-with-respect-to-network-parameters}{%
+\subsection{Computing gradients of the loss with respect to network
+parameters}\label{computing-gradients-of-the-loss-with-respect-to-network-parameters}}
+
+    \hypertarget{task-1.1}{%
+\subsubsection{:: TASK 1.1 ::}\label{task-1.1}}
+
+Derive the form of the gradient of the logistic loss (3) with respect to
+the parameters of the network \(W_i\), \(W_o\), \(B_i\) and \(B_o\).
+\emph{Hint:} Use the chain rule as discussed in the class.
+
+    \[\frac{\partial s}{\partial W_o} = -H.\frac{\bar{Y}(X)}{1+ \exp((W_oH+B_o)\bar{Y}(X)}\]
+
+\[\frac{\partial s}{\partial B_o} = -\frac{\bar{Y}(X)}{1+ \exp((W_oH+B_o)\bar{Y}(X)}\]
+
+\[\frac{\partial s}{\partial W_i} = -W_o.\unicode{x1D7D9}_{\mathbb{R}^{+}_{*}}\{W_iX^T+B_0\} X \frac{\bar{Y}(X)}{1+ \exp ((W_oH+B_o)\bar{Y}(X))}\]
+
+\[\frac{\partial s}{\partial B_i} = -W_o.\unicode{x1D7D9}_{\mathbb{R}^{+}_{*}}\{W_iX^T+B_0\} \frac{\bar{Y}(X)}{1+ \exp((W_oH+B_o)\bar{Y}(X))}\]
+
+    \hypertarget{task-1.2}{%
+\subsubsection{:: TASK 1.2 ::}\label{task-1.2}}
+
+Following your derivation, implement the gradient computation in the
+function \texttt{gradient\_nn}. See the code for the description of the
+required inputs / outputs of this function.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}21}]:} \PY{n}{relu} \PY{o}{=} \PY{k}{lambda} \PY{n}{X}\PY{p}{:} \PY{n}{X} \PY{o}{*} \PY{p}{(}\PY{n}{X} \PY{o}{\PYZgt{}} \PY{l+m+mi}{0}\PY{p}{)}
+         
+         
+         \PY{k}{def} \PY{n+nf}{gradient\PYZus{}nn}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{p}{)}\PY{p}{:}
+             \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+         \PY{l+s+sd}{    Compute gradient of the logistic loss of the neural network on example X with}
+         \PY{l+s+sd}{    target label Y, with respect to the parameters Wi,bi,Wo,bo.}
+         
+         \PY{l+s+sd}{    Input:}
+         \PY{l+s+sd}{        X ... 1xd vector of the input example}
+         \PY{l+s+sd}{        Y ... 1x1 the target label in \PYZob{}\PYZhy{}1,1\PYZcb{}   }
+         \PY{l+s+sd}{        Wi,bi,Wo,bo ... parameters of the network}
+         \PY{l+s+sd}{        Wi ... [hxd]}
+         \PY{l+s+sd}{        bi ... [hx1]}
+         \PY{l+s+sd}{        Wo ... [1xh]}
+         \PY{l+s+sd}{        bo ... 1x1}
+         \PY{l+s+sd}{        where h... is the number of hidden units}
+         \PY{l+s+sd}{              d... is the number of input dimensions (d=2)}
+         
+         \PY{l+s+sd}{    Output: }
+         \PY{l+s+sd}{        grad\PYZus{}s\PYZus{}Wi [hxd] ... gradient of loss s(Y,Y(X)) w.r.t  Wi}
+         \PY{l+s+sd}{        grad\PYZus{}s\PYZus{}Wo [1xh] ... gradient of loss s(Y,Y(X)) w.r.t. Wo}
+         \PY{l+s+sd}{        grad\PYZus{}s\PYZus{}bi [hx1] ... gradient of loss s(Y,Y(X)) w.r.t. bi}
+         \PY{l+s+sd}{        grad\PYZus{}s\PYZus{}bo [1x1] ... gradient of loss s(Y,Y(X)) w.r.t. bo}
+         \PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+             \PY{n}{X} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{)}
+             \PY{n}{H} \PY{o}{=} \PY{n}{X}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{Wi}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{+} \PY{n}{bi}
+             \PY{n}{indicator} \PY{o}{=} \PY{p}{(}\PY{n}{H} \PY{o}{\PYZgt{}} \PY{l+m+mf}{0.}\PY{p}{)}
+             \PY{n}{H} \PY{o}{=} \PY{n}{H} \PY{o}{*} \PY{n}{indicator} 
+             \PY{n}{frac} \PY{o}{=} \PY{n}{Y}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{1}\PY{o}{+} \PY{n}{np}\PY{o}{.}\PY{n}{exp}\PY{p}{(}\PY{n}{Wo}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{H}\PY{p}{)}\PY{o}{*}\PY{n}{Y}\PY{o}{+}\PY{n}{bo}\PY{o}{*}\PY{n}{Y}\PY{p}{)}\PY{p}{)}
+             \PY{n}{grad\PYZus{}s\PYZus{}Wi} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{X}\PY{o}{.}\PY{n}{T}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{Wo}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{newaxis}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{n}{indicator}\PY{o}{*}\PY{n}{frac}
+             \PY{n}{grad\PYZus{}s\PYZus{}Wo} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{H}\PY{o}{*}\PY{n}{frac}
+             \PY{n}{grad\PYZus{}s\PYZus{}bi} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{Wo}\PY{o}{*}\PY{n}{indicator}\PY{o}{*}\PY{n}{frac}
+             \PY{n}{grad\PYZus{}s\PYZus{}bo} \PY{o}{=} \PY{o}{\PYZhy{}}\PY{n}{frac}
+             \PY{k}{return} \PY{n}{grad\PYZus{}s\PYZus{}Wi}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}bi}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}Wo}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}bo}
+\end{Verbatim}
+
+
+    \hypertarget{numerically-verify-the-gradients}{%
+\subsection{Numerically verify the
+gradients}\label{numerically-verify-the-gradients}}
+
+Here you will numerically verify that your analytically computed
+gradients in function \texttt{gradient\_nn} are correct.
+
+    \hypertarget{task-1.3}{%
+\subsubsection{:: TASK 1.3 ::}\label{task-1.3}}
+
+\textbf{Write down the general formula for numerically computing the
+approximate derivative of the loss \(s(\theta)\), with respect to the
+parameter \(\theta_i\) using finite differencing.} \emph{Hint: use the
+first order Taylor expansion of loss \(s(\theta+\Delta \theta)\) around
+point \(\theta\).}
+
+    The centered first-order finite difference formula is:
+
+\[\frac{\partial s(\theta)}{\partial \theta} = \frac{s(\theta + \epsilon) - s(\theta - \epsilon)}{2\epsilon}\]
+
+    Following the general formula, \texttt{gradient\_nn\_numerical} function
+numerically computes the derivatives of the loss function with respect
+to all the parameters of the network \(W_i\), \(W_o\), \(B_i\) and
+\(B_o\):
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}4}]:} \PY{k}{def} \PY{n+nf}{gradient\PYZus{}nn\PYZus{}numerical}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{p}{)}\PY{p}{:}
+            \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+        \PY{l+s+sd}{    Compute numerical gradient of the logistic loss of the neural network on}
+        \PY{l+s+sd}{    example X with target label Y, with respect to the parameters Wi,bi,Wo,bo.}
+        
+        \PY{l+s+sd}{    Input:}
+        \PY{l+s+sd}{       X ... 2d vector of the input example}
+        \PY{l+s+sd}{       Y ... the target label in \PYZob{}\PYZhy{}1,1\PYZcb{}   }
+        \PY{l+s+sd}{       Wi, bi, Wo, bo ... parameters of the network}
+        \PY{l+s+sd}{       Wi ... [dxh]}
+        \PY{l+s+sd}{       bi ... [h]}
+        \PY{l+s+sd}{       Wo ... [h]}
+        \PY{l+s+sd}{       bo ... 1}
+        \PY{l+s+sd}{       where h... is the number of hidden units}
+        \PY{l+s+sd}{             d... is the number of input dimensions (d=2)}
+        
+        \PY{l+s+sd}{    Output: }
+        \PY{l+s+sd}{       grad\PYZus{}s\PYZus{}Wi\PYZus{}numerical [dxh] ... gradient of loss s(Y,Y(X)) w.r.t  Wi}
+        \PY{l+s+sd}{       grad\PYZus{}s\PYZus{}bi\PYZus{}numerical [h]   ... gradient of loss s(Y,Y(X)) w.r.t. bi}
+        \PY{l+s+sd}{       grad\PYZus{}s\PYZus{}Wo\PYZus{}numerical [h]   ... gradient of loss s(Y,Y(X)) w.r.t. Wo}
+        \PY{l+s+sd}{       grad\PYZus{}s\PYZus{}bo\PYZus{}numerical 1     ... gradient of loss s(Y,Y(X)) w.r.t. bo}
+        \PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+        
+            \PY{n}{eps} \PY{o}{=} \PY{l+m+mf}{1e\PYZhy{}8}
+            \PY{n}{grad\PYZus{}s\PYZus{}Wi\PYZus{}numerical} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{Wi}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+            \PY{n}{grad\PYZus{}s\PYZus{}bi\PYZus{}numerical} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{bi}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+            \PY{n}{grad\PYZus{}s\PYZus{}Wo\PYZus{}numerical} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{Wo}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+        
+            \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{Wi}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+                \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{Wi}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+                    \PY{n}{dummy}\PY{p}{,} \PY{n}{dummy}\PY{p}{,} \PY{n}{pos\PYZus{}loss} \PY{o}{=} \PY{n}{nnet\PYZus{}forward\PYZus{}logloss}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{sumelement\PYZus{}matrix}\PY{p}{(}\PY{n}{Wi}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{,} \PY{o}{+}\PY{n}{eps}\PY{p}{)}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{p}{)}
+                    \PY{n}{dummy}\PY{p}{,} \PY{n}{dummy}\PY{p}{,} \PY{n}{neg\PYZus{}loss} \PY{o}{=} \PY{n}{nnet\PYZus{}forward\PYZus{}logloss}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{sumelement\PYZus{}matrix}\PY{p}{(}\PY{n}{Wi}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{eps}\PY{p}{)}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{p}{)}
+                    \PY{n}{grad\PYZus{}s\PYZus{}Wi\PYZus{}numerical}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{n}{pos\PYZus{}loss} \PY{o}{\PYZhy{}} \PY{n}{neg\PYZus{}loss}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{eps}\PY{p}{)}
+        
+            \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{bi}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+                \PY{n}{dummy}\PY{p}{,} \PY{n}{dummy}\PY{p}{,} \PY{n}{pos\PYZus{}loss} \PY{o}{=} \PY{n}{nnet\PYZus{}forward\PYZus{}logloss}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{sumelement\PYZus{}vector}\PY{p}{(}\PY{n}{bi}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{o}{+}\PY{n}{eps}\PY{p}{)}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{p}{)}
+                \PY{n}{dummy}\PY{p}{,} \PY{n}{dummy}\PY{p}{,} \PY{n}{neg\PYZus{}loss} \PY{o}{=} \PY{n}{nnet\PYZus{}forward\PYZus{}logloss}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{sumelement\PYZus{}vector}\PY{p}{(}\PY{n}{bi}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{eps}\PY{p}{)}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{p}{)}
+                \PY{n}{grad\PYZus{}s\PYZus{}bi\PYZus{}numerical}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{n}{pos\PYZus{}loss} \PY{o}{\PYZhy{}} \PY{n}{neg\PYZus{}loss}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{eps}\PY{p}{)}
+        
+            \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{Wo}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+                \PY{n}{dummy}\PY{p}{,} \PY{n}{dummy}\PY{p}{,} \PY{n}{pos\PYZus{}loss} \PY{o}{=} \PY{n}{nnet\PYZus{}forward\PYZus{}logloss}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{sumelement\PYZus{}vector}\PY{p}{(}\PY{n}{Wo}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{o}{+}\PY{n}{eps}\PY{p}{)}\PY{p}{,} \PY{n}{bo}\PY{p}{)}
+                \PY{n}{dummy}\PY{p}{,} \PY{n}{dummy}\PY{p}{,} \PY{n}{neg\PYZus{}loss} \PY{o}{=} \PY{n}{nnet\PYZus{}forward\PYZus{}logloss}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{sumelement\PYZus{}vector}\PY{p}{(}\PY{n}{Wo}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{eps}\PY{p}{)}\PY{p}{,} \PY{n}{bo}\PY{p}{)}
+                \PY{n}{grad\PYZus{}s\PYZus{}Wo\PYZus{}numerical}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{p}{(}\PY{n}{pos\PYZus{}loss} \PY{o}{\PYZhy{}} \PY{n}{neg\PYZus{}loss}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{eps}\PY{p}{)}
+        
+            \PY{n}{dummy}\PY{p}{,} \PY{n}{dummy}\PY{p}{,} \PY{n}{pos\PYZus{}loss} \PY{o}{=} \PY{n}{nnet\PYZus{}forward\PYZus{}logloss}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{o}{+}\PY{n}{eps}\PY{p}{)}
+            \PY{n}{dummy}\PY{p}{,} \PY{n}{dummy}\PY{p}{,} \PY{n}{neg\PYZus{}loss} \PY{o}{=} \PY{n}{nnet\PYZus{}forward\PYZus{}logloss}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{o}{\PYZhy{}}\PY{n}{eps}\PY{p}{)}
+            \PY{n}{grad\PYZus{}s\PYZus{}bo\PYZus{}numerical} \PY{o}{=} \PY{p}{(}\PY{n}{pos\PYZus{}loss} \PY{o}{\PYZhy{}} \PY{n}{neg\PYZus{}loss}\PY{p}{)}\PY{o}{/}\PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{eps}\PY{p}{)}
+        
+            \PY{k}{return} \PY{n}{grad\PYZus{}s\PYZus{}Wi\PYZus{}numerical}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}bi\PYZus{}numerical}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}Wo\PYZus{}numerical}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}bo\PYZus{}numerical}
+        
+        
+        \PY{k}{def} \PY{n+nf}{sumelement\PYZus{}matrix}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{,} \PY{n}{element}\PY{p}{)}\PY{p}{:}
+            \PY{n}{Y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+            \PY{n}{Y}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{]} \PY{o}{=} \PY{n}{X}\PY{p}{[}\PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{]} \PY{o}{+} \PY{n}{element}
+            \PY{k}{return} \PY{n}{Y}
+        
+        
+        \PY{k}{def} \PY{n+nf}{sumelement\PYZus{}vector}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{n}{element}\PY{p}{)}\PY{p}{:}
+            \PY{n}{Y} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{copy}\PY{p}{(}\PY{n}{X}\PY{p}{)}
+            \PY{n}{Y}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{X}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{+} \PY{n}{element}
+            \PY{k}{return} \PY{n}{Y}
+\end{Verbatim}
+
+
+    \hypertarget{task-1.4}{%
+\subsubsection{:: TASK 1.4 ::}\label{task-1.4}}
+
+Run the following code snippet and understand what it is doing.
+\texttt{gradcheck} function checks that the analytically computed
+derivative using function \texttt{gradient\_nn} (e.g.
+\texttt{grad\_s\_bo}) at the same training example \(\{X,Y\}\) is the
+same (up to small errors) as your numerically computed value of the
+derivative using function \texttt{gradient\_nn\_numerical} (e.g.
+\texttt{grad\_s\_bo\_numerical}). Make sure the output is
+\texttt{SUCCESS} to move on to the next task.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}23}]:} \PY{k}{def} \PY{n+nf}{gradcheck}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+             \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+         \PY{l+s+sd}{    Check that the numerical and analytical gradients are the same up to eps}
+         \PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+             \PY{n}{h} \PY{o}{=} \PY{l+m+mi}{3} \PY{c+c1}{\PYZsh{} number of hidden units}
+             \PY{n}{eps} \PY{o}{=} \PY{l+m+mf}{1e\PYZhy{}6}
+             \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1000}\PY{p}{)}\PY{p}{:}
+                 \PY{c+c1}{\PYZsh{} Generate random input/output/weight/bias}
+                 \PY{n}{X}  \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+                 \PY{n}{Y}  \PY{o}{=} \PY{l+m+mi}{2}\PY{o}{*} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randint}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{l+m+mi}{1} \PY{c+c1}{\PYZsh{} \PYZob{}\PYZhy{}1, 1\PYZcb{}}
+                 \PY{n}{Wi} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{X}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{h}\PY{p}{)}
+                 \PY{n}{bi} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{h}\PY{p}{)}
+                 \PY{n}{Wo} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{h}\PY{p}{)}
+                 \PY{n}{bo} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{)}
+                 \PY{c+c1}{\PYZsh{} Compute analytical gradients}
+                 \PY{n}{grad\PYZus{}s\PYZus{}Wi}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}bi}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}Wo}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}bo} \PY{o}{=} \PY{n}{gradient\PYZus{}nn}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{p}{)}
+                 \PY{c+c1}{\PYZsh{} Compute numerical gradients}
+                 \PY{n}{grad\PYZus{}s\PYZus{}Wi\PYZus{}numerical}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}bi\PYZus{}numerical}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}Wo\PYZus{}numerical}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}bo\PYZus{}numerical} \PY{o}{=} \PY{n}{gradient\PYZus{}nn\PYZus{}numerical}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{p}{)}
+                 \PY{c+c1}{\PYZsh{} Compute the difference between analytical and numerical gradients}
+                 \PY{n}{delta\PYZus{}Wi} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{grad\PYZus{}s\PYZus{}Wi} \PY{o}{\PYZhy{}} \PY{n}{grad\PYZus{}s\PYZus{}Wi\PYZus{}numerical}\PY{p}{)}\PY{p}{)}
+                 \PY{n}{delta\PYZus{}bi} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{grad\PYZus{}s\PYZus{}bi} \PY{o}{\PYZhy{}} \PY{n}{grad\PYZus{}s\PYZus{}bi\PYZus{}numerical}\PY{p}{)}\PY{p}{)}
+                 \PY{n}{delta\PYZus{}Wo} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{grad\PYZus{}s\PYZus{}Wo} \PY{o}{\PYZhy{}} \PY{n}{grad\PYZus{}s\PYZus{}Wo\PYZus{}numerical}\PY{p}{)}\PY{p}{)}
+                 \PY{n}{delta\PYZus{}bo} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{grad\PYZus{}s\PYZus{}bo} \PY{o}{\PYZhy{}} \PY{n}{grad\PYZus{}s\PYZus{}bo\PYZus{}numerical}\PY{p}{)}
+                 \PY{c+c1}{\PYZsh{} Difference larger than a threshold}
+                 \PY{k}{if} \PY{p}{(} \PY{n}{delta\PYZus{}Wi} \PY{o}{\PYZgt{}} \PY{n}{eps} \PY{o+ow}{or} \PY{n}{delta\PYZus{}bi} \PY{o}{\PYZgt{}} \PY{n}{eps} \PY{o+ow}{or} \PY{n}{delta\PYZus{}Wo} \PY{o}{\PYZgt{}} \PY{n}{eps} \PY{o+ow}{or} \PY{n}{delta\PYZus{}bo} \PY{o}{\PYZgt{}} \PY{n}{eps}\PY{p}{)}\PY{p}{:}
+                     \PY{k}{return} \PY{k+kc}{False}
+         
+             \PY{k}{return} \PY{k+kc}{True} 
+         
+         
+         \PY{c+c1}{\PYZsh{} Check gradients}
+         \PY{k}{if} \PY{n}{gradcheck}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{SUCCESS: Passed gradcheck.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{k}{else}\PY{p}{:}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{FAILURE: Fix gradient\PYZus{}nn and/or gradient\PYZus{}nn\PYZus{}aprox implementation.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+SUCCESS: Passed gradcheck.
+
+    \end{Verbatim}
+
+    \hypertarget{training-the-network-using-backpropagation-and-experimenting-with-different-parameters}{%
+\subsection{Training the network using backpropagation and experimenting
+with different
+parameters}\label{training-the-network-using-backpropagation-and-experimenting-with-different-parameters}}
+
+    Use the provided code below that calls the \texttt{train\_loop}
+function. Set the number of hidden units to 7 by setting \(h=7\) in the
+code and set the learning rate to 0.02 by setting
+\texttt{lrate\ =\ 0.02}. Run the training code. Visualize the trained
+hyperplane using the provided function
+\texttt{plot\_decision\_boundary(Xtr,Ytr,Wi,bi,Wo,bo)}. Show also the
+evolution of the training and validation errors. Include the decision
+hyper-plane visualization and the training and validation error plots.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}24}]:} \PY{k}{def} \PY{n+nf}{train\PYZus{}loop}\PY{p}{(}\PY{n}{Xtr}\PY{p}{,} \PY{n}{Ytr}\PY{p}{,} \PY{n}{Xval}\PY{p}{,} \PY{n}{Yval}\PY{p}{,} \PY{n}{h}\PY{p}{,} \PY{n}{lrate}\PY{p}{,} \PY{n}{vis}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{all}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{nEpochs}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{)}\PY{p}{:}
+             \PY{l+s+sd}{\PYZsq{}\PYZsq{}\PYZsq{}}
+         \PY{l+s+sd}{    Check that the numerical and analytical gradients are the same up to eps}
+         
+         \PY{l+s+sd}{    Input:}
+         \PY{l+s+sd}{        Xtr ... Nx2 matrix of training samples}
+         \PY{l+s+sd}{        Ytr ... N dimensional vector of training labels}
+         \PY{l+s+sd}{        Xval ... Nx2 matrix of validation samples }
+         \PY{l+s+sd}{        Yval ... N dimensional vector validation labels}
+         \PY{l+s+sd}{        h ... number of hidden units}
+         \PY{l+s+sd}{        lrate ... learning rate}
+         \PY{l+s+sd}{        vis ... visulaization option (\PYZsq{}all\PYZsq{} | \PYZsq{}last\PYZsq{} | \PYZsq{}never\PYZsq{})}
+         \PY{l+s+sd}{        nEpochs ... number of training epochs}
+         
+         \PY{l+s+sd}{    Output:}
+         \PY{l+s+sd}{        tr\PYZus{}error ... nEpochs*nSamples dimensional vector of training error}
+         \PY{l+s+sd}{        val\PYZus{}error ... nEpochs*nSamples dimensional vector of validation error}
+         \PY{l+s+sd}{    \PYZsq{}\PYZsq{}\PYZsq{}}
+         
+             \PY{n}{nSamples} \PY{o}{=} \PY{n}{Xtr}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+             \PY{n}{tr\PYZus{}error} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{nEpochs}\PY{o}{*}\PY{n}{nSamples}\PY{p}{)}
+             \PY{n}{val\PYZus{}error} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{nEpochs}\PY{o}{*}\PY{n}{nSamples}\PY{p}{)}
+         
+             \PY{c+c1}{\PYZsh{} Randomly initialize parameters of the model}
+             \PY{n}{Wi} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randn}\PY{p}{(}\PY{n}{Xtr}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{h}\PY{p}{)}
+             \PY{n}{Wo} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{h}\PY{p}{)}
+             \PY{n}{bi} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{h}\PY{p}{)}
+             \PY{n}{bo} \PY{o}{=} \PY{l+m+mf}{0.}
+         
+             \PY{k}{if}\PY{p}{(}\PY{n}{vis} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{all}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{or} \PY{n}{vis} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{last}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+                 \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+         
+             \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{nEpochs}\PY{o}{*}\PY{n}{nSamples}\PY{p}{)}\PY{p}{:}
+                 \PY{c+c1}{\PYZsh{} Draw an example at random}
+                 \PY{n}{n} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randint}\PY{p}{(}\PY{n}{nSamples}\PY{p}{)}
+                 \PY{n}{X} \PY{o}{=} \PY{n}{Xtr}\PY{p}{[}\PY{n}{n}\PY{p}{]}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{newaxis}\PY{p}{]}
+                 \PY{n}{Y} \PY{o}{=} \PY{n}{Ytr}\PY{p}{[}\PY{n}{n}\PY{p}{]}
+         
+                 \PY{c+c1}{\PYZsh{} Compute gradient }
+                 \PY{n}{grad\PYZus{}s\PYZus{}Wi}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}bi}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}Wo}\PY{p}{,} \PY{n}{grad\PYZus{}s\PYZus{}bo} \PY{o}{=} \PY{n}{gradient\PYZus{}nn}\PY{p}{(}\PY{n}{X}\PY{p}{,} \PY{n}{Y}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{p}{)}
+         
+                 \PY{c+c1}{\PYZsh{} Gradient update}
+                 \PY{n}{Wi} \PY{o}{\PYZhy{}}\PY{o}{=} \PY{n}{lrate}\PY{o}{*}\PY{n}{grad\PYZus{}s\PYZus{}Wi}
+                 \PY{n}{Wo} \PY{o}{\PYZhy{}}\PY{o}{=} \PY{n}{lrate}\PY{o}{*}\PY{n}{grad\PYZus{}s\PYZus{}Wo}
+                 \PY{n}{bi} \PY{o}{\PYZhy{}}\PY{o}{=} \PY{n}{lrate}\PY{o}{*}\PY{n}{grad\PYZus{}s\PYZus{}bi}
+                 \PY{n}{bo} \PY{o}{\PYZhy{}}\PY{o}{=} \PY{n}{lrate}\PY{o}{*}\PY{n}{grad\PYZus{}s\PYZus{}bo}
+         
+                 \PY{c+c1}{\PYZsh{} Compute training error}
+                 \PY{n}{Po}\PY{p}{,} \PY{n}{Yo}\PY{p}{,} \PY{n}{loss}    \PY{o}{=} \PY{n}{nnet\PYZus{}forward\PYZus{}logloss}\PY{p}{(}\PY{n}{Xtr}\PY{p}{,} \PY{n}{Ytr}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{p}{)}
+                 \PY{n}{Yo\PYZus{}class}        \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sign}\PY{p}{(}\PY{n}{Yo}\PY{p}{)}
+                 \PY{n}{tr\PYZus{}error}\PY{p}{[}\PY{n}{i}\PY{p}{]}     \PY{o}{=} \PY{l+m+mi}{100}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Yo\PYZus{}class} \PY{o}{!=} \PY{n}{Ytr}\PY{p}{)}
+         
+                 \PY{c+c1}{\PYZsh{} Compute validation error}
+                 \PY{n}{Pov}\PY{p}{,} \PY{n}{Yov}\PY{p}{,} \PY{n}{lossv} \PY{o}{=} \PY{n}{nnet\PYZus{}forward\PYZus{}logloss}\PY{p}{(}\PY{n}{Xval}\PY{p}{,} \PY{n}{Yval}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{p}{)}
+                 \PY{n}{Yov\PYZus{}class}       \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sign}\PY{p}{(}\PY{n}{Yov}\PY{p}{)}
+                 \PY{n}{val\PYZus{}error}\PY{p}{[}\PY{n}{i}\PY{p}{]}    \PY{o}{=} \PY{l+m+mi}{100}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{Yov\PYZus{}class} \PY{o}{!=} \PY{n}{Yval}\PY{p}{)}
+         
+                 \PY{c+c1}{\PYZsh{} Plot (at every epoch if visualization is \PYZsq{}all\PYZsq{}, only at the end if \PYZsq{}last\PYZsq{})}
+                 \PY{k}{if}\PY{p}{(}\PY{n}{vis} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{all}\PY{l+s+s1}{\PYZsq{}} \PY{o+ow}{and} \PY{n}{i}\PY{o}{\PYZpc{}}\PY{k}{nSamples} == 0) or (vis == \PYZsq{}last\PYZsq{} and i == nEpochs*nSamples \PYZhy{} 1):
+                     \PY{c+c1}{\PYZsh{} Draw the decision boundary.}
+                     \PY{n}{plt}\PY{o}{.}\PY{n}{clf}\PY{p}{(}\PY{p}{)}
+                     \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{p = }\PY{l+s+si}{\PYZpc{}d}\PY{l+s+s1}{, Iteration = }\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{.d, Error = }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{h}\PY{p}{,} \PY{n}{i}\PY{o}{/}\PY{n}{nSamples}\PY{p}{,} \PY{n}{tr\PYZus{}error}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+                     \PY{n}{decision\PYZus{}boundary\PYZus{}nnet}\PY{p}{(}\PY{n}{Xtr}\PY{p}{,} \PY{n}{Ytr}\PY{p}{,} \PY{n}{Wi}\PY{p}{,} \PY{n}{bi}\PY{p}{,} \PY{n}{Wo}\PY{p}{,} \PY{n}{bo}\PY{p}{)}
+                     \PY{n}{display}\PY{o}{.}\PY{n}{display}\PY{p}{(}\PY{n}{plt}\PY{o}{.}\PY{n}{gcf}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{display\PYZus{}id}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+                     \PY{n}{display}\PY{o}{.}\PY{n}{clear\PYZus{}output}\PY{p}{(}\PY{n}{wait}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}
+         
+             \PY{k}{if}\PY{p}{(}\PY{n}{vis} \PY{o}{==} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{all}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{:}
+                 \PY{c+c1}{\PYZsh{} Plot the evolution of the training and test errors}
+                 \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+                 \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{tr\PYZus{}error}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{training}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+                 \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{val\PYZus{}error}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{validation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+                 \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+                 \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Training/validation errors: }\PY{l+s+si}{\PYZpc{}.2f}\PY{l+s+si}{\PYZpc{}\PYZpc{}}\PY{l+s+s1}{ / }\PY{l+s+si}{\PYZpc{}.2f}\PY{l+s+si}{\PYZpc{}\PYZpc{}}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{p}{(}\PY{n}{tr\PYZus{}error}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{n}{val\PYZus{}error}\PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+             \PY{k}{return} \PY{n}{tr\PYZus{}error}\PY{p}{,} \PY{n}{val\PYZus{}error}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}27}]:} \PY{c+c1}{\PYZsh{} Run training}
+         \PY{n}{h} \PY{o}{=} \PY{l+m+mi}{7}
+         \PY{n}{lrate} \PY{o}{=} \PY{o}{.}\PY{l+m+mi}{02}
+         \PY{n}{tr\PYZus{}error}\PY{p}{,} \PY{n}{val\PYZus{}error} \PY{o}{=} \PY{n}{train\PYZus{}loop}\PY{p}{(}\PY{n}{Xtr}\PY{p}{,} \PY{n}{Ytr}\PY{p}{,} \PY{n}{Xval}\PY{p}{,} \PY{n}{Yval}\PY{p}{,} \PY{n}{h}\PY{p}{,} \PY{n}{lrate}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_23_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_23_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{task-1.6}{%
+\subsubsection{:: TASK 1.6 ::}\label{task-1.6}}
+
+\textbf{Random initializations.} Repeat this procedure 5 times from 5
+different random initializations. Record for each run the final training
+and validation errors. Did the network always converge to zero training
+error? Summarize your final training and validation errors into a table
+for the 5 runs. You do not need to include the decision hyper-plane
+visualizations. Note: to speed-up the training you can plot the
+visualization figures less often (or never) and hence speed-up the
+training.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}123}]:} \PY{k+kn}{import} \PY{n+nn}{IPython}\PY{n+nn}{.}\PY{n+nn}{core}\PY{n+nn}{.}\PY{n+nn}{display}
+          \PY{n}{h} \PY{o}{=} \PY{l+m+mi}{7}
+          \PY{n}{lrate} \PY{o}{=} \PY{o}{.}\PY{l+m+mi}{02}
+          \PY{n}{Ntry} \PY{o}{=} \PY{l+m+mi}{5}
+          \PY{n}{tr\PYZus{}errors} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+          \PY{n}{val\PYZus{}errors} \PY{o}{=} \PY{p}{[}\PY{p}{]}
+          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{Ntry}\PY{p}{)}\PY{p}{:}
+              \PY{n}{tr\PYZus{}error}\PY{p}{,} \PY{n}{val\PYZus{}error} \PY{o}{=} \PY{n}{train\PYZus{}loop}\PY{p}{(}\PY{n}{Xtr}\PY{p}{,} \PY{n}{Ytr}\PY{p}{,} \PY{n}{Xval}\PY{p}{,} \PY{n}{Yval}\PY{p}{,} \PY{n}{h}\PY{p}{,} \PY{n}{lrate}\PY{p}{,} \PY{n}{vis}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{never}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+              \PY{n}{tr\PYZus{}errors} \PY{o}{+}\PY{o}{=} \PY{p}{[}\PY{n}{tr\PYZus{}error}\PY{p}{]}
+              \PY{n}{val\PYZus{}errors} \PY{o}{+}\PY{o}{=} \PY{p}{[}\PY{n}{val\PYZus{}error}\PY{p}{]}
+          
+          \PY{n}{content} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}\PY{l+s+s2}{\PYZlt{}table\PYZgt{}}
+          \PY{l+s+s2}{    \PYZlt{}tr\PYZgt{}\PYZlt{}th\PYZgt{}Try ID\PYZlt{}/th\PYZgt{}\PYZlt{}th\PYZgt{}Convergence\PYZlt{}/th\PYZgt{}\PYZlt{}th\PYZgt{}Training error\PYZlt{}/th\PYZgt{}\PYZlt{}th\PYZgt{}Validation error\PYZlt{}/th\PYZgt{}\PYZlt{}/tr\PYZgt{}}\PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}
+          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{Ntry}\PY{p}{)}\PY{p}{:}
+              \PY{n}{content} \PY{o}{+}\PY{o}{=} \PY{n}{f}\PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}
+          \PY{l+s+s2}{    \PYZlt{}tr\PYZgt{}\PYZlt{}td\PYZgt{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{i+1\PYZcb{}\PYZlt{}/td\PYZgt{}\PYZlt{}td\PYZgt{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{np.mean(val\PYZus{}errors[i][\PYZhy{}1]) == 0.\PYZcb{}\PYZlt{}/td\PYZgt{}\PYZlt{}td\PYZgt{}}\PY{l+s+si}{\PYZob{}tr\PYZus{}errors[i][\PYZhy{}1]\PYZcb{}}\PY{l+s+s2}{\PYZlt{}/td\PYZgt{}\PYZlt{}td\PYZgt{}}\PY{l+s+si}{\PYZob{}val\PYZus{}errors[i][\PYZhy{}1]\PYZcb{}}\PY{l+s+s2}{\PYZlt{}/td\PYZgt{}\PYZlt{}/tr\PYZgt{}}
+          \PY{l+s+s2}{    }\PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}
+          \PY{n}{content} \PY{o}{+}\PY{o}{=} \PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{\PYZlt{}/table\PYZgt{}}\PY{l+s+s2}{\PYZdq{}}
+          \PY{n}{display}\PY{o}{.}\PY{n}{display}\PY{p}{(}\PY{n}{display}\PY{o}{.}\PY{n}{HTML}\PY{p}{(}\PY{n}{content}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    
+    \begin{verbatim}
+<IPython.core.display.HTML object>
+    \end{verbatim}
+
+    
+    The algorithm converged for all 5 different initializations. So the
+algorithm does not depend on the inital parameters. This means that even
+if the problem is non-convex, we do not fall into a local minimum far
+the optimal solution.
+
+    \hypertarget{sample-task}{%
+\subsubsection{:: SAMPLE TASK ::}\label{sample-task}}
+
+For this task, the answer is given. Run the given code and answer Task
+1.8 similarly.
+
+\textbf{Learning rate:}
+
+Keep \(h=7\) and change the learning rate to values
+\(\text{lrate} = \{2, 0.2, 0.02, 0.002\}\). For each of these values run
+the training procedure 5 times and observe the training behaviour. You
+do not need to include the decision hyper-plane visualizations in your
+answer.
+
+\textbf{- Make one figure} where \emph{final} error for (i) training and
+(ii) validation sets are superimposed. \(x\)-axis should be the
+different values of the learning rate, \(y\)-axis the error \emph{mean}
+across 5 runs. Show the standard deviation with error bars and make sure
+to label each plot with a legend.
+
+\textbf{- Make another figure} where \emph{training error evolution} for
+each learning rate is superimposed. \(x\)-axis should be the iteration
+number, \(y\)-axis the training error \emph{mean} across 5 runs for a
+given learning rate. Show the standard deviation with error bars and
+make sure to label each curve with a legend.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}29}]:} \PY{n}{nEpochs} \PY{o}{=} \PY{l+m+mi}{40}
+         \PY{n}{trials} \PY{o}{=} \PY{l+m+mi}{5}
+         \PY{n}{lrates} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mf}{0.2}\PY{p}{,} \PY{l+m+mf}{0.02}\PY{p}{,} \PY{l+m+mf}{0.002}\PY{p}{]}
+         \PY{n}{plot\PYZus{}data\PYZus{}lr} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{trials}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{lrates}\PY{p}{)}\PY{p}{,} \PY{n}{nEpochs}\PY{o}{*}\PY{l+m+mi}{1000}\PY{p}{)}\PY{p}{)}
+         \PY{n}{h} \PY{o}{=} \PY{l+m+mi}{7}
+         \PY{k}{for} \PY{n}{j}\PY{p}{,} \PY{n}{lrate} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{lrates}\PY{p}{)}\PY{p}{:}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LR = }\PY{l+s+si}{\PYZpc{}f}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{lrate}\PY{p}{)}
+             \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{trials}\PY{p}{)}\PY{p}{:}
+                 \PY{n}{tr\PYZus{}error}\PY{p}{,} \PY{n}{val\PYZus{}error} \PY{o}{=} \PY{n}{train\PYZus{}loop}\PY{p}{(}\PY{n}{Xtr}\PY{p}{,} \PY{n}{Ytr}\PY{p}{,} \PY{n}{Xval}\PY{p}{,} \PY{n}{Yval}\PY{p}{,} \PY{n}{h}\PY{p}{,} \PY{n}{lrate}\PY{p}{,} \PY{n}{vis}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{never}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{nEpochs}\PY{o}{=}\PY{n}{nEpochs}\PY{p}{)}
+                 \PY{n}{plot\PYZus{}data\PYZus{}lr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{,} \PY{p}{:}\PY{p}{]} \PY{o}{=} \PY{n}{tr\PYZus{}error}
+                 \PY{n}{plot\PYZus{}data\PYZus{}lr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{,} \PY{p}{:}\PY{p}{]} \PY{o}{=} \PY{n}{val\PYZus{}error}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+LR = 2.000000
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+/Users/pierre-louis/.pyenv/versions/3.6.5/lib/python3.6/site-packages/ipykernel\_launcher.py:33: RuntimeWarning: overflow encountered in exp
+/Users/pierre-louis/.pyenv/versions/3.6.5/lib/python3.6/site-packages/ipykernel\_launcher.py:64: RuntimeWarning: overflow encountered in exp
+/Users/pierre-louis/.pyenv/versions/3.6.5/lib/python3.6/site-packages/ipykernel\_launcher.py:30: RuntimeWarning: overflow encountered in exp
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+LR = 0.200000
+LR = 0.020000
+LR = 0.002000
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}31}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{errorbar}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{lrates}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{plot\PYZus{}data\PYZus{}lr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{yerr}\PY{o}{=}\PY{n}{plot\PYZus{}data\PYZus{}lr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Training}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{errorbar}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{lrates}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{plot\PYZus{}data\PYZus{}lr}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{yerr}\PY{o}{=}\PY{n}{plot\PYZus{}data\PYZus{}lr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Validation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xticks}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{lrates}\PY{p}{)}\PY{p}{)}\PY{p}{,} \PY{n}{lrates}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{learning rate}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+         
+         \PY{c+c1}{\PYZsh{} Plot the evolution of the training loss for each learning rate}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+         \PY{k}{for} \PY{n}{j}\PY{p}{,} \PY{n}{lrate} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{lrates}\PY{p}{)}\PY{p}{:}
+             \PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{plot\PYZus{}data\PYZus{}lr}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+             \PY{c+c1}{\PYZsh{} Mean training loss over trials}
+             \PY{n}{y} \PY{o}{=} \PY{n}{plot\PYZus{}data\PYZus{}lr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{n}{j}\PY{p}{,} \PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+             \PY{c+c1}{\PYZsh{} Standard deviation over trials}
+             \PY{n}{ebar} \PY{o}{=} \PY{n}{plot\PYZus{}data\PYZus{}lr}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{n}{j}\PY{p}{,} \PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+             \PY{c+c1}{\PYZsh{} Plot}
+             \PY{n}{markers}\PY{p}{,} \PY{n}{caps}\PY{p}{,} \PY{n}{bars} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{errorbar}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{yerr}\PY{o}{=}\PY{n}{ebar}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{LR = }\PY{l+s+s1}{\PYZsq{}} \PY{o}{+} \PY{n+nb}{str}\PY{p}{(}\PY{n}{lrate}\PY{p}{)}\PY{p}{)}
+             \PY{c+c1}{\PYZsh{} Make the error bars transparent}
+             \PY{p}{[}\PY{n}{bar}\PY{o}{.}\PY{n}{set\PYZus{}alpha}\PY{p}{(}\PY{l+m+mf}{0.01}\PY{p}{)} \PY{k}{for} \PY{n}{bar} \PY{o+ow}{in} \PY{n}{bars}\PY{p}{]}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{iterations}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{training error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+\end{Verbatim}
+
+
+\begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}31}]:} Text(0,0.5,'training error')
+\end{Verbatim}
+            
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_29_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_29_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{task-1.7}{%
+\subsubsection{:: TASK 1.7 ::}\label{task-1.7}}
+
+\textbf{- Briefly discuss} the different behaviour of the training for
+different learning rates. How many iterations does it take to converge
+or does it converge at all? Which learning rate is better and why?
+
+    The learning rate is a trade-off between the number of steps necessary
+to converge (the smallest learning rate 2e-3 was decreasing but have not
+converge yet even after 40 000 steps!) and the sensitivity of the
+optimal solution (the learning rate of 2 is completely oscillating
+because it jumps back and forward over the optimal solution).
+
+The choice of a learning rate of 0.2 seem to be a good compromise, but
+the solution is still unstable (a peak appears around the step 25000).
+Therefore, it would be risky to stop the solver as soon as when the
+training error achieves a result low enough.
+
+Consequently, a learning rate at 0.2 seem to be the most promising
+choice.
+
+Furthermore, it would be intereting to have an adaptive learning rate:
+first steps can accept a large learning rate (for example 0.2) but then
+we should switch to a smaller value (0.02). Such derivation could be
+based on the observed error as it is done for PDE solvers with an
+adaptive step size.
+
+    \hypertarget{task-1.8}{%
+\subsubsection{:: TASK 1.8 ::}\label{task-1.8}}
+
+\textbf{The number of hidden units:}
+
+Set the learning rate to 0.02 and change the number of hidden units
+\(h = \{1, 2, 5, 7, 10, 100\}\). For each of these values run the
+training procedure 5 times and observe the training behaviour
+
+\textbf{-Visualize} one decision hyper-plane per number of hidden units.
+
+\textbf{-Make one figure} where \emph{final} error for (i) training and
+(ii) validation sets are superimposed. \(x\)-axis should be the
+different values of the number of hidden units, \(y\)-axis the error
+\emph{mean} across 5 runs. Show the standard deviation with error bars
+and make sure to label each plot with a legend.
+
+\textbf{-Make another figure} where \emph{training error evolution} for
+each number of hidden units is superimposed. \(x\)-axis should be the
+iteration number, \(y\)-axis the training error \emph{mean} across 5
+runs for a given learning rate. Show the standard deviation with error
+bars and make sure to label each curve with a legend.
+
+\textbf{-Briefly discuss} the different behaviours for the different
+numbers of hidden units.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}129}]:} \PY{k+kn}{import} \PY{n+nn}{IPython}\PY{n+nn}{.}\PY{n+nn}{core}\PY{n+nn}{.}\PY{n+nn}{display} \PY{k}{as} \PY{n+nn}{display}
+          
+          \PY{n}{hidden\PYZus{}units} \PY{o}{=} \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{,}\PY{l+m+mi}{7}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{100}\PY{p}{]}
+          \PY{n}{Nhidden} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{hidden\PYZus{}units}\PY{p}{)}
+          \PY{n}{lrate} \PY{o}{=} \PY{o}{.}\PY{l+m+mi}{02}
+          \PY{n}{Ntry} \PY{o}{=} \PY{l+m+mi}{5}
+          \PY{n}{nEpochs} \PY{o}{=} \PY{l+m+mi}{40}
+          \PY{n}{data\PYZus{}h} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{trials}\PY{p}{,} \PY{n}{Nhidden}\PY{p}{,} \PY{n}{nEpochs}\PY{o}{*}\PY{l+m+mi}{1000}\PY{p}{)}\PY{p}{)}
+          
+          \PY{k}{for} \PY{n}{j}\PY{p}{,} \PY{n}{h} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{hidden\PYZus{}units}\PY{p}{)}\PY{p}{:}
+              \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{h = }\PY{l+s+si}{\PYZpc{}f}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{lrate}\PY{p}{)}
+              \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{Ntry}\PY{p}{)}\PY{p}{:}
+                  \PY{n}{tr\PYZus{}error}\PY{p}{,} \PY{n}{val\PYZus{}error} \PY{o}{=} \PY{n}{train\PYZus{}loop}\PY{p}{(}\PY{n}{Xtr}\PY{p}{,} \PY{n}{Ytr}\PY{p}{,} \PY{n}{Xval}\PY{p}{,} \PY{n}{Yval}\PY{p}{,} \PY{n}{h}\PY{p}{,} \PY{n}{lrate}\PY{p}{,} \PY{n}{vis}\PY{o}{=}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{last}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,} \PY{n}{nEpochs}\PY{o}{=}\PY{n}{nEpochs}\PY{p}{)}
+                  \PY{n}{data\PYZus{}h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{,} \PY{p}{:}\PY{p}{]} \PY{o}{=} \PY{n}{tr\PYZus{}error}
+                  \PY{n}{data\PYZus{}h}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{i}\PY{p}{,} \PY{n}{j}\PY{p}{,} \PY{p}{:}\PY{p}{]} \PY{o}{=} \PY{n}{val\PYZus{}error}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_3.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_4.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_5.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_6.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_7.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_8.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_9.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_10.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_11.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_12.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_13.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_14.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_15.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_16.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_17.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_18.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_19.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_20.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_21.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_22.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_23.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_24.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_25.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_26.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_27.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_28.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_33_29.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}143}]:} \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{errorbar}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{Nhidden}\PY{p}{)}\PY{p}{,} \PY{n}{data\PYZus{}h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{yerr}\PY{o}{=}\PY{n}{data\PYZus{}h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Training}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{errorbar}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{Nhidden}\PY{p}{)}\PY{p}{,} \PY{n}{data\PYZus{}h}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{yerr}\PY{o}{=}\PY{n}{data\PYZus{}h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Validation}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{xticks}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{Nhidden}\PY{p}{)}\PY{p}{,} \PY{n}{hidden\PYZus{}units}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{hidden units}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+          
+          \PY{c+c1}{\PYZsh{} Plot the evolution of the training loss for each learning rate}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+          \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{h} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{hidden\PYZus{}units}\PY{p}{)}\PY{p}{:}
+              \PY{n}{x} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{arange}\PY{p}{(}\PY{n}{data\PYZus{}h}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{)}
+              \PY{c+c1}{\PYZsh{} Mean training loss over trials}
+              \PY{n}{y} \PY{o}{=} \PY{n}{data\PYZus{}h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{n}{j}\PY{p}{,} \PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{mean}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+              \PY{c+c1}{\PYZsh{} Standard deviation over trials}
+              \PY{n}{ebar} \PY{o}{=} \PY{n}{data\PYZus{}h}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,} \PY{p}{:}\PY{p}{,} \PY{n}{j}\PY{p}{,} \PY{p}{:}\PY{p}{]}\PY{o}{.}\PY{n}{std}\PY{p}{(}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+              \PY{c+c1}{\PYZsh{} Plot}
+              \PY{n}{markers}\PY{p}{,} \PY{n}{caps}\PY{p}{,} \PY{n}{bars} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{errorbar}\PY{p}{(}\PY{n}{x}\PY{p}{,} \PY{n}{y}\PY{p}{,} \PY{n}{yerr}\PY{o}{=}\PY{n}{ebar}\PY{p}{,} \PY{n}{label}\PY{o}{=}\PY{n}{f}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}h\PYZcb{}}\PY{l+s+s1}{ hidden units}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+              \PY{c+c1}{\PYZsh{} Make the error bars transparent}
+              \PY{p}{[}\PY{n}{bar}\PY{o}{.}\PY{n}{set\PYZus{}alpha}\PY{p}{(}\PY{l+m+mf}{0.01}\PY{p}{)} \PY{k}{for} \PY{n}{bar} \PY{o+ow}{in} \PY{n}{bars}\PY{p}{]}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{legend}\PY{p}{(}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{iterations}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{training error}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+          
+          
+          \PY{n}{content} \PY{o}{=} \PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}\PY{l+s+s2}{\PYZlt{}table\PYZgt{}}
+          \PY{l+s+s2}{    \PYZlt{}tr\PYZgt{}\PYZlt{}th\PYZgt{}Hidden units\PYZlt{}/th\PYZgt{}\PYZlt{}th\PYZgt{}Convergence rate\PYZlt{}/th\PYZgt{}\PYZlt{}th\PYZgt{}Mean training error\PYZlt{}/th\PYZgt{}\PYZlt{}th\PYZgt{}Mean validation error\PYZlt{}/th\PYZgt{}\PYZlt{}/tr\PYZgt{}}\PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}
+          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{Nhidden}\PY{p}{)}\PY{p}{:}
+              \PY{n}{content} \PY{o}{+}\PY{o}{=} \PY{n}{f}\PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}
+          \PY{l+s+s2}{    \PYZlt{}tr\PYZgt{}}
+          \PY{l+s+s2}{        \PYZlt{}td\PYZgt{}}\PY{l+s+si}{\PYZob{}hidden\PYZus{}units[i]\PYZcb{}}\PY{l+s+s2}{\PYZlt{}/td\PYZgt{}}
+          \PY{l+s+s2}{        \PYZlt{}td\PYZgt{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{np.sum(data\PYZus{}h[1, :, i, \PYZhy{}1] == 0.)/Ntry*100:.1f\PYZcb{} }\PY{l+s+s2}{\PYZpc{}}\PY{l+s+s2}{\PYZlt{}/td\PYZgt{}}
+          \PY{l+s+s2}{        \PYZlt{}td\PYZgt{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{np.mean(data\PYZus{}h[0, :, i, \PYZhy{}1]):.2f\PYZcb{}\PYZlt{}/td\PYZgt{}}
+          \PY{l+s+s2}{        \PYZlt{}td\PYZgt{}}\PY{l+s+s2}{\PYZob{}}\PY{l+s+s2}{np.mean(data\PYZus{}h[1, :, i, \PYZhy{}1]):.2f\PYZcb{}\PYZlt{}/td\PYZgt{}}
+          \PY{l+s+s2}{    \PYZlt{}/tr\PYZgt{}}
+          \PY{l+s+s2}{    }\PY{l+s+s2}{\PYZdq{}\PYZdq{}\PYZdq{}}
+          \PY{n}{display}\PY{o}{.}\PY{n}{display}\PY{p}{(}\PY{n}{display}\PY{o}{.}\PY{n}{HTML}\PY{p}{(}\PY{n}{content}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_34_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_34_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    
+    \begin{verbatim}
+<IPython.core.display.HTML object>
+    \end{verbatim}
+
+    
+    When the neural network has not enough hidden units (below 7), it is not
+sure to converge. Indeed, with only one the system requires several
+degree of freedom to create complex enough hyperplanes as seen in the
+decision hyperplane visualization.
+
+Poor hyperplanes structures are highly sensitive to noise in the data.
+Therefore, their capacity for generalizations is poor and their
+validation error is 10 to 20\% higher than their training error.
+
+High number of hidden units perform well, though their convergence is
+slower.
+
+    \hypertarget{part-2---building-blocks-of-a-cnn}{%
+\section{Part 2 - Building blocks of a
+CNN}\label{part-2---building-blocks-of-a-cnn}}
+
+This part introduces typical CNN building blocks, such as ReLU units and
+linear filters. For a motivation for using CNNs over fully-connected
+neural networks, see
+\href{http://yann.lecun.com/exdb/publis/pdf/lecun-01a.pdf}{{[}Le Cun, et
+al, 1998{]}}.
+
+    \hypertarget{install-pytorch}{%
+\subsection{Install PyTorch}\label{install-pytorch}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}33}]:} \PY{c+c1}{\PYZsh{} Install PyTorch (http://pytorch.org/)}
+         \PY{k+kn}{from} \PY{n+nn}{os} \PY{k}{import} \PY{n}{path}
+         \PY{k+kn}{from} \PY{n+nn}{wheel}\PY{n+nn}{.}\PY{n+nn}{pep425tags} \PY{k}{import} \PY{n}{get\PYZus{}abbr\PYZus{}impl}\PY{p}{,} \PY{n}{get\PYZus{}impl\PYZus{}ver}\PY{p}{,} \PY{n}{get\PYZus{}abi\PYZus{}tag}
+         \PY{n}{platform} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZhy{}}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}\PY{n}{get\PYZus{}abbr\PYZus{}impl}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{get\PYZus{}impl\PYZus{}ver}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{get\PYZus{}abi\PYZus{}tag}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n}{accelerator} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cu80}\PY{l+s+s1}{\PYZsq{}} \PY{k}{if} \PY{n}{path}\PY{o}{.}\PY{n}{exists}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{/opt/bin/nvidia\PYZhy{}smi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{k}{else} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cpu}\PY{l+s+s1}{\PYZsq{}}
+         
+         \PY{c+c1}{\PYZsh{}!pip install \PYZhy{}q http://download.pytorch.org/whl/\PYZob{}accelerator\PYZcb{}/torch\PYZhy{}0.3.0.post4\PYZhy{}\PYZob{}platform\PYZcb{}\PYZhy{}linux\PYZus{}x86\PYZus{}64.whl torchvision}
+         \PY{c+c1}{\PYZsh{} !pip install \PYZhy{}q http://download.pytorch.org/whl/\PYZob{}accelerator\PYZcb{}/torch\PYZhy{}0.4.0\PYZhy{}\PYZob{}platform\PYZcb{}\PYZhy{}linux\PYZus{}x86\PYZus{}64.whl torchvision}
+         \PY{k+kn}{import} \PY{n+nn}{torch}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{torch}\PY{o}{.}\PY{n}{\PYZus{}\PYZus{}version\PYZus{}\PYZus{}}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{torch}\PY{o}{.}\PY{n}{cuda}\PY{o}{.}\PY{n}{is\PYZus{}available}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+0.4.1
+False
+
+    \end{Verbatim}
+
+    \hypertarget{convolution}{%
+\subsection{Convolution}\label{convolution}}
+
+A feed-forward neural network can be thought of as the composition of
+number of functions \[
+f(\mathbf{x}) = f_L(\dots f_2(f_1(\mathbf{x};\mathbf{w}_1);\mathbf{w}_2)\dots),\mathbf{w}_{L}).
+\] Each function \(f_l\) takes as input a datum \(\mathbf{x}_l\) and a
+parameter vector \(\mathbf{w}_l\) and produces as output a datum
+\(\mathbf{x}_{l+1}\). While the type and sequence of functions is
+usually handcrafted, the parameters
+\(\mathbf{w}=(\mathbf{w}_1,\dots,\mathbf{w}_L)\) are \emph{learned from
+data} in order to solve a target problem, for example classifying images
+or sounds.
+
+In a \emph{convolutional neural network} data and functions have
+additional structure. The data \(\mathbf{x}_1,\dots,\mathbf{x}_n\) are
+images, sounds, or more in general maps from a lattice\(^1\) to one or
+more real numbers. In particular, since the rest of the practical will
+focus on computer vision applications, data will be 2D arrays of pixels.
+Formally, each \(\mathbf{x}_i\) will be a \(M \times N \times K\) real
+array of \(M \times N\) pixels and \(K\) channels per pixel. Hence the
+first two dimensions of the array span space, while the last one spans
+channels. Note that only the input \(\mathbf{x}=\mathbf{x}_1\) of the
+network is an actual image, while the remaining data are intermediate
+\emph{feature maps}.
+
+The second property of a CNN is that the functions \(f_l\) have a
+\emph{convolutional structure}. This means that \(f_l\) applies to the
+input map \(\mathbf{x}_l\) an operator that is \emph{local and
+translation invariant}. Examples of convolutional operators are applying
+a bank of linear filters to \(\mathbf{x}_l\).
+
+In this part we will familiarise ourselves with a number of such
+convolutional and non-linear operators. The first one is the regular
+\emph{linear convolution} by a filter bank. We will start by focusing
+our attention on a single function relation as follows: \[
+ f: \mathbb{R}^{M\times N\times K} \rightarrow \mathbb{R}^{M' \times N' \times K'},
+ \qquad \mathbf{x} \mapsto \mathbf{y}.
+\]
+
+\(^1\)A two-dimensional \emph{lattice} is a discrete grid embedded in
+\(R^2\), similar for example to a checkerboard.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}74}]:} \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+         \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+         \PY{k+kn}{import} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{misc}
+         \PY{k+kn}{import} \PY{n+nn}{torch}
+         \PY{k+kn}{import} \PY{n+nn}{torchvision}
+         
+         \PY{c+c1}{\PYZsh{} Download an example image}
+         \PY{o}{!}wget \PYZhy{}q http://www.di.ens.fr/willow/teaching/recvis/assignment3/images/peppers.png
+         \PY{c+c1}{\PYZsh{} Read the image }
+         \PY{n}{x} \PY{o}{=} \PY{n}{scipy}\PY{o}{.}\PY{n}{misc}\PY{o}{.}\PY{n}{imread}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{peppers.png}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{o}{/}\PY{l+m+mf}{255.0}
+         \PY{c+c1}{\PYZsh{} Print the size of x. Third dimension (=3) corresponds to the R, G, B channels}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{shape}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} Visualize the input x}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} Convert to torch tensor}
+         \PY{n}{x} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{from\PYZus{}numpy}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{o}{.}\PY{n}{permute}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{float}\PY{p}{(}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} Prepare it as a batch}
+         \PY{n}{x} \PY{o}{=} \PY{n}{x}\PY{o}{.}\PY{n}{unsqueeze}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+(384, 512, 3)
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+/Users/pierre-louis/.pyenv/versions/3.6.5/lib/python3.6/site-packages/ipykernel\_launcher.py:10: DeprecationWarning: `imread` is deprecated!
+`imread` is deprecated in SciPy 1.0.0, and will be removed in 1.2.0.
+Use ``imageio.imread`` instead.
+  \# Remove the CWD from sys.path while we load stuff.
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_40_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    This should display an image of bell peppers.
+
+Next, we create a convolutional layer with a bank of 10 filters of
+dimension \(5 \times 5 \times 3\) whose coefficients are initialized
+randomly. This uses the
+\href{https://pytorch.org/docs/stable/nn.html\#torch.nn.Conv2d}{\texttt{torch.nn.Conv2d}}
+module from PyTorch:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}75}]:} \PY{c+c1}{\PYZsh{} Create a convolutional layer and a random bank of linear filters}
+         \PY{n}{conv} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Conv2d}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{n}{kernel\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,} \PY{n}{stride}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{padding}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{bias}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{conv}\PY{o}{.}\PY{n}{weight}\PY{o}{.}\PY{n}{size}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+torch.Size([10, 3, 5, 5])
+
+    \end{Verbatim}
+
+    \textbf{Remark:} You might have noticed that the \texttt{bias} argument
+to the \texttt{torch.nn.Conv2d} function is the empty matrix
+\texttt{false}. It can be otherwise used to pass a vector of bias terms
+to add to the output of each filter.
+
+Note that \texttt{conv.weight} has four dimensions, packing 10 filters.
+Note also that each filter is not flat, but rather a volume containing
+three slices. The next step is applying the filter to the image.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}76}]:} \PY{c+c1}{\PYZsh{} Apply the convolution operator}
+         \PY{n}{y} \PY{o}{=} \PY{n}{conv}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} Observe the input/output sizes}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{size}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{y}\PY{o}{.}\PY{n}{size}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+torch.Size([1, 3, 384, 512])
+torch.Size([1, 10, 380, 508])
+
+    \end{Verbatim}
+
+    The variable \texttt{y} contains the output of the convolution. Note
+that the filters are three-dimensional. This is because they operate on
+a tensor \(\mathbf{x}\) with \(K\) channels. Furthermore, there are
+\(K'\) such filters, generating a \(K'\) dimensional map \(\mathbf{y}\).
+
+We can now visualise the output \texttt{y} of the convolution. In order
+to do this, use the \texttt{torchvision.utils.make\_grid} function to
+display an image for each feature channel in \texttt{y}:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}77}]:} \PY{c+c1}{\PYZsh{} Visualize the output y}
+         \PY{k}{def} \PY{n+nf}{vis\PYZus{}features}\PY{p}{(}\PY{n}{y}\PY{p}{)}\PY{p}{:}
+             \PY{c+c1}{\PYZsh{} Organize it into 10 grayscale images}
+             \PY{n}{out} \PY{o}{=} \PY{n}{y}\PY{o}{.}\PY{n}{permute}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}
+             \PY{c+c1}{\PYZsh{} Scale between [0, 1]}
+             \PY{n}{out} \PY{o}{=} \PY{p}{(}\PY{n}{out} \PY{o}{\PYZhy{}} \PY{n}{out}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{expand}\PY{p}{(}\PY{n}{out}\PY{o}{.}\PY{n}{size}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)} \PY{o}{/} \PY{p}{(}\PY{n}{out}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{p}{)} \PY{o}{\PYZhy{}} \PY{n}{out}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{expand}\PY{p}{(}\PY{n}{out}\PY{o}{.}\PY{n}{size}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+             \PY{c+c1}{\PYZsh{} Create a grid of images}
+             \PY{n}{out} \PY{o}{=} \PY{n}{torchvision}\PY{o}{.}\PY{n}{utils}\PY{o}{.}\PY{n}{make\PYZus{}grid}\PY{p}{(}\PY{n}{out}\PY{p}{,} \PY{n}{nrow}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{)}
+             \PY{c+c1}{\PYZsh{} Convert to numpy image}
+             \PY{n}{out} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{n}{out}\PY{o}{.}\PY{n}{detach}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{numpy}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}
+             \PY{c+c1}{\PYZsh{} Show}
+             \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{out}\PY{p}{)}
+             \PY{c+c1}{\PYZsh{} Remove grid}
+             \PY{n}{plt}\PY{o}{.}\PY{n}{gca}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{False}\PY{p}{)}
+         
+         \PY{n}{vis\PYZus{}features}\PY{p}{(}\PY{n}{y}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_46_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    So far filters preserve the resolution of the input feature map.
+However, it is often useful to \emph{downsample the output}. This can be
+obtained by using the \texttt{stride} option in
+\texttt{torch.nn.Conv2d}:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}79}]:} \PY{c+c1}{\PYZsh{} Try again, downsampling the output}
+         \PY{n}{conv\PYZus{}ds} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Conv2d}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{n}{kernel\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,} \PY{n}{stride}\PY{o}{=}\PY{l+m+mi}{16}\PY{p}{,} \PY{n}{padding}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{bias}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+         \PY{n}{y\PYZus{}ds} \PY{o}{=} \PY{n}{conv\PYZus{}ds}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{size}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{y\PYZus{}ds}\PY{o}{.}\PY{n}{size}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+         \PY{n}{vis\PYZus{}features}\PY{p}{(}\PY{n}{y\PYZus{}ds}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+torch.Size([1, 3, 384, 512])
+torch.Size([1, 10, 24, 32])
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_48_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Applying a filter to an image or feature map interacts with the
+boundaries, making the output map smaller by an amount proportional to
+the size of the filters. If this is undesirable, then the input array
+can be padded with zeros by using the \texttt{pad} option:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}80}]:} \PY{c+c1}{\PYZsh{} Try padding}
+         \PY{n}{conv\PYZus{}pad} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Conv2d}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{,} \PY{n}{kernel\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,} \PY{n}{stride}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{padding}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{,} \PY{n}{bias}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+         \PY{n}{y\PYZus{}pad} \PY{o}{=} \PY{n}{conv\PYZus{}pad}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{size}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{y\PYZus{}pad}\PY{o}{.}\PY{n}{size}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+         \PY{n}{vis\PYZus{}features}\PY{p}{(}\PY{n}{y\PYZus{}pad}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+torch.Size([1, 3, 384, 512])
+torch.Size([1, 10, 384, 512])
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_50_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    In order to consolidate what has been learned so far, we will now design
+a filter by hand:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}81}]:} \PY{n}{w} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{FloatTensor}\PY{p}{(}\PY{p}{[}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}  \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0} \PY{p}{]}\PY{p}{,}
+                               \PY{p}{[}\PY{l+m+mi}{1}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{l+m+mi}{4}\PY{p}{,} \PY{l+m+mi}{1} \PY{p}{]}\PY{p}{,}
+                               \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}  \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{0} \PY{p}{]}\PY{p}{]}\PY{p}{)} 
+         \PY{n}{w} \PY{o}{=} \PY{n}{w}\PY{o}{.}\PY{n}{repeat}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{o}{.}\PY{n}{reshape}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}
+         \PY{n}{conv\PYZus{}lap} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Conv2d}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{n}{kernel\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{3}\PY{p}{,} \PY{n}{stride}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{padding}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{bias}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+         \PY{n}{conv\PYZus{}lap}\PY{o}{.}\PY{n}{weight} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Parameter}\PY{p}{(}\PY{n}{w}\PY{p}{)} 
+         \PY{n}{y\PYZus{}lap} \PY{o}{=} \PY{n}{conv\PYZus{}lap}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{x}\PY{o}{.}\PY{n}{size}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+         \PY{n+nb}{print}\PY{p}{(}\PY{n}{y\PYZus{}lap}\PY{o}{.}\PY{n}{size}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+         \PY{n}{vis\PYZus{}features}\PY{p}{(}\PY{n}{y\PYZus{}lap}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{filter output}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+         \PY{n}{vis\PYZus{}features}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{torch}\PY{o}{.}\PY{n}{abs}\PY{p}{(}\PY{n}{y\PYZus{}lap}\PY{p}{)}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{\PYZhy{} abs(filter output)}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)} \PY{p}{;}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+torch.Size([1, 3, 384, 512])
+torch.Size([1, 1, 384, 512])
+
+    \end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_52_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_52_2.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{task-2.1}{%
+\subsubsection{:: TASK 2.1 ::}\label{task-2.1}}
+
+\begin{itemize}
+\item
+  \begin{enumerate}
+  \def\labelenumi{\roman{enumi}.}
+  \tightlist
+  \item
+    What filter have we implemented?
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \def\labelenumi{\roman{enumi}.}
+  \setcounter{enumi}{1}
+  \tightlist
+  \item
+    How are the RGB colour channels processed by this filter?
+  \end{enumerate}
+\item
+  \begin{enumerate}
+  \def\labelenumi{\roman{enumi}.}
+  \setcounter{enumi}{2}
+  \tightlist
+  \item
+    What image structure are detected?
+  \end{enumerate}
+\end{itemize}
+
+    \begin{enumerate}
+\def\labelenumi{\roman{enumi}.}
+\item
+  This is a Laplacian filter of size 3x3. It can be interpreted as the
+  finite difference of the Laplacian operator \(\Delta\).
+\item
+  The filter was repeated on each filter. Therefore, all three channels
+  were processed.
+\item
+  The Laplacian filter exhibits the contour of objects inside an image.
+\end{enumerate}
+
+    \hypertarget{non-linear-activation-functions}{%
+\subsection{Non-linear activation
+functions}\label{non-linear-activation-functions}}
+
+The simplest non-linearity is obtained by following a linear filter by a
+\emph{non-linear activation function}, applied identically to each
+component (i.e.~point-wise) of a feature map. The simplest such function
+is the \emph{Rectified Linear Unit (ReLU)} \[
+  y_{ijk} = \max\{0, x_{ijk}\}.
+\] This function is implemented by
+\href{https://pytorch.org/docs/stable/nn.html\#torch.nn.ReLU}{\texttt{torch.nn.ReLU()}}.
+Run the code below and understand what the filter \(\mathbf{w}\) is
+doing.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}82}]:} \PY{n}{w} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{FloatTensor}\PY{p}{(}\PY{p}{[}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{)}\PY{o}{.}\PY{n}{repeat}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}
+         \PY{n}{w} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{cat}\PY{p}{(}\PY{p}{(}\PY{n}{w}\PY{p}{,} \PY{o}{\PYZhy{}}\PY{n}{w}\PY{p}{)}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}
+         
+         \PY{n}{conv} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Conv2d}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{n}{kernel\PYZus{}size}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{1}\PY{p}{)}\PY{p}{,} \PY{n}{stride}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{padding}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{bias}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}
+         \PY{n}{conv}\PY{o}{.}\PY{n}{weight} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{Parameter}\PY{p}{(}\PY{n}{w}\PY{p}{)}
+         \PY{n}{relu} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{ReLU}\PY{p}{(}\PY{p}{)}
+         
+         \PY{n}{y} \PY{o}{=} \PY{n}{conv}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+         \PY{n}{z} \PY{o}{=} \PY{n}{relu}\PY{p}{(}\PY{n}{y}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+         \PY{n}{vis\PYZus{}features}\PY{p}{(}\PY{n}{y}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{p}{)}
+         \PY{n}{vis\PYZus{}features}\PY{p}{(}\PY{n}{z}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_56_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_56_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{pooling}{%
+\subsection{Pooling}\label{pooling}}
+
+There are several other important operators in a CNN. One of them is
+\emph{pooling}. A pooling operator operates on individual feature
+channels, coalescing nearby feature values into one by the application
+of a suitable operator. Common choices include max-pooling (using the
+max operator) or sum-pooling (using summation). For example,
+\emph{max-pooling} is defined as: \[
+   y_{ijk} = \max \{ y_{i'j'k} : i \leq i' < i+p, j \leq j' < j + p \}
+\] Max-pooling is implemented by
+\href{https://pytorch.org/docs/stable/nn.html\#torch.nn.MaxPool2d}{\texttt{torch.nn.MaxPool2d()}}.
+
+\hypertarget{task-2.2}{%
+\subsubsection{:: TASK 2.2 ::}\label{task-2.2}}
+
+Run the code below to try max-pooling. Look at the resulting image. Can
+you interpret the result?
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}54}]:} \PY{n}{mp} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{nn}\PY{o}{.}\PY{n}{MaxPool2d}\PY{p}{(}\PY{l+m+mi}{15}\PY{p}{,} \PY{n}{stride}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+         \PY{n}{y} \PY{o}{=} \PY{n}{mp}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{y}\PY{o}{.}\PY{n}{squeeze}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{permute}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{o}{.}\PY{n}{numpy}\PY{p}{(}\PY{p}{)}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{gca}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{grid}\PY{p}{(}\PY{k+kc}{False}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_58_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Two observations can be drawn:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Some details are removed, such that the image appears blurred. Indeed,
+  by pooling the vector {[}1, 2, 3, 4, 5, 4, 3, 2, 1{]} becomes, for p =
+  5, {[}4, 5, 5, 5, 4, 3, 2, 1{]} (variation is lost on the left of the
+  vector).
+\item
+  Objects appear more squared, because we pooled pixels inside a moving
+  square.
+\end{enumerate}
+
+    \hypertarget{part-3---training-a-cnn}{%
+\section{Part 3 - Training a CNN}\label{part-3---training-a-cnn}}
+
+This part is an introduction to using PyTorch for training simple neural
+net models. CIFAR-10 dataset will be used.
+
+    \hypertarget{imports}{%
+\subsection{Imports}\label{imports}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}83}]:} \PY{k+kn}{from} \PY{n+nn}{\PYZus{}\PYZus{}future\PYZus{}\PYZus{}} \PY{k}{import} \PY{n}{print\PYZus{}function}
+         \PY{k+kn}{import} \PY{n+nn}{torch}
+         \PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{nn} \PY{k}{as} \PY{n+nn}{nn}
+         \PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{nn}\PY{n+nn}{.}\PY{n+nn}{functional} \PY{k}{as} \PY{n+nn}{F}
+         \PY{k+kn}{import} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{optim} \PY{k}{as} \PY{n+nn}{optim}
+         \PY{k+kn}{from} \PY{n+nn}{torchvision} \PY{k}{import} \PY{n}{datasets}\PY{p}{,} \PY{n}{transforms}
+         \PY{k+kn}{from} \PY{n+nn}{torch}\PY{n+nn}{.}\PY{n+nn}{autograd} \PY{k}{import} \PY{n}{Variable}
+\end{Verbatim}
+
+
+    \hypertarget{parameters}{%
+\subsection{Parameters}\label{parameters}}
+
+    The default values for the learning rate, batch size and number of
+epochs are given in the ``options'' cell of this notebook. Unless
+otherwise specified, use the default values throughout this assignment.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}84}]:} \PY{n}{batch\PYZus{}size} \PY{o}{=} \PY{l+m+mi}{64}   \PY{c+c1}{\PYZsh{} input batch size for training}
+         \PY{n}{epochs} \PY{o}{=} \PY{l+m+mi}{10}       \PY{c+c1}{\PYZsh{} number of epochs to train}
+         \PY{n}{lr} \PY{o}{=} \PY{l+m+mf}{0.01}         \PY{c+c1}{\PYZsh{} learning rate}
+\end{Verbatim}
+
+
+    \hypertarget{warmup}{%
+\subsection{Warmup}\label{warmup}}
+
+    It is always good practice to visually inspect your data before trying
+to train a model, since it lets you check for problems and get a feel
+for the task at hand.
+
+CIFAR-10 is a dataset of 60,000 color images (32 by 32 resolution)
+across 10 classes (airplane, automobile, bird, cat, deer, dog, frog,
+horse, ship, truck). The train/test split is 50k/10k.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}85}]:} \PY{c+c1}{\PYZsh{} Data Loading}
+         \PY{c+c1}{\PYZsh{} Warning: this cell might take some time when you run it for the first time, }
+         \PY{c+c1}{\PYZsh{}          because it will download the dataset from the internet}
+         \PY{n}{dataset} \PY{o}{=} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cifar10}\PY{l+s+s1}{\PYZsq{}}
+         \PY{n}{data\PYZus{}transform} \PY{o}{=} \PY{n}{transforms}\PY{o}{.}\PY{n}{Compose}\PY{p}{(}\PY{p}{[}
+             \PY{n}{transforms}\PY{o}{.}\PY{n}{ToTensor}\PY{p}{(}\PY{p}{)}\PY{p}{,}
+             \PY{n}{transforms}\PY{o}{.}\PY{n}{Normalize}\PY{p}{(}\PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{l+m+mf}{0.5}\PY{p}{,} \PY{l+m+mf}{0.5}\PY{p}{)}\PY{p}{,} \PY{p}{(}\PY{l+m+mf}{0.5}\PY{p}{,} \PY{l+m+mf}{0.5}\PY{p}{,} \PY{l+m+mf}{0.5}\PY{p}{)}\PY{p}{)}\PY{p}{,}
+         \PY{p}{]}\PY{p}{)}
+         \PY{n}{trainset} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{CIFAR10}\PY{p}{(}\PY{n}{root}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{train}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{download}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{transform}\PY{o}{=}\PY{n}{data\PYZus{}transform}\PY{p}{)}
+         \PY{n}{testset} \PY{o}{=} \PY{n}{datasets}\PY{o}{.}\PY{n}{CIFAR10}\PY{p}{(}\PY{n}{root}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{.}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{train}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{download}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{transform}\PY{o}{=}\PY{n}{data\PYZus{}transform}\PY{p}{)}
+         
+         \PY{n}{train\PYZus{}loader} \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{utils}\PY{o}{.}\PY{n}{data}\PY{o}{.}\PY{n}{DataLoader}\PY{p}{(}\PY{n}{trainset}\PY{p}{,} \PY{n}{batch\PYZus{}size}\PY{o}{=}\PY{n}{batch\PYZus{}size}\PY{p}{,} \PY{n}{shuffle}\PY{o}{=}\PY{k+kc}{True}\PY{p}{,} \PY{n}{num\PYZus{}workers}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+         \PY{n}{test\PYZus{}loader}  \PY{o}{=} \PY{n}{torch}\PY{o}{.}\PY{n}{utils}\PY{o}{.}\PY{n}{data}\PY{o}{.}\PY{n}{DataLoader}\PY{p}{(}\PY{n}{testset}\PY{p}{,} \PY{n}{batch\PYZus{}size}\PY{o}{=}\PY{n}{batch\PYZus{}size}\PY{p}{,} \PY{n}{shuffle}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{num\PYZus{}workers}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Files already downloaded and verified
+Files already downloaded and verified
+
+    \end{Verbatim}
+
+    \hypertarget{task-3.1}{%
+\subsubsection{:: TASK 3.1 ::}\label{task-3.1}}
+
+Use \texttt{matplotlib} and ipython notebook's visualization
+capabilities to display some of these images. Display 5 images from the
+dataset together with their category label.
+\href{http://pytorch.org/tutorials/beginner/blitz/cifar10_tutorial.html\#sphx-glr-beginner-blitz-cifar10-tutorial-py}{See
+this PyTorch tutorial page} for hints on how to achieve this.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor} }]:} \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+        
+        \PY{n}{classes} \PY{o}{=} \PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{plane}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{car}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bird}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{cat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,}
+                   \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{deer}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{dog}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{frog}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{horse}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ship}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{truck}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+        \PY{k}{def} \PY{n+nf}{imshow}\PY{p}{(}\PY{n}{img}\PY{p}{)}\PY{p}{:}
+            \PY{n}{img} \PY{o}{=} \PY{n}{img} \PY{o}{/} \PY{l+m+mi}{2} \PY{o}{+} \PY{l+m+mf}{0.5}     \PY{c+c1}{\PYZsh{} unnormalize}
+            \PY{n}{npimg} \PY{o}{=} \PY{n}{img}\PY{o}{.}\PY{n}{numpy}\PY{p}{(}\PY{p}{)}
+            \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{n}{npimg}\PY{p}{,} \PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+        
+        
+        \PY{c+c1}{\PYZsh{} get some random training images}
+        \PY{n}{dataiter} \PY{o}{=} \PY{n+nb}{iter}\PY{p}{(}\PY{n}{train\PYZus{}loader}\PY{p}{)}
+        \PY{n}{images}\PY{p}{,} \PY{n}{labels} \PY{o}{=} \PY{n}{dataiter}\PY{o}{.}\PY{n}{next}\PY{p}{(}\PY{p}{)}
+        
+        \PY{c+c1}{\PYZsh{} show images}
+        \PY{n}{imshow}\PY{p}{(}\PY{n}{torchvision}\PY{o}{.}\PY{n}{utils}\PY{o}{.}\PY{n}{make\PYZus{}grid}\PY{p}{(}\PY{n}{images}\PY{p}{[}\PY{p}{:}\PY{l+m+mi}{5}\PY{p}{,}\PY{o}{.}\PY{o}{.}\PY{o}{.}\PY{p}{]}\PY{p}{)}\PY{p}{)}
+        \PY{c+c1}{\PYZsh{} print labels}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ }\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{join}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+si}{\PYZpc{}5s}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{classes}\PY{p}{[}\PY{n}{labels}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{]} \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \hypertarget{training-a-convolutional-network-on-cifar-10}{%
+\subsection{Training a Convolutional Network on
+CIFAR-10}\label{training-a-convolutional-network-on-cifar-10}}
+
+    Start by running the provided training code below. By default it will
+train on CIFAR-10 for 10 epochs (passes through the training data) with
+a single layer network. The loss function
+\href{http://pytorch.org/docs/master/nn.html?highlight=cross_entropy\#torch.nn.functional.cross_entropy}{cross\_entropy}
+computes a Logarithm of the Softmax on the output of the neural network,
+and then computes the negative log-likelihood w.r.t. the given
+\texttt{target}. Note the decrease in training loss and corresponding
+decrease in validation errors.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}86}]:} \PY{k}{def} \PY{n+nf}{train}\PY{p}{(}\PY{n}{epoch}\PY{p}{,} \PY{n}{network}\PY{p}{)}\PY{p}{:}
+             \PY{n}{network}\PY{o}{.}\PY{n}{train}\PY{p}{(}\PY{p}{)}
+             \PY{k}{for} \PY{n}{batch\PYZus{}idx}\PY{p}{,} \PY{p}{(}\PY{n}{data}\PY{p}{,} \PY{n}{target}\PY{p}{)} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{train\PYZus{}loader}\PY{p}{)}\PY{p}{:}
+                 \PY{n}{optimizer}\PY{o}{.}\PY{n}{zero\PYZus{}grad}\PY{p}{(}\PY{p}{)}
+                 \PY{n}{output} \PY{o}{=} \PY{n}{network}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+                 \PY{n}{loss} \PY{o}{=} \PY{n}{F}\PY{o}{.}\PY{n}{cross\PYZus{}entropy}\PY{p}{(}\PY{n}{output}\PY{p}{,} \PY{n}{target}\PY{p}{)}
+                 \PY{n}{loss}\PY{o}{.}\PY{n}{backward}\PY{p}{(}\PY{p}{)}
+                 \PY{n}{optimizer}\PY{o}{.}\PY{n}{step}\PY{p}{(}\PY{p}{)}
+                 \PY{k}{if} \PY{n}{batch\PYZus{}idx} \PY{o}{\PYZpc{}} \PY{l+m+mi}{100} \PY{o}{==} \PY{l+m+mi}{0}\PY{p}{:}
+                     \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{Train Epoch: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ [}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{/}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ (}\PY{l+s+si}{\PYZob{}:.0f\PYZcb{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{)]}\PY{l+s+se}{\PYZbs{}t}\PY{l+s+s1}{Loss: }\PY{l+s+si}{\PYZob{}:.6f\PYZcb{}}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}
+                         \PY{n}{epoch}\PY{p}{,} \PY{n}{batch\PYZus{}idx} \PY{o}{*} \PY{n+nb}{len}\PY{p}{(}\PY{n}{data}\PY{p}{)}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{train\PYZus{}loader}\PY{o}{.}\PY{n}{dataset}\PY{p}{)}\PY{p}{,}
+                         \PY{l+m+mf}{100.} \PY{o}{*} \PY{n}{batch\PYZus{}idx} \PY{o}{/} \PY{n+nb}{len}\PY{p}{(}\PY{n}{train\PYZus{}loader}\PY{p}{)}\PY{p}{,} \PY{n}{loss}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+         
+         \PY{k}{def} \PY{n+nf}{test}\PY{p}{(}\PY{n}{network}\PY{p}{)}\PY{p}{:}
+             \PY{n}{network}\PY{o}{.}\PY{n}{eval}\PY{p}{(}\PY{p}{)}
+             \PY{n}{test\PYZus{}loss} \PY{o}{=} \PY{l+m+mi}{0}
+             \PY{n}{correct} \PY{o}{=} \PY{l+m+mi}{0}
+             \PY{k}{for} \PY{n}{data}\PY{p}{,} \PY{n}{target} \PY{o+ow}{in} \PY{n}{test\PYZus{}loader}\PY{p}{:}
+                 \PY{n}{output} \PY{o}{=} \PY{n}{network}\PY{p}{(}\PY{n}{data}\PY{p}{)}
+                 \PY{n}{test\PYZus{}loss} \PY{o}{+}\PY{o}{=} \PY{n}{F}\PY{o}{.}\PY{n}{cross\PYZus{}entropy}\PY{p}{(}\PY{n}{output}\PY{p}{,} \PY{n}{target}\PY{p}{,} \PY{n}{size\PYZus{}average}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)} \PY{c+c1}{\PYZsh{} sum up batch loss}
+                 \PY{n}{pred} \PY{o}{=} \PY{n}{output}\PY{o}{.}\PY{n}{data}\PY{o}{.}\PY{n}{max}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{keepdim}\PY{o}{=}\PY{k+kc}{True}\PY{p}{)}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]} \PY{c+c1}{\PYZsh{} get the index of the max log\PYZhy{}probability}
+                 \PY{n}{correct} \PY{o}{+}\PY{o}{=} \PY{n}{pred}\PY{o}{.}\PY{n}{eq}\PY{p}{(}\PY{n}{target}\PY{o}{.}\PY{n}{data}\PY{o}{.}\PY{n}{view\PYZus{}as}\PY{p}{(}\PY{n}{pred}\PY{p}{)}\PY{p}{)}\PY{o}{.}\PY{n}{cpu}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{)}
+         
+             \PY{n}{test\PYZus{}loss} \PY{o}{/}\PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{test\PYZus{}loader}\PY{o}{.}\PY{n}{dataset}\PY{p}{)}
+             \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{Test set: Average loss: }\PY{l+s+si}{\PYZob{}:.4f\PYZcb{}}\PY{l+s+s1}{, Accuracy: }\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{/}\PY{l+s+si}{\PYZob{}\PYZcb{}}\PY{l+s+s1}{ (}\PY{l+s+si}{\PYZob{}:.0f\PYZcb{}}\PY{l+s+s1}{\PYZpc{}}\PY{l+s+s1}{)}\PY{l+s+se}{\PYZbs{}n}\PY{l+s+s1}{\PYZsq{}}\PY{o}{.}\PY{n}{format}\PY{p}{(}
+                 \PY{n}{test\PYZus{}loss}\PY{p}{,} \PY{n}{correct}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{test\PYZus{}loader}\PY{o}{.}\PY{n}{dataset}\PY{p}{)}\PY{p}{,}
+                 \PY{l+m+mf}{100.} \PY{o}{*} \PY{n}{correct} \PY{o}{/} \PY{n+nb}{len}\PY{p}{(}\PY{n}{test\PYZus{}loader}\PY{o}{.}\PY{n}{dataset}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}73}]:} \PY{c+c1}{\PYZsh{} Single layer network architecture}
+         
+         \PY{k}{class} \PY{n+nc}{Net}\PY{p}{(}\PY{n}{nn}\PY{o}{.}\PY{n}{Module}\PY{p}{)}\PY{p}{:}
+             \PY{k}{def} \PY{n+nf}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{num\PYZus{}inputs}\PY{p}{,} \PY{n}{num\PYZus{}outputs}\PY{p}{)}\PY{p}{:}
+                 \PY{n+nb}{super}\PY{p}{(}\PY{n}{Net}\PY{p}{,} \PY{n+nb+bp}{self}\PY{p}{)}\PY{o}{.}\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{p}{)}
+                 \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{n}{num\PYZus{}inputs}\PY{p}{,} \PY{n}{num\PYZus{}outputs}\PY{p}{)}
+                 \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{num\PYZus{}inputs} \PY{o}{=} \PY{n}{num\PYZus{}inputs}
+                 
+             \PY{k}{def} \PY{n+nf}{forward}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n+nb}{input}\PY{p}{)}\PY{p}{:}
+                 \PY{n+nb}{input} \PY{o}{=} \PY{n+nb}{input}\PY{o}{.}\PY{n}{view}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{num\PYZus{}inputs}\PY{p}{)} \PY{c+c1}{\PYZsh{} reshape input to batch x num\PYZus{}inputs}
+                 \PY{n}{output} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{linear}\PY{p}{(}\PY{n+nb}{input}\PY{p}{)}
+                 \PY{k}{return} \PY{n}{output}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}74}]:} \PY{c+c1}{\PYZsh{} Train}
+         \PY{n}{network} \PY{o}{=} \PY{n}{Net}\PY{p}{(}\PY{l+m+mi}{3072}\PY{p}{,} \PY{l+m+mi}{10}\PY{p}{)}
+         \PY{n}{optimizer} \PY{o}{=} \PY{n}{optim}\PY{o}{.}\PY{n}{SGD}\PY{p}{(}\PY{n}{network}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{lr}\PY{o}{=}\PY{n}{lr}\PY{p}{)}
+         \PY{k}{for} \PY{n}{epoch} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{11}\PY{p}{)}\PY{p}{:}
+             \PY{n}{train}\PY{p}{(}\PY{n}{epoch}\PY{p}{,} \PY{n}{network}\PY{p}{)}
+             \PY{n}{test}\PY{p}{(}\PY{n}{network}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Train Epoch: 1 [0/50000 (0\%)]	Loss: 2.465513
+Train Epoch: 1 [6400/50000 (13\%)]	Loss: 1.907268
+Train Epoch: 1 [12800/50000 (26\%)]	Loss: 1.781120
+Train Epoch: 1 [19200/50000 (38\%)]	Loss: 1.901051
+Train Epoch: 1 [25600/50000 (51\%)]	Loss: 1.842574
+Train Epoch: 1 [32000/50000 (64\%)]	Loss: 1.876386
+Train Epoch: 1 [38400/50000 (77\%)]	Loss: 1.921085
+Train Epoch: 1 [44800/50000 (90\%)]	Loss: 1.566456
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+/Users/pierre-louis/.pyenv/versions/3.6.5/lib/python3.6/site-packages/torch/nn/functional.py:52: UserWarning: size\_average and reduce args will be deprecated, please use reduction='sum' instead.
+  warnings.warn(warning.format(ret))
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Test set: Average loss: 1.7919, Accuracy: 19327/50000 (38\%)
+
+Train Epoch: 2 [0/50000 (0\%)]	Loss: 1.621286
+Train Epoch: 2 [6400/50000 (13\%)]	Loss: 1.614083
+Train Epoch: 2 [12800/50000 (26\%)]	Loss: 1.708106
+Train Epoch: 2 [19200/50000 (38\%)]	Loss: 1.784162
+Train Epoch: 2 [25600/50000 (51\%)]	Loss: 1.615401
+Train Epoch: 2 [32000/50000 (64\%)]	Loss: 1.853918
+Train Epoch: 2 [38400/50000 (77\%)]	Loss: 1.585275
+Train Epoch: 2 [44800/50000 (90\%)]	Loss: 1.680191
+
+Test set: Average loss: 1.7265, Accuracy: 20759/50000 (41\%)
+
+Train Epoch: 3 [0/50000 (0\%)]	Loss: 1.922572
+Train Epoch: 3 [6400/50000 (13\%)]	Loss: 1.745324
+Train Epoch: 3 [12800/50000 (26\%)]	Loss: 1.814732
+Train Epoch: 3 [19200/50000 (38\%)]	Loss: 1.682146
+Train Epoch: 3 [25600/50000 (51\%)]	Loss: 1.929942
+Train Epoch: 3 [32000/50000 (64\%)]	Loss: 1.811997
+Train Epoch: 3 [38400/50000 (77\%)]	Loss: 1.757770
+Train Epoch: 3 [44800/50000 (90\%)]	Loss: 1.771991
+
+Test set: Average loss: 1.7082, Accuracy: 21024/50000 (42\%)
+
+Train Epoch: 4 [0/50000 (0\%)]	Loss: 1.658015
+Train Epoch: 4 [6400/50000 (13\%)]	Loss: 1.649557
+Train Epoch: 4 [12800/50000 (26\%)]	Loss: 1.817867
+Train Epoch: 4 [19200/50000 (38\%)]	Loss: 1.806272
+Train Epoch: 4 [25600/50000 (51\%)]	Loss: 1.846104
+Train Epoch: 4 [32000/50000 (64\%)]	Loss: 1.631818
+Train Epoch: 4 [38400/50000 (77\%)]	Loss: 1.939369
+Train Epoch: 4 [44800/50000 (90\%)]	Loss: 1.920348
+
+Test set: Average loss: 1.6940, Accuracy: 21202/50000 (42\%)
+
+Train Epoch: 5 [0/50000 (0\%)]	Loss: 1.494887
+Train Epoch: 5 [6400/50000 (13\%)]	Loss: 1.604562
+Train Epoch: 5 [12800/50000 (26\%)]	Loss: 1.798800
+Train Epoch: 5 [19200/50000 (38\%)]	Loss: 1.821765
+Train Epoch: 5 [25600/50000 (51\%)]	Loss: 1.743377
+Train Epoch: 5 [32000/50000 (64\%)]	Loss: 1.593025
+Train Epoch: 5 [38400/50000 (77\%)]	Loss: 1.895879
+Train Epoch: 5 [44800/50000 (90\%)]	Loss: 1.784889
+
+Test set: Average loss: 1.7013, Accuracy: 20957/50000 (41\%)
+
+Train Epoch: 6 [0/50000 (0\%)]	Loss: 1.612710
+Train Epoch: 6 [6400/50000 (13\%)]	Loss: 1.806661
+Train Epoch: 6 [12800/50000 (26\%)]	Loss: 1.564548
+Train Epoch: 6 [19200/50000 (38\%)]	Loss: 1.629087
+Train Epoch: 6 [25600/50000 (51\%)]	Loss: 1.497233
+Train Epoch: 6 [32000/50000 (64\%)]	Loss: 1.452049
+Train Epoch: 6 [38400/50000 (77\%)]	Loss: 1.743016
+Train Epoch: 6 [44800/50000 (90\%)]	Loss: 1.607178
+
+Test set: Average loss: 1.6843, Accuracy: 21400/50000 (42\%)
+
+Train Epoch: 7 [0/50000 (0\%)]	Loss: 1.727890
+Train Epoch: 7 [6400/50000 (13\%)]	Loss: 1.815750
+Train Epoch: 7 [12800/50000 (26\%)]	Loss: 1.732919
+Train Epoch: 7 [19200/50000 (38\%)]	Loss: 1.563205
+Train Epoch: 7 [25600/50000 (51\%)]	Loss: 1.700497
+Train Epoch: 7 [32000/50000 (64\%)]	Loss: 1.973674
+Train Epoch: 7 [38400/50000 (77\%)]	Loss: 1.824547
+Train Epoch: 7 [44800/50000 (90\%)]	Loss: 1.456151
+
+Test set: Average loss: 1.6842, Accuracy: 21269/50000 (42\%)
+
+Train Epoch: 8 [0/50000 (0\%)]	Loss: 1.755547
+Train Epoch: 8 [6400/50000 (13\%)]	Loss: 1.609760
+Train Epoch: 8 [12800/50000 (26\%)]	Loss: 1.433208
+Train Epoch: 8 [19200/50000 (38\%)]	Loss: 1.736326
+Train Epoch: 8 [25600/50000 (51\%)]	Loss: 1.475266
+Train Epoch: 8 [32000/50000 (64\%)]	Loss: 1.613407
+Train Epoch: 8 [38400/50000 (77\%)]	Loss: 1.524942
+Train Epoch: 8 [44800/50000 (90\%)]	Loss: 1.579508
+
+Test set: Average loss: 1.6734, Accuracy: 21299/50000 (42\%)
+
+Train Epoch: 9 [0/50000 (0\%)]	Loss: 1.373614
+Train Epoch: 9 [6400/50000 (13\%)]	Loss: 1.753515
+Train Epoch: 9 [12800/50000 (26\%)]	Loss: 1.499163
+Train Epoch: 9 [19200/50000 (38\%)]	Loss: 1.737875
+Train Epoch: 9 [25600/50000 (51\%)]	Loss: 1.702603
+Train Epoch: 9 [32000/50000 (64\%)]	Loss: 1.839476
+Train Epoch: 9 [38400/50000 (77\%)]	Loss: 1.546673
+Train Epoch: 9 [44800/50000 (90\%)]	Loss: 1.734025
+
+Test set: Average loss: 1.6723, Accuracy: 21630/50000 (43\%)
+
+Train Epoch: 10 [0/50000 (0\%)]	Loss: 1.694918
+Train Epoch: 10 [6400/50000 (13\%)]	Loss: 1.835304
+Train Epoch: 10 [12800/50000 (26\%)]	Loss: 1.672483
+Train Epoch: 10 [19200/50000 (38\%)]	Loss: 1.793629
+Train Epoch: 10 [25600/50000 (51\%)]	Loss: 1.687314
+Train Epoch: 10 [32000/50000 (64\%)]	Loss: 1.650047
+Train Epoch: 10 [38400/50000 (77\%)]	Loss: 1.622946
+Train Epoch: 10 [44800/50000 (90\%)]	Loss: 1.796479
+
+Test set: Average loss: 1.6646, Accuracy: 21662/50000 (43\%)
+
+
+    \end{Verbatim}
+
+    \hypertarget{task-3.2}{%
+\subsubsection{:: TASK 3.2 ::}\label{task-3.2}}
+
+Add code to create a convolutional network architecture as below.
+
+\begin{itemize}
+\tightlist
+\item
+  Convolution with 5 by 5 filters, 16 feature maps + Tanh nonlinearity.
+\item
+  2 by 2 max pooling.
+\item
+  Convolution with 5 by 5 filters, 128 feature maps + Tanh nonlinearity.
+\item
+  2 by 2 max pooling.
+\item
+  Flatten to vector.
+\item
+  Linear layer with 64 hidden units + Tanh nonlinearity.
+\item
+  Linear layer to 10 output units.
+\end{itemize}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}70}]:} \PY{k}{class} \PY{n+nc}{ConvNet}\PY{p}{(}\PY{n}{nn}\PY{o}{.}\PY{n}{Module}\PY{p}{)}\PY{p}{:}
+             \PY{k}{def} \PY{n+nf}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{num\PYZus{}outputs}\PY{p}{)}\PY{p}{:}
+                 \PY{n+nb}{super}\PY{p}{(}\PY{n}{ConvNet}\PY{p}{,} \PY{n+nb+bp}{self}\PY{p}{)}\PY{o}{.}\PY{n+nf+fm}{\PYZus{}\PYZus{}init\PYZus{}\PYZus{}}\PY{p}{(}\PY{p}{)}
+                 \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{conv1} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Conv2d}\PY{p}{(}\PY{l+m+mi}{3}\PY{p}{,} \PY{l+m+mi}{16}\PY{p}{,} \PY{n}{kernel\PYZus{}size}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,} \PY{n}{stride}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{,} \PY{n}{padding}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{)}
+                 \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{pool1} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{MaxPool2d}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+                 \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{conv2} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Conv2d}\PY{p}{(}\PY{l+m+mi}{16}\PY{p}{,} \PY{l+m+mi}{128}\PY{p}{,} \PY{l+m+mi}{5}\PY{p}{)}
+                 \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{pool2} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{MaxPool2d}\PY{p}{(}\PY{l+m+mi}{2}\PY{p}{)}
+                 \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{fc1} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{l+m+mi}{128} \PY{o}{*} \PY{l+m+mi}{5} \PY{o}{*} \PY{l+m+mi}{5}\PY{p}{,} \PY{l+m+mi}{64}\PY{p}{)}
+                 \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{fc2} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{Linear}\PY{p}{(}\PY{l+m+mi}{64}\PY{p}{,} \PY{n}{num\PYZus{}outputs}\PY{p}{)}
+         
+             \PY{k}{def} \PY{n+nf}{forward}\PY{p}{(}\PY{n+nb+bp}{self}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{:}
+                 \PY{n}{x} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{pool1}\PY{p}{(}\PY{n}{nn}\PY{o}{.}\PY{n}{functional}\PY{o}{.}\PY{n}{tanh}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{conv1}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+                 \PY{n}{x} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{pool2}\PY{p}{(}\PY{n}{nn}\PY{o}{.}\PY{n}{functional}\PY{o}{.}\PY{n}{tanh}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{conv2}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+                 \PY{n}{x} \PY{o}{=} \PY{n}{x}\PY{o}{.}\PY{n}{view}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{128} \PY{o}{*} \PY{l+m+mi}{5} \PY{o}{*} \PY{l+m+mi}{5}\PY{p}{)}
+                 \PY{n}{x} \PY{o}{=} \PY{n}{nn}\PY{o}{.}\PY{n}{functional}\PY{o}{.}\PY{n}{tanh}\PY{p}{(}\PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{fc1}\PY{p}{(}\PY{n}{x}\PY{p}{)}\PY{p}{)}
+                 \PY{n}{x} \PY{o}{=} \PY{n+nb+bp}{self}\PY{o}{.}\PY{n}{fc2}\PY{p}{(}\PY{n}{x}\PY{p}{)}
+                 \PY{k}{return} \PY{n}{x}
+             
+\end{Verbatim}
+
+
+    \hypertarget{task-3.3}{%
+\subsubsection{:: TASK 3.3 ::}\label{task-3.3}}
+
+Some of the functions in a CNN must be non-linear. Why?
+
+    Summing linear layers give just another linear function. So adding
+layers do not improve the degree of freedoms of the system.
+
+Moreover, a linear activation function might explode numerical values.
+
+    \hypertarget{task-3.4}{%
+\subsubsection{:: TASK 3.4 ::}\label{task-3.4}}
+
+Train the CNN for 20 epochs on the CIFAR-10 training set.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}105}]:} \PY{c+c1}{\PYZsh{} Train}
+          \PY{n}{network}\PY{o}{=}\PY{n}{ConvNet}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}
+          \PY{n}{optimizer} \PY{o}{=} \PY{n}{optim}\PY{o}{.}\PY{n}{SGD}\PY{p}{(}\PY{n}{network}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)}\PY{p}{,} \PY{n}{lr}\PY{o}{=}\PY{n}{lr}\PY{p}{)}
+          \PY{k}{for} \PY{n}{epoch} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{21}\PY{p}{)}\PY{p}{:}
+              \PY{n}{train}\PY{p}{(}\PY{n}{epoch}\PY{p}{,} \PY{n}{network}\PY{p}{)}
+              \PY{n}{test}\PY{p}{(}\PY{n}{network}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+/Users/pierre-louis/.pyenv/versions/3.6.5/lib/python3.6/site-packages/torch/nn/functional.py:995: UserWarning: nn.functional.tanh is deprecated. Use torch.tanh instead.
+  warnings.warn("nn.functional.tanh is deprecated. Use torch.tanh instead.")
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+Train Epoch: 1 [0/50000 (0\%)]	Loss: 2.293155
+Train Epoch: 1 [6400/50000 (13\%)]	Loss: 2.202787
+Train Epoch: 1 [12800/50000 (26\%)]	Loss: 2.256428
+Train Epoch: 1 [19200/50000 (38\%)]	Loss: 1.979439
+Train Epoch: 1 [25600/50000 (51\%)]	Loss: 1.913129
+Train Epoch: 1 [32000/50000 (64\%)]	Loss: 1.922821
+Train Epoch: 1 [38400/50000 (77\%)]	Loss: 2.003609
+Train Epoch: 1 [44800/50000 (90\%)]	Loss: 1.787287
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+/Users/pierre-louis/.pyenv/versions/3.6.5/lib/python3.6/site-packages/torch/nn/functional.py:52: UserWarning: size\_average and reduce args will be deprecated, please use reduction='sum' instead.
+  warnings.warn(warning.format(ret))
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+
+Test set: Average loss: 1.8112, Accuracy: 18362/50000 (36\%)
+
+Train Epoch: 2 [0/50000 (0\%)]	Loss: 1.829560
+Train Epoch: 2 [6400/50000 (13\%)]	Loss: 1.804514
+Train Epoch: 2 [12800/50000 (26\%)]	Loss: 1.704777
+Train Epoch: 2 [19200/50000 (38\%)]	Loss: 1.799304
+Train Epoch: 2 [25600/50000 (51\%)]	Loss: 1.872620
+Train Epoch: 2 [32000/50000 (64\%)]	Loss: 1.678563
+Train Epoch: 2 [38400/50000 (77\%)]	Loss: 1.668955
+Train Epoch: 2 [44800/50000 (90\%)]	Loss: 1.542551
+
+Test set: Average loss: 1.6438, Accuracy: 20951/50000 (41\%)
+
+Train Epoch: 3 [0/50000 (0\%)]	Loss: 1.612250
+Train Epoch: 3 [6400/50000 (13\%)]	Loss: 1.664977
+Train Epoch: 3 [12800/50000 (26\%)]	Loss: 1.525902
+Train Epoch: 3 [19200/50000 (38\%)]	Loss: 1.469762
+Train Epoch: 3 [25600/50000 (51\%)]	Loss: 1.601933
+Train Epoch: 3 [32000/50000 (64\%)]	Loss: 1.529375
+Train Epoch: 3 [38400/50000 (77\%)]	Loss: 1.477588
+Train Epoch: 3 [44800/50000 (90\%)]	Loss: 1.364409
+
+Test set: Average loss: 1.5049, Accuracy: 23195/50000 (46\%)
+
+Train Epoch: 4 [0/50000 (0\%)]	Loss: 1.486930
+Train Epoch: 4 [6400/50000 (13\%)]	Loss: 1.399247
+Train Epoch: 4 [12800/50000 (26\%)]	Loss: 1.363820
+Train Epoch: 4 [19200/50000 (38\%)]	Loss: 1.315137
+Train Epoch: 4 [25600/50000 (51\%)]	Loss: 1.296814
+Train Epoch: 4 [32000/50000 (64\%)]	Loss: 1.288199
+Train Epoch: 4 [38400/50000 (77\%)]	Loss: 1.578539
+Train Epoch: 4 [44800/50000 (90\%)]	Loss: 1.416771
+
+Test set: Average loss: 1.4390, Accuracy: 24679/50000 (49\%)
+
+Train Epoch: 5 [0/50000 (0\%)]	Loss: 1.394458
+Train Epoch: 5 [6400/50000 (13\%)]	Loss: 1.549176
+Train Epoch: 5 [12800/50000 (26\%)]	Loss: 1.488361
+Train Epoch: 5 [19200/50000 (38\%)]	Loss: 1.371487
+Train Epoch: 5 [25600/50000 (51\%)]	Loss: 1.202587
+Train Epoch: 5 [32000/50000 (64\%)]	Loss: 1.384144
+Train Epoch: 5 [38400/50000 (77\%)]	Loss: 1.366267
+Train Epoch: 5 [44800/50000 (90\%)]	Loss: 1.299029
+
+Test set: Average loss: 1.3483, Accuracy: 26199/50000 (52\%)
+
+Train Epoch: 6 [0/50000 (0\%)]	Loss: 1.580784
+Train Epoch: 6 [6400/50000 (13\%)]	Loss: 1.319462
+Train Epoch: 6 [12800/50000 (26\%)]	Loss: 1.302827
+Train Epoch: 6 [19200/50000 (38\%)]	Loss: 1.296779
+Train Epoch: 6 [25600/50000 (51\%)]	Loss: 1.322724
+Train Epoch: 6 [32000/50000 (64\%)]	Loss: 1.459296
+Train Epoch: 6 [38400/50000 (77\%)]	Loss: 1.073497
+Train Epoch: 6 [44800/50000 (90\%)]	Loss: 1.265736
+
+Test set: Average loss: 1.3046, Accuracy: 26920/50000 (53\%)
+
+Train Epoch: 7 [0/50000 (0\%)]	Loss: 1.355003
+Train Epoch: 7 [6400/50000 (13\%)]	Loss: 1.204245
+Train Epoch: 7 [12800/50000 (26\%)]	Loss: 1.362893
+Train Epoch: 7 [19200/50000 (38\%)]	Loss: 1.116305
+Train Epoch: 7 [25600/50000 (51\%)]	Loss: 1.183206
+Train Epoch: 7 [32000/50000 (64\%)]	Loss: 1.227069
+Train Epoch: 7 [38400/50000 (77\%)]	Loss: 1.193395
+Train Epoch: 7 [44800/50000 (90\%)]	Loss: 1.216534
+
+Test set: Average loss: 1.3057, Accuracy: 26816/50000 (53\%)
+
+Train Epoch: 8 [0/50000 (0\%)]	Loss: 1.504607
+Train Epoch: 8 [6400/50000 (13\%)]	Loss: 1.344466
+Train Epoch: 8 [12800/50000 (26\%)]	Loss: 1.095537
+Train Epoch: 8 [19200/50000 (38\%)]	Loss: 1.166582
+Train Epoch: 8 [25600/50000 (51\%)]	Loss: 1.268196
+Train Epoch: 8 [32000/50000 (64\%)]	Loss: 1.226434
+Train Epoch: 8 [38400/50000 (77\%)]	Loss: 1.064802
+Train Epoch: 8 [44800/50000 (90\%)]	Loss: 1.003638
+
+Test set: Average loss: 1.2031, Accuracy: 28656/50000 (57\%)
+
+Train Epoch: 9 [0/50000 (0\%)]	Loss: 1.224706
+Train Epoch: 9 [6400/50000 (13\%)]	Loss: 1.155441
+Train Epoch: 9 [12800/50000 (26\%)]	Loss: 1.042028
+Train Epoch: 9 [19200/50000 (38\%)]	Loss: 0.989802
+Train Epoch: 9 [25600/50000 (51\%)]	Loss: 0.935172
+Train Epoch: 9 [32000/50000 (64\%)]	Loss: 1.199361
+Train Epoch: 9 [38400/50000 (77\%)]	Loss: 0.969241
+Train Epoch: 9 [44800/50000 (90\%)]	Loss: 1.193368
+
+Test set: Average loss: 1.1631, Accuracy: 29497/50000 (58\%)
+
+Train Epoch: 10 [0/50000 (0\%)]	Loss: 1.378958
+Train Epoch: 10 [6400/50000 (13\%)]	Loss: 1.084054
+Train Epoch: 10 [12800/50000 (26\%)]	Loss: 1.078287
+Train Epoch: 10 [19200/50000 (38\%)]	Loss: 0.890706
+Train Epoch: 10 [25600/50000 (51\%)]	Loss: 1.181734
+Train Epoch: 10 [32000/50000 (64\%)]	Loss: 1.067366
+Train Epoch: 10 [38400/50000 (77\%)]	Loss: 0.991593
+Train Epoch: 10 [44800/50000 (90\%)]	Loss: 0.982596
+
+Test set: Average loss: 1.2138, Accuracy: 28333/50000 (56\%)
+
+Train Epoch: 11 [0/50000 (0\%)]	Loss: 1.178489
+Train Epoch: 11 [6400/50000 (13\%)]	Loss: 1.129459
+Train Epoch: 11 [12800/50000 (26\%)]	Loss: 1.098190
+Train Epoch: 11 [19200/50000 (38\%)]	Loss: 1.185253
+Train Epoch: 11 [25600/50000 (51\%)]	Loss: 1.211621
+Train Epoch: 11 [32000/50000 (64\%)]	Loss: 1.049959
+Train Epoch: 11 [38400/50000 (77\%)]	Loss: 0.836196
+Train Epoch: 11 [44800/50000 (90\%)]	Loss: 0.876956
+
+Test set: Average loss: 1.0534, Accuracy: 31585/50000 (63\%)
+
+Train Epoch: 12 [0/50000 (0\%)]	Loss: 0.992557
+Train Epoch: 12 [6400/50000 (13\%)]	Loss: 1.177591
+Train Epoch: 12 [12800/50000 (26\%)]	Loss: 0.919004
+Train Epoch: 12 [19200/50000 (38\%)]	Loss: 1.115136
+Train Epoch: 12 [25600/50000 (51\%)]	Loss: 1.033882
+Train Epoch: 12 [32000/50000 (64\%)]	Loss: 1.017904
+Train Epoch: 12 [38400/50000 (77\%)]	Loss: 1.187957
+Train Epoch: 12 [44800/50000 (90\%)]	Loss: 1.150559
+
+Test set: Average loss: 1.0327, Accuracy: 31640/50000 (63\%)
+
+Train Epoch: 13 [0/50000 (0\%)]	Loss: 0.870617
+Train Epoch: 13 [6400/50000 (13\%)]	Loss: 0.988804
+Train Epoch: 13 [12800/50000 (26\%)]	Loss: 0.741279
+Train Epoch: 13 [19200/50000 (38\%)]	Loss: 0.859556
+Train Epoch: 13 [25600/50000 (51\%)]	Loss: 1.069875
+Train Epoch: 13 [32000/50000 (64\%)]	Loss: 0.925419
+Train Epoch: 13 [38400/50000 (77\%)]	Loss: 0.924536
+Train Epoch: 13 [44800/50000 (90\%)]	Loss: 1.063727
+
+Test set: Average loss: 1.0277, Accuracy: 31877/50000 (63\%)
+
+Train Epoch: 14 [0/50000 (0\%)]	Loss: 1.009695
+Train Epoch: 14 [6400/50000 (13\%)]	Loss: 0.805376
+Train Epoch: 14 [12800/50000 (26\%)]	Loss: 0.864268
+Train Epoch: 14 [19200/50000 (38\%)]	Loss: 1.000465
+Train Epoch: 14 [25600/50000 (51\%)]	Loss: 0.846141
+Train Epoch: 14 [32000/50000 (64\%)]	Loss: 1.040400
+Train Epoch: 14 [38400/50000 (77\%)]	Loss: 0.845384
+Train Epoch: 14 [44800/50000 (90\%)]	Loss: 0.712349
+
+Test set: Average loss: 0.9796, Accuracy: 32782/50000 (65\%)
+
+Train Epoch: 15 [0/50000 (0\%)]	Loss: 0.936188
+Train Epoch: 15 [6400/50000 (13\%)]	Loss: 1.021849
+Train Epoch: 15 [12800/50000 (26\%)]	Loss: 0.935602
+Train Epoch: 15 [19200/50000 (38\%)]	Loss: 0.966650
+Train Epoch: 15 [25600/50000 (51\%)]	Loss: 1.128173
+Train Epoch: 15 [32000/50000 (64\%)]	Loss: 0.975990
+Train Epoch: 15 [38400/50000 (77\%)]	Loss: 0.783195
+Train Epoch: 15 [44800/50000 (90\%)]	Loss: 0.782042
+
+Test set: Average loss: 0.9714, Accuracy: 32980/50000 (65\%)
+
+Train Epoch: 16 [0/50000 (0\%)]	Loss: 0.972140
+Train Epoch: 16 [6400/50000 (13\%)]	Loss: 0.924619
+Train Epoch: 16 [12800/50000 (26\%)]	Loss: 0.960505
+Train Epoch: 16 [19200/50000 (38\%)]	Loss: 0.857813
+Train Epoch: 16 [25600/50000 (51\%)]	Loss: 0.891293
+Train Epoch: 16 [32000/50000 (64\%)]	Loss: 0.840683
+Train Epoch: 16 [38400/50000 (77\%)]	Loss: 0.942400
+Train Epoch: 16 [44800/50000 (90\%)]	Loss: 0.775664
+
+Test set: Average loss: 0.9682, Accuracy: 32897/50000 (65\%)
+
+Train Epoch: 17 [0/50000 (0\%)]	Loss: 1.022442
+Train Epoch: 17 [6400/50000 (13\%)]	Loss: 0.808925
+Train Epoch: 17 [12800/50000 (26\%)]	Loss: 0.779607
+Train Epoch: 17 [19200/50000 (38\%)]	Loss: 0.818545
+Train Epoch: 17 [25600/50000 (51\%)]	Loss: 0.791395
+Train Epoch: 17 [32000/50000 (64\%)]	Loss: 0.920871
+Train Epoch: 17 [38400/50000 (77\%)]	Loss: 0.951643
+Train Epoch: 17 [44800/50000 (90\%)]	Loss: 0.787579
+
+Test set: Average loss: 0.9711, Accuracy: 32732/50000 (65\%)
+
+Train Epoch: 18 [0/50000 (0\%)]	Loss: 1.082359
+Train Epoch: 18 [6400/50000 (13\%)]	Loss: 0.992305
+Train Epoch: 18 [12800/50000 (26\%)]	Loss: 0.940204
+Train Epoch: 18 [19200/50000 (38\%)]	Loss: 0.899531
+Train Epoch: 18 [25600/50000 (51\%)]	Loss: 0.773933
+Train Epoch: 18 [32000/50000 (64\%)]	Loss: 0.930977
+Train Epoch: 18 [38400/50000 (77\%)]	Loss: 0.940566
+Train Epoch: 18 [44800/50000 (90\%)]	Loss: 0.858044
+
+Test set: Average loss: 0.8993, Accuracy: 33866/50000 (67\%)
+
+Train Epoch: 19 [0/50000 (0\%)]	Loss: 0.868103
+Train Epoch: 19 [6400/50000 (13\%)]	Loss: 0.680791
+Train Epoch: 19 [12800/50000 (26\%)]	Loss: 0.767008
+Train Epoch: 19 [19200/50000 (38\%)]	Loss: 0.759001
+Train Epoch: 19 [25600/50000 (51\%)]	Loss: 0.938291
+Train Epoch: 19 [32000/50000 (64\%)]	Loss: 0.695437
+Train Epoch: 19 [38400/50000 (77\%)]	Loss: 0.864357
+Train Epoch: 19 [44800/50000 (90\%)]	Loss: 0.708005
+
+Test set: Average loss: 0.8591, Accuracy: 34865/50000 (69\%)
+
+Train Epoch: 20 [0/50000 (0\%)]	Loss: 0.989658
+Train Epoch: 20 [6400/50000 (13\%)]	Loss: 1.009045
+Train Epoch: 20 [12800/50000 (26\%)]	Loss: 0.856712
+Train Epoch: 20 [19200/50000 (38\%)]	Loss: 0.780319
+Train Epoch: 20 [25600/50000 (51\%)]	Loss: 0.738128
+Train Epoch: 20 [32000/50000 (64\%)]	Loss: 0.909611
+Train Epoch: 20 [38400/50000 (77\%)]	Loss: 0.834496
+Train Epoch: 20 [44800/50000 (90\%)]	Loss: 0.871072
+
+Test set: Average loss: 0.8088, Accuracy: 35944/50000 (71\%)
+
+
+    \end{Verbatim}
+
+    \hypertarget{task-3.5}{%
+\subsubsection{:: TASK 3.5 ::}\label{task-3.5}}
+
+Plot the first convolutional layer weights as images after the last
+epoch. (Hint threads:
+\href{https://discuss.pytorch.org/t/understanding-deep-network-visualize-weights/2060/2?u=smth}{\#1}
+\href{https://github.com/pytorch/vision\#utils}{\#2} )
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}89}]:} \PY{k}{for} \PY{n}{m} \PY{o+ow}{in} \PY{n}{network}\PY{o}{.}\PY{n}{modules}\PY{p}{(}\PY{p}{)}\PY{p}{:}
+             \PY{k}{if} \PY{n+nb}{isinstance}\PY{p}{(}\PY{n}{m}\PY{p}{,} \PY{n}{nn}\PY{o}{.}\PY{n}{Conv2d}\PY{p}{)}\PY{p}{:}
+                 \PY{n}{bias} \PY{o}{=} \PY{n}{m}\PY{o}{.}\PY{n}{bias}\PY{o}{.}\PY{n}{data}
+                 \PY{n}{weight} \PY{o}{=} \PY{n}{m}\PY{o}{.}\PY{n}{weight}\PY{o}{.}\PY{n}{data}
+                 \PY{k}{break}
+\end{Verbatim}
+
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}122}]:} \PY{n}{Noutputs}\PY{p}{,} \PY{n}{Ninputs}\PY{p}{,} \PY{n}{w}\PY{p}{,} \PY{n}{h} \PY{o}{=} \PY{n}{weight}\PY{o}{.}\PY{n}{shape}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,}\PY{l+m+mi}{10}\PY{p}{)}\PY{p}{)}
+          \PY{n}{plots\PYZus{}per\PYZus{}col} \PY{o}{=} \PY{l+m+mi}{8}
+          \PY{n}{plots\PYZus{}per\PYZus{}line} \PY{o}{=} \PY{p}{(}\PY{l+m+mi}{2}\PY{o}{*}\PY{n}{Noutputs}\PY{p}{)}\PY{o}{/}\PY{o}{/}\PY{n}{plots\PYZus{}per\PYZus{}col}
+          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{Noutputs}\PY{p}{)}\PY{p}{:}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{n}{plots\PYZus{}per\PYZus{}line}\PY{p}{,} \PY{n}{plots\PYZus{}per\PYZus{}col}\PY{p}{,} \PY{l+m+mi}{2}\PY{o}{*}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}
+              \PY{n}{we} \PY{o}{=} \PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{swapaxes}\PY{p}{(}\PY{n}{weight}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{,} \PY{l+m+mi}{0}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}\PY{o}{.}\PY{n}{numpy}\PY{p}{(}\PY{p}{)}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{128}
+              \PY{n}{we} \PY{o}{=} \PY{n}{we}\PY{o}{.}\PY{n}{astype}\PY{p}{(}\PY{n+nb}{int}\PY{p}{)}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{we}\PY{p}{)}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Weight }\PY{l+s+si}{\PYZob{}i\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{,}\PY{p}{)}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{off}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          
+              \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{n}{plots\PYZus{}per\PYZus{}line}\PY{p}{,} \PY{n}{plots\PYZus{}per\PYZus{}col}\PY{p}{,} \PY{l+m+mi}{2}\PY{o}{*}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{2}\PY{p}{)}
+              \PY{n}{b} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{ones}\PY{p}{(}\PY{p}{(}\PY{n}{w}\PY{p}{,}\PY{n}{h}\PY{p}{)}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n+nb}{int}\PY{p}{)}\PY{o}{*}\PY{n+nb}{int}\PY{p}{(}\PY{p}{(}\PY{n}{bias}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{*}\PY{l+m+mf}{128.}\PY{p}{)}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{b}\PY{p}{,} \PY{n}{cmap}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{gray}\PY{l+s+s1}{\PYZsq{}}\PY{p}{,} \PY{n}{vmin}\PY{o}{=}\PY{l+m+mi}{0}\PY{p}{,} \PY{n}{vmax}\PY{o}{=}\PY{l+m+mi}{255}\PY{p}{)}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{n}{f}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{Bias }\PY{l+s+si}{\PYZob{}i\PYZcb{}}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{off}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_84_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{task-3.6}{%
+\subsubsection{:: TASK 3.6 ::}\label{task-3.6}}
+
+What is the dimensionality of the weights at each layer? How many
+parameters are there in total in this CNN architecture?
+
+    A 2D convolution layer has
+\texttt{(kernel**2\ *\ input\ +\ 1)\ *\ ouput} parameters. A linear
+layer has \texttt{(input\ +\ 1)\ *\ output} parameters. Other layers
+have no parameters. The term \texttt{+1} comes from the bias.
+
+So here:
+
+\begin{itemize}
+\tightlist
+\item
+  2 convolutions (kernel with 5 by 5 filters:
+  \texttt{5\^{}2*((16+1)*128+\ (3+1)*16)} parameters;
+\item
+  Linear layers : \texttt{(128\ *\ 5\ *\ 5+1)*64\ +\ (64+1)*10}.
+\end{itemize}
+
+\textbf{Total: 258,058 parameters!}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}72}]:} \PY{k}{def} \PY{n+nf}{count\PYZus{}parameters}\PY{p}{(}\PY{n}{model}\PY{p}{)}\PY{p}{:}
+             \PY{c+c1}{\PYZsh{} https://discuss.pytorch.org/t/how\PYZhy{}do\PYZhy{}i\PYZhy{}check\PYZhy{}the\PYZhy{}number\PYZhy{}of\PYZhy{}parameters\PYZhy{}of\PYZhy{}a\PYZhy{}model/4325/9}
+             \PY{k}{return} \PY{n+nb}{sum}\PY{p}{(}\PY{n}{p}\PY{o}{.}\PY{n}{numel}\PY{p}{(}\PY{p}{)} \PY{k}{for} \PY{n}{p} \PY{o+ow}{in} \PY{n}{model}\PY{o}{.}\PY{n}{parameters}\PY{p}{(}\PY{p}{)} \PY{k}{if} \PY{n}{p}\PY{o}{.}\PY{n}{requires\PYZus{}grad}\PY{p}{)}
+         
+         \PY{n}{network}\PY{o}{=}\PY{n}{ConvNet}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{)}
+         
+         \PY{k}{assert}  \PY{p}{(}\PY{l+m+mi}{5}\PY{o}{*}\PY{l+m+mi}{5}\PY{o}{*}\PY{l+m+mi}{16} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{128}\PY{o}{+}   \PY{p}{(}\PY{l+m+mi}{5}\PY{o}{*}\PY{l+m+mi}{5}\PY{o}{*}\PY{l+m+mi}{3} \PY{o}{+} \PY{l+m+mi}{1}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{16} \PY{o}{+} \PY{p}{(}\PY{l+m+mi}{128} \PY{o}{*} \PY{l+m+mi}{5} \PY{o}{*} \PY{l+m+mi}{5}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{64} \PY{o}{+} \PY{p}{(}\PY{l+m+mi}{64}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}\PY{o}{*}\PY{l+m+mi}{10} \PY{o}{==} \PY{n}{count\PYZus{}parameters}\PY{p}{(}\PY{n}{network}\PY{p}{)}
+\end{Verbatim}
+
+
+    \hypertarget{useful-resources}{%
+\subsection{Useful resources}\label{useful-resources}}
+
+\begin{itemize}
+\tightlist
+\item
+  \href{http://pytorch.org/tutorials/beginner/blitz/neural_networks_tutorial.html\#sphx-glr-beginner-blitz-neural-networks-tutorial-py}{PyTorch
+  tutorial}
+\item
+  \href{https://github.com/pytorch/examples/tree/master/mnist}{MNIST
+  example}
+\end{itemize}
+
+    \hypertarget{authorship-statement}{%
+\subsection{AUTHORSHIP STATEMENT}\label{authorship-statement}}
+
+I declare that the preceding work was the sole result of my own effort
+and that I have not used any code or results from third-parties.
+
+Pierre-Louis Guhur
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}

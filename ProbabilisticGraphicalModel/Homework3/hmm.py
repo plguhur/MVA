@@ -28,43 +28,93 @@ class GaussianHiddenMarkovModel():
     # EXPECTATION STEP
     def compute_likelihood(self, observations):
         diff = observations[:, None, :] - self.means
-#         self.precisions = inv(self.covariances) # makes sense for me but does not work
+        self.precisions = inv(self.covariances) # makes sense for me but does not work
         exponents = np.sum(
             np.einsum('nki,kij->nkj', diff, self.precisions) * diff, axis=-1)
         return np.exp(-0.5 * exponents) / np.sqrt(det(self.covariances) * (2 * np.pi) ** self.n_features)
-        
-    def compute_alpha(self, observations, likelihoods):
-        N = len(observations)
-        alphas = np.zeros((N, self.K))
-        constants = np.zeros(N)
-        
-        alpha = self.pi * likelihoods[0]
-        constants[0] = alpha.sum()
-        alphas[0] = alpha / alpha.sum()
-        for i, likelihood in enumerate(likelihoods[1:]):
-            alpha = alphas[i] @ self.transition_matrix * likelihood
-            constants[i+1] = alpha.sum()
-            alphas[i+1] = alpha / alpha.sum()
-
-        return alphas, constants
     
-    def compute_beta(self, observations, likelihoods, constants):
-        N = len(observations)
-        betas = np.zeros((N, self.K))
-        i = N - 1
-        betas[i] = np.ones(self.K)
-        for likelihood, constant in zip(likelihoods[-1:0:-1], constants[-1:0:-1]):
-            betas[i-1] = self.transition_matrix @ (likelihood * betas[i]) / constant
-            i -= 1
+    def _state_likelihood(self, obs):
+        obs = np.atleast_2d(obs)
+        B = np.zeros((self.n_states, obs.shape[1]))
+        for s in range(self.n_states):
+            #Needs scipy 0.14
+            B[s, :] = st.multivariate_normal.pdf(obs.T, mean=self.mu[:, s].T, cov=self.covs[:, :, s].T)
+            #This function can (and will!) return values >> 1
+            #See the discussion here for the equivalent matlab function
+            #https://groups.google.com/forum/#!topic/comp.soft-sys.matlab/YksWK0T74Ak
+            #Key line: "Probabilities have to be less than 1,
+            #Densities can be anything, even infinite (at individual points)."
+            #This is evaluating the density at individual points...
+        return B
+    
+#     def compute_alpha(self, observations, likelihoods):
+#         N = len(observations)
+#         alphas = np.zeros((N, self.K))
+#         constants = np.zeros(N)
+        
+#         alpha = self.pi * likelihoods[0]
+#         constants[0] = alpha.sum()
+#         alphas[0] = alpha / alpha.sum()
+#         for i, likelihood in enumerate(likelihoods[1:]):
+#             alpha = alphas[i] @ self.transition_matrix * likelihood
+#             constants[i+1] = alpha.sum()
+#             alphas[i+1] = alpha / alpha.sum()
 
-        return betas
+#         return alphas, constants
+
+    def compute_alpha(self, B):
+        log_likelihood = 0.
+        T = B.shape[1]
+        
+        
+        alpha = np.zeros(B.shape)
+        for t in range(T):
+            if t == 0:
+                alpha[:, t] = B[:, t] * self.prior.ravel()
+            else:
+                alpha[:, t] = B[:, t] * np.dot(self.a.T, alpha[:, t - 1])
+         
+            alpha_sum = np.sum(alpha[:, t])
+            alpha[:, t] /= alpha_sum
+            log_likelihood = log_likelihood + np.log(alpha_sum)
+        return log_likelihood, np.ex(alpha
+    
+    def compute_beta(self, B):
+        T = B.shape[1]
+        beta = np.zeros(B.shape);
+           
+        beta[:, -1] = np.ones(B.shape[0])
+            
+        for t in range(T - 1)[::-1]:
+            beta[:, t] = np.dot(self.A, (B[:, t + 1] * beta[:, t + 1]))
+            beta[:, t] /= np.sum(beta[:, t])
+        return np.exp(beta)
+    
+#     def compute_beta(self, observations, likelihoods, constants):
+#         N = len(observations)
+#         betas = np.zeros((N, self.K))
+#         i = N - 1
+#         betas[i] = np.ones(self.K)
+#         for likelihood, constant in zip(likelihoods[-1:0:-1], constants[-1:0:-1]):
+# #             betas[i-1] = self.transition_matrix @ (likelihood * betas[i] / constant) 
+#             beta = self.transition_matrix @ (likelihood * betas[i])
+#             betas[i-1] = beta / np.sum(beta)
+# #          / constant
+#             i -= 1
+
+#         return betas
 
     
     def expectation_step(self, observations):        
-        likelihoods = self.compute_likelihood(observations)
-        alphas, constants = self.compute_alpha(observations, likelihoods)
-        betas = self.compute_beta(observations, likelihoods, constants)
-        posterior = alphas * betas #/ np.sum(alphas*betas)
+#         likelihoods = self.compute_likelihood(observations)
+#         alphas, constants = self.compute_alpha(observations, likelihoods)
+        s = self.state_likelihood(obs)
+        log_likelihood, alpha = self.compute_alpha(s)
+        beta = self.compute_beta(s)
+        
+#         betas = self.compute_beta(observations, likelihoods, constants)
+#         posterior = np.divide(alphas * betas, np.sum(alphas*betas, axis=1)[:,None])
+        posterior = alphas*betas
         unn_transition = self.transition_matrix * likelihoods[1:, None, :] * betas[1:, None, :] * alphas[:-1, :, None]   
         self.transition_matrix = np.sum(unn_transition, axis=0) / np.sum(unn_transition, axis=(0, 2))
         return posterior

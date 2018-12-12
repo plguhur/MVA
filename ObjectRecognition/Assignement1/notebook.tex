@@ -1,0 +1,983 @@
+
+% Default to the notebook output style
+
+    
+
+
+% Inherit from the specified cell style.
+
+
+
+
+    
+\documentclass[11pt]{article}
+
+    
+    
+    \usepackage[T1]{fontenc}
+    % Nicer default font (+ math font) than Computer Modern for most use cases
+    \usepackage{mathpazo}
+
+    % Basic figure setup, for now with no caption control since it's done
+    % automatically by Pandoc (which extracts ![](path) syntax from Markdown).
+    \usepackage{graphicx}
+    % We will generate all images so they have a width \maxwidth. This means
+    % that they will get their normal width if they fit onto the page, but
+    % are scaled down if they would overflow the margins.
+    \makeatletter
+    \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth
+    \else\Gin@nat@width\fi}
+    \makeatother
+    \let\Oldincludegraphics\includegraphics
+    % Set max figure width to be 80% of text width, for now hardcoded.
+    \renewcommand{\includegraphics}[1]{\Oldincludegraphics[width=.8\maxwidth]{#1}}
+    % Ensure that by default, figures have no caption (until we provide a
+    % proper Figure object with a Caption API and a way to capture that
+    % in the conversion process - todo).
+    \usepackage{caption}
+    \DeclareCaptionLabelFormat{nolabel}{}
+    \captionsetup{labelformat=nolabel}
+
+    \usepackage{adjustbox} % Used to constrain images to a maximum size 
+    \usepackage{xcolor} % Allow colors to be defined
+    \usepackage{enumerate} % Needed for markdown enumerations to work
+    \usepackage{geometry} % Used to adjust the document margins
+    \usepackage{amsmath} % Equations
+    \usepackage{amssymb} % Equations
+    \usepackage{textcomp} % defines textquotesingle
+    % Hack from http://tex.stackexchange.com/a/47451/13684:
+    \AtBeginDocument{%
+        \def\PYZsq{\textquotesingle}% Upright quotes in Pygmentized code
+    }
+    \usepackage{upquote} % Upright quotes for verbatim code
+    \usepackage{eurosym} % defines \euro
+    \usepackage[mathletters]{ucs} % Extended unicode (utf-8) support
+    \usepackage[utf8x]{inputenc} % Allow utf-8 characters in the tex document
+    \usepackage{fancyvrb} % verbatim replacement that allows latex
+    \usepackage{grffile} % extends the file name processing of package graphics 
+                         % to support a larger range 
+    % The hyperref package gives us a pdf with properly built
+    % internal navigation ('pdf bookmarks' for the table of contents,
+    % internal cross-reference links, web links for URLs, etc.)
+    \usepackage{hyperref}
+    \usepackage{longtable} % longtable support required by pandoc >1.10
+    \usepackage{booktabs}  % table support for pandoc > 1.12.2
+    \usepackage[inline]{enumitem} % IRkernel/repr support (it uses the enumerate* environment)
+    \usepackage[normalem]{ulem} % ulem is needed to support strikethroughs (\sout)
+                                % normalem makes italics be italics, not underlines
+    
+
+    
+    
+    % Colors for the hyperref package
+    \definecolor{urlcolor}{rgb}{0,.145,.698}
+    \definecolor{linkcolor}{rgb}{.71,0.21,0.01}
+    \definecolor{citecolor}{rgb}{.12,.54,.11}
+
+    % ANSI colors
+    \definecolor{ansi-black}{HTML}{3E424D}
+    \definecolor{ansi-black-intense}{HTML}{282C36}
+    \definecolor{ansi-red}{HTML}{E75C58}
+    \definecolor{ansi-red-intense}{HTML}{B22B31}
+    \definecolor{ansi-green}{HTML}{00A250}
+    \definecolor{ansi-green-intense}{HTML}{007427}
+    \definecolor{ansi-yellow}{HTML}{DDB62B}
+    \definecolor{ansi-yellow-intense}{HTML}{B27D12}
+    \definecolor{ansi-blue}{HTML}{208FFB}
+    \definecolor{ansi-blue-intense}{HTML}{0065CA}
+    \definecolor{ansi-magenta}{HTML}{D160C4}
+    \definecolor{ansi-magenta-intense}{HTML}{A03196}
+    \definecolor{ansi-cyan}{HTML}{60C6C8}
+    \definecolor{ansi-cyan-intense}{HTML}{258F8F}
+    \definecolor{ansi-white}{HTML}{C5C1B4}
+    \definecolor{ansi-white-intense}{HTML}{A1A6B2}
+
+    % commands and environments needed by pandoc snippets
+    % extracted from the output of `pandoc -s`
+    \providecommand{\tightlist}{%
+      \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+    \DefineVerbatimEnvironment{Highlighting}{Verbatim}{commandchars=\\\{\}}
+    % Add ',fontsize=\small' for more characters per line
+    \newenvironment{Shaded}{}{}
+    \newcommand{\KeywordTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\DataTypeTok}[1]{\textcolor[rgb]{0.56,0.13,0.00}{{#1}}}
+    \newcommand{\DecValTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\BaseNTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\FloatTok}[1]{\textcolor[rgb]{0.25,0.63,0.44}{{#1}}}
+    \newcommand{\CharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\StringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\CommentTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textit{{#1}}}}
+    \newcommand{\OtherTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{{#1}}}
+    \newcommand{\AlertTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\FunctionTok}[1]{\textcolor[rgb]{0.02,0.16,0.49}{{#1}}}
+    \newcommand{\RegionMarkerTok}[1]{{#1}}
+    \newcommand{\ErrorTok}[1]{\textcolor[rgb]{1.00,0.00,0.00}{\textbf{{#1}}}}
+    \newcommand{\NormalTok}[1]{{#1}}
+    
+    % Additional commands for more recent versions of Pandoc
+    \newcommand{\ConstantTok}[1]{\textcolor[rgb]{0.53,0.00,0.00}{{#1}}}
+    \newcommand{\SpecialCharTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\VerbatimStringTok}[1]{\textcolor[rgb]{0.25,0.44,0.63}{{#1}}}
+    \newcommand{\SpecialStringTok}[1]{\textcolor[rgb]{0.73,0.40,0.53}{{#1}}}
+    \newcommand{\ImportTok}[1]{{#1}}
+    \newcommand{\DocumentationTok}[1]{\textcolor[rgb]{0.73,0.13,0.13}{\textit{{#1}}}}
+    \newcommand{\AnnotationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\CommentVarTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\VariableTok}[1]{\textcolor[rgb]{0.10,0.09,0.49}{{#1}}}
+    \newcommand{\ControlFlowTok}[1]{\textcolor[rgb]{0.00,0.44,0.13}{\textbf{{#1}}}}
+    \newcommand{\OperatorTok}[1]{\textcolor[rgb]{0.40,0.40,0.40}{{#1}}}
+    \newcommand{\BuiltInTok}[1]{{#1}}
+    \newcommand{\ExtensionTok}[1]{{#1}}
+    \newcommand{\PreprocessorTok}[1]{\textcolor[rgb]{0.74,0.48,0.00}{{#1}}}
+    \newcommand{\AttributeTok}[1]{\textcolor[rgb]{0.49,0.56,0.16}{{#1}}}
+    \newcommand{\InformationTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    \newcommand{\WarningTok}[1]{\textcolor[rgb]{0.38,0.63,0.69}{\textbf{\textit{{#1}}}}}
+    
+    
+    % Define a nice break command that doesn't care if a line doesn't already
+    % exist.
+    \def\br{\hspace*{\fill} \\* }
+    % Math Jax compatability definitions
+    \def\gt{>}
+    \def\lt{<}
+    % Document parameters
+    \title{A1\_GUHUR\_Pierre-Louis}
+    
+    
+    
+
+    % Pygments definitions
+    
+\makeatletter
+\def\PY@reset{\let\PY@it=\relax \let\PY@bf=\relax%
+    \let\PY@ul=\relax \let\PY@tc=\relax%
+    \let\PY@bc=\relax \let\PY@ff=\relax}
+\def\PY@tok#1{\csname PY@tok@#1\endcsname}
+\def\PY@toks#1+{\ifx\relax#1\empty\else%
+    \PY@tok{#1}\expandafter\PY@toks\fi}
+\def\PY@do#1{\PY@bc{\PY@tc{\PY@ul{%
+    \PY@it{\PY@bf{\PY@ff{#1}}}}}}}
+\def\PY#1#2{\PY@reset\PY@toks#1+\relax+\PY@do{#2}}
+
+\expandafter\def\csname PY@tok@gd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gu\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.50,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@gt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.27,0.87}{##1}}}
+\expandafter\def\csname PY@tok@gs\endcsname{\let\PY@bf=\textbf}
+\expandafter\def\csname PY@tok@gr\endcsname{\def\PY@tc##1{\textcolor[rgb]{1.00,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cm\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@vg\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@vm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@mh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@cs\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@ge\endcsname{\let\PY@it=\textit}
+\expandafter\def\csname PY@tok@vc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@il\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@go\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.53,0.53}{##1}}}
+\expandafter\def\csname PY@tok@cp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.74,0.48,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@gh\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@ni\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.60,0.60,0.60}{##1}}}
+\expandafter\def\csname PY@tok@nl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.63,0.63,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@no\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.53,0.00,0.00}{##1}}}
+\expandafter\def\csname PY@tok@na\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.49,0.56,0.16}{##1}}}
+\expandafter\def\csname PY@tok@nb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@nd\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@ne\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.82,0.25,0.23}{##1}}}
+\expandafter\def\csname PY@tok@nf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@si\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@s2\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@nt\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@nv\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@s1\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@dl\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@ch\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@m\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@gp\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,0.50}{##1}}}
+\expandafter\def\csname PY@tok@sh\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@ow\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.67,0.13,1.00}{##1}}}
+\expandafter\def\csname PY@tok@sx\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@bp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@c1\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@fm\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.00,1.00}{##1}}}
+\expandafter\def\csname PY@tok@o\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@kc\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@c\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@mf\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@err\endcsname{\def\PY@bc##1{\setlength{\fboxsep}{0pt}\fcolorbox[rgb]{1.00,0.00,0.00}{1,1,1}{\strut ##1}}}
+\expandafter\def\csname PY@tok@mb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@ss\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.10,0.09,0.49}{##1}}}
+\expandafter\def\csname PY@tok@sr\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.53}{##1}}}
+\expandafter\def\csname PY@tok@mo\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@kd\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@mi\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.40,0.40,0.40}{##1}}}
+\expandafter\def\csname PY@tok@kn\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@cpf\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.25,0.50,0.50}{##1}}}
+\expandafter\def\csname PY@tok@kr\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@s\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@kp\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@w\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.73,0.73}{##1}}}
+\expandafter\def\csname PY@tok@kt\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.69,0.00,0.25}{##1}}}
+\expandafter\def\csname PY@tok@sc\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sb\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sa\endcsname{\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+\expandafter\def\csname PY@tok@k\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.00,0.50,0.00}{##1}}}
+\expandafter\def\csname PY@tok@se\endcsname{\let\PY@bf=\textbf\def\PY@tc##1{\textcolor[rgb]{0.73,0.40,0.13}{##1}}}
+\expandafter\def\csname PY@tok@sd\endcsname{\let\PY@it=\textit\def\PY@tc##1{\textcolor[rgb]{0.73,0.13,0.13}{##1}}}
+
+\def\PYZbs{\char`\\}
+\def\PYZus{\char`\_}
+\def\PYZob{\char`\{}
+\def\PYZcb{\char`\}}
+\def\PYZca{\char`\^}
+\def\PYZam{\char`\&}
+\def\PYZlt{\char`\<}
+\def\PYZgt{\char`\>}
+\def\PYZsh{\char`\#}
+\def\PYZpc{\char`\%}
+\def\PYZdl{\char`\$}
+\def\PYZhy{\char`\-}
+\def\PYZsq{\char`\'}
+\def\PYZdq{\char`\"}
+\def\PYZti{\char`\~}
+% for compatibility with earlier versions
+\def\PYZat{@}
+\def\PYZlb{[}
+\def\PYZrb{]}
+\makeatother
+
+
+    % Exact colors from NB
+    \definecolor{incolor}{rgb}{0.0, 0.0, 0.5}
+    \definecolor{outcolor}{rgb}{0.545, 0.0, 0.0}
+
+
+
+    
+    % Prevent overflowing lines due to hard-to-break entities
+    \sloppy 
+    % Setup hyperref package
+    \hypersetup{
+      breaklinks=true,  % so long urls are correctly broken across lines
+      colorlinks=true,
+      urlcolor=urlcolor,
+      linkcolor=linkcolor,
+      citecolor=citecolor,
+      }
+    % Slightly bigger margins than the latex defaults
+    
+    \geometry{verbose,tmargin=1in,bmargin=1in,lmargin=1in,rmargin=1in}
+    
+    
+
+    \begin{document}
+    
+    
+    \maketitle
+    
+    
+
+    
+    Object recognition and computer vision 2018/2019
+
+Jean Ponce, Ivan Laptev, Cordelia Schmid and Josef Sivic
+
+Assignment 1: Instance-level recognition
+
+Adapted from practicals from Andrea Vedaldi and Andrew Zisserman by Gul
+Varol and Ignacio Rocco
+
+    \textbf{STUDENT}: Pierre-Louis Guhur
+
+\textbf{EMAIL}: pierre-louis.guhur@ens-paris-saclay.fr
+
+    \hypertarget{guidelines}{%
+\section{Guidelines}\label{guidelines}}
+
+The purpose of this assignment is that you get hands-on experience with
+the topics covered in class, which will help you understand these topics
+better. Therefore, ** it is imperative that you do this assignment
+yourself. No code sharing will be tolerated. **
+
+Once you have completed the assignment, you will submit the
+\texttt{ipynb} file containing \textbf{both} code and results. For this,
+make sure to \textbf{run your notebook completely before submitting}.
+
+The \texttt{ipynb} must be named using the following format:
+\textbf{A1\_LASTNAME\_Firstname.ipynb}, and submitted in the
+\textbf{class Moodle page}.
+
+    \hypertarget{goal}{%
+\section{Goal}\label{goal}}
+
+The goal of instance-level recognition is to match (recognize) a
+specific object or scene. Examples include recognizing a specific
+building, such as Notre Dame, or a specific painting, such as `Starry
+Night' by Van Gogh. The object is recognized despite changes in scale,
+camera viewpoint, illumination conditions and partial occlusion. An
+important application is image retrieval - starting from an image of an
+object of interest (the query), search through an image dataset to
+obtain (or retrieve) those images that contain the target object.
+
+The goal of this assignment is to experiment and get basic practical
+experience with the methods that enable specific object recognition. It
+includes: (i) using SIFT features to obtain sparse matches between two
+images; (ii) using similarity co-variant detectors to cover changes in
+viewpoint; (iii) vector quantizing the SIFT descriptors into visual
+words to enable large scale retrieval; and (iv) constructing and using
+an image retrieval system to identify objects.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}1}]:} \PY{k+kn}{import} \PY{n+nn}{cyvlfeat}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+        \PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{misc} \PY{k}{import} \PY{n}{imread}\PY{p}{,}\PY{n}{imresize}\PY{p}{,}\PY{n}{imrotate}
+        \PY{k+kn}{from} \PY{n+nn}{urllib}\PY{n+nn}{.}\PY{n+nn}{request} \PY{k}{import} \PY{n}{urlopen}
+        \PY{k+kn}{import} \PY{n+nn}{matplotlib} \PY{k}{as} \PY{n+nn}{mpl}
+        \PY{k+kn}{import} \PY{n+nn}{matplotlib}\PY{n+nn}{.}\PY{n+nn}{pyplot} \PY{k}{as} \PY{n+nn}{plt}
+        \PY{k+kn}{import} \PY{n+nn}{warnings}
+        \PY{k+kn}{from} \PY{n+nn}{cyvlfeat}\PY{n+nn}{.}\PY{n+nn}{plot} \PY{k}{import} \PY{n}{plotframes}
+        \PY{k+kn}{from} \PY{n+nn}{scipy}\PY{n+nn}{.}\PY{n+nn}{io} \PY{k}{import} \PY{n}{loadmat}
+        \PY{k+kn}{import} \PY{n+nn}{numpy} \PY{k}{as} \PY{n+nn}{np}
+        
+        \PY{c+c1}{\PYZsh{} change some default matplotlib parameters}
+        \PY{n}{mpl}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{axes.grid}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{k+kc}{False}
+        \PY{n}{mpl}\PY{o}{.}\PY{n}{rcParams}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{figure.dpi}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]} \PY{o}{=} \PY{l+m+mi}{120}
+        
+        \PY{c+c1}{\PYZsh{} ignore warnings}
+        \PY{n}{warnings}\PY{o}{.}\PY{n}{filterwarnings}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{ignore}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+        \PY{k}{def} \PY{n+nf}{rgb2gray}\PY{p}{(}\PY{n}{rgb}\PY{p}{)}\PY{p}{:}
+            \PY{k}{return} \PY{n}{np}\PY{o}{.}\PY{n}{float32}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{dot}\PY{p}{(}\PY{n}{rgb}\PY{p}{[}\PY{o}{.}\PY{o}{.}\PY{o}{.}\PY{p}{,}\PY{p}{:}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{l+m+mf}{0.299}\PY{p}{,} \PY{l+m+mf}{0.587}\PY{p}{,} \PY{l+m+mf}{0.114}\PY{p}{]}\PY{p}{)}\PY{o}{/}\PY{l+m+mf}{255.0}\PY{p}{)}
+\end{Verbatim}
+
+    \hypertarget{part-1-sparse-features-for-matching-specific-objects-in-images}{%
+\section{Part 1: Sparse features for matching specific objects in
+images}\label{part-1-sparse-features-for-matching-specific-objects-in-images}}
+
+    \hypertarget{feature-point-detection}{%
+\subsection{Feature point detection}\label{feature-point-detection}}
+
+The SIFT feature has both a \emph{detector} and a \emph{descriptor}. The
+\emph{detector} used in SIFT corresponds to the ``difference of
+Gaussians'' (DoG) detector, which is an approximation of the ``Laplacian
+of Gaussian'' (LoG) detector.
+
+We will start by computing and visualizing the SIFT feature detections
+(usually called frames) for two images of the same object (a building
+facade). Load an image, rotate and scale it, and then display the
+original and transformed pair:
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}79}]:} \PY{n}{im1} \PY{o}{=} \PY{n}{imread}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{data/oxbuild\PYZus{}lite/all\PYZus{}souls\PYZus{}000002.jpg}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{c+c1}{\PYZsh{} Let the second image be a rotated and scaled version of the first}
+         \PY{n}{im1prime} \PY{o}{=} \PY{n}{imresize}\PY{p}{(}\PY{n}{imrotate}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{pad}\PY{p}{(}\PY{n}{im1}\PY{p}{,}\PY{p}{(}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{,}\PY{p}{(}\PY{l+m+mi}{200}\PY{p}{,}\PY{l+m+mi}{200}\PY{p}{)}\PY{p}{,}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{)}\PY{p}{)}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{constant}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{35}\PY{p}{,}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{bilinear}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}\PY{p}{,}\PY{l+m+mf}{0.7}\PY{p}{)}
+         
+         \PY{n}{f}\PY{p}{,} \PY{p}{(}\PY{n}{ax1}\PY{p}{,} \PY{n}{ax2}\PY{p}{)} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+         \PY{n}{ax1}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{im1}\PY{p}{)}
+         \PY{n}{ax2}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{im1prime}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_7_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    A SIFT frame is a circle with an orientation and is specified by four
+parameters: the center \(x\), \(y\), the scale \(s\), and the rotation
+\(\theta\) (in radians), resulting in a vector of four parameters
+\((x, y, s, \theta)\).
+
+Now compute and visualise the SIFT feature detections (frames):
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}5}]:} \PY{p}{[}\PY{n}{frames1}\PY{p}{,} \PY{n}{descrs1}\PY{p}{]} \PY{o}{=} \PY{n}{cyvlfeat}\PY{o}{.}\PY{n}{sift}\PY{o}{.}\PY{n}{sift}\PY{p}{(}\PY{n}{rgb2gray}\PY{p}{(}\PY{n}{im1}\PY{p}{)}\PY{p}{,}\PY{n}{peak\PYZus{}thresh}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{)}
+        
+        \PY{p}{[}\PY{n}{frames1prime}\PY{p}{,} \PY{n}{descrs1prime}\PY{p}{]} \PY{o}{=} \PY{n}{cyvlfeat}\PY{o}{.}\PY{n}{sift}\PY{o}{.}\PY{n}{sift}\PY{p}{(}\PY{n}{rgb2gray}\PY{p}{(}\PY{n}{im1prime}\PY{p}{)}\PY{p}{,}\PY{n}{peak\PYZus{}thresh}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{)}
+        
+        \PY{n}{f}\PY{p}{,} \PY{p}{(}\PY{n}{ax1}\PY{p}{,} \PY{n}{ax2}\PY{p}{)} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{2}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{sca}\PY{p}{(}\PY{n}{ax1}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{im1}\PY{p}{)}
+        \PY{n}{plotframes}\PY{p}{(}\PY{n}{frames1}\PY{p}{,}\PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+        
+        \PY{n}{plt}\PY{o}{.}\PY{n}{sca}\PY{p}{(}\PY{n}{ax2}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{im1prime}\PY{p}{)}
+        \PY{n}{plotframes}\PY{p}{(}\PY{n}{frames1prime}\PY{p}{,}\PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+        
+        \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_9_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    Examine the second image and its rotated and scaled version and convince
+yourself that the detections overlap the same scene regions (even though
+the circles' positions have moved in the image and their radius' have
+changed). This demonstrates that the detection process (is co-variant or
+equi-variant) with translations, rotations and isotropic scalings. This
+class of transformations is known as a similarity or equiform.
+
+    \hypertarget{task-1.1}{%
+\subsubsection{:: TASK 1.1 ::}\label{task-1.1}}
+
+Now repeat the exercise with a pair of natural images.
+
+Start by loading the second one:
+\texttt{data/oxbuild\_lite/all\_souls\_000015.jpg}
+
+Plot the images and feature frames. Again you should see that many of
+the detections overlap the same scene region. Note that, while
+repeatability occurs for the pair of natural views, it is much better
+for the synthetically rotated pair.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}80}]:} \PY{n}{im2} \PY{o}{=} \PY{n}{imread}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{data/oxbuild\PYZus{}lite/all\PYZus{}souls\PYZus{}000015.jpg}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+         \PY{p}{[}\PY{n}{frames2}\PY{p}{,} \PY{n}{descrs2}\PY{p}{]} \PY{o}{=} \PY{n}{cyvlfeat}\PY{o}{.}\PY{n}{sift}\PY{o}{.}\PY{n}{sift}\PY{p}{(}\PY{n}{rgb2gray}\PY{p}{(}\PY{n}{im2}\PY{p}{)}\PY{p}{,}\PY{n}{peak\PYZus{}thresh}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{)}
+         
+         \PY{n}{f}\PY{p}{,} \PY{p}{(}\PY{n}{ax1}\PY{p}{,} \PY{n}{ax2}\PY{p}{,} \PY{n}{ax3}\PY{p}{)} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplots}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{l+m+mi}{3}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{sca}\PY{p}{(}\PY{n}{ax1}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{im1}\PY{p}{)}
+         \PY{n}{plotframes}\PY{p}{(}\PY{n}{frames1}\PY{p}{,}\PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{sca}\PY{p}{(}\PY{n}{ax2}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{im1prime}\PY{p}{)}
+         \PY{n}{plotframes}\PY{p}{(}\PY{n}{frames1prime}\PY{p}{,}\PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{sca}\PY{p}{(}\PY{n}{ax3}\PY{p}{)}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{im2}\PY{p}{)}
+         \PY{n}{plotframes}\PY{p}{(}\PY{n}{frames2}\PY{p}{,}\PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+         
+         \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_12_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    The number of detected features can be controlled by changing the
+peak\_thresh option. A larger value will select features that correspond
+to higher contrast structures in the image.
+
+    \hypertarget{task-1.2}{%
+\subsubsection{:: TASK 1.2 ::}\label{task-1.2}}
+
+\textbf{\emph{For the same image, produce 3 sub-figures with different
+values of peak\_thresh. Comment.}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}32}]:} \PY{n}{thresholds} \PY{o}{=} \PY{p}{[}\PY{l+m+mf}{0.001}\PY{p}{,} \PY{l+m+mf}{0.01}\PY{p}{,} \PY{l+m+mf}{0.05}\PY{p}{]}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{10}\PY{p}{,}\PY{l+m+mi}{20}\PY{p}{)}\PY{p}{)}
+         
+         \PY{k}{for} \PY{n}{i}\PY{p}{,} \PY{n}{thresh} \PY{o+ow}{in} \PY{n+nb}{enumerate}\PY{p}{(}\PY{n}{thresholds}\PY{p}{)}\PY{p}{:}
+             \PY{p}{[}\PY{n}{frames}\PY{p}{,} \PY{n}{descrs}\PY{p}{]} \PY{o}{=} \PY{n}{cyvlfeat}\PY{o}{.}\PY{n}{sift}\PY{o}{.}\PY{n}{sift}\PY{p}{(}\PY{n}{rgb2gray}\PY{p}{(}\PY{n}{im1}\PY{p}{)}\PY{p}{,}\PY{n}{peak\PYZus{}thresh}\PY{o}{=}\PY{n}{thresh}\PY{p}{)}
+             \PY{n}{ax} \PY{o}{=} \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{l+m+mi}{1}\PY{p}{,} \PY{n+nb}{len}\PY{p}{(}\PY{n}{thresholds}\PY{p}{)}\PY{p}{,} \PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}
+             \PY{n}{ax}\PY{o}{.}\PY{n}{tick\PYZus{}params}\PY{p}{(}\PY{n}{labelbottom}\PY{o}{=}\PY{k+kc}{False}\PY{p}{,} \PY{n}{labelleft}\PY{o}{=}\PY{k+kc}{False}\PY{p}{)}  
+             \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{im1}\PY{p}{)}
+             \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{peak\PYZus{}thresh = }\PY{l+s+si}{\PYZpc{}.3f}\PY{l+s+s2}{\PYZdq{}} \PY{o}{\PYZpc{}} \PY{n}{thresh}\PY{p}{)}
+             \PY{n}{plotframes}\PY{p}{(}\PY{n}{frames}\PY{p}{,}\PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_15_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    The \texttt{peak\_thresh} parameter is responsable for granularity
+degree of feature detections. With a too small value, so many features
+are detected that some noise points are considered -- which will keep
+the algorithm from detecting real pattern. At the opposite, a too strong
+value provides few indications to find the correspondance between two
+images.
+
+The parameter corresponds to the minimal value of the DoG to be
+considered as a feature. On the DoG, peaks are the regions with an high
+contrast. This explains why a too small value of \texttt{peak\_thresh}
+provides a large number of features.
+
+    \hypertarget{feature-point-description-and-matching}{%
+\subsection{Feature point description and
+matching}\label{feature-point-description-and-matching}}
+
+    \hypertarget{introduction-to-feature-descriptors}{%
+\subsubsection{Introduction to feature
+descriptors}\label{introduction-to-feature-descriptors}}
+
+The parameters \((t_x, t_y, s, \theta)\) of the detected \emph{frames},
+can be used to extract a \textbf{scaled and oriented RGB patch} around
+\((t_x,t_y)\), used to \emph{describe} the feature point.
+
+The simplest possible descriptor would be to (i) resize these patches to
+a common size (eg. 30x30) and (ii) flatten to a vector. However, in
+practice we use more sophisticated descriptors such as SIFT, that is
+based on histograms of gradient orientations.
+
+    \hypertarget{task-1.3}{%
+\subsubsection{:: TASK 1.3 ::}\label{task-1.3}}
+
+\textbf{\emph{What is the interest of using SIFT descriptors over these
+flattened RGB patches?}}
+
+    RGB patches are highly dependant on the illumination of the scene. By
+using the gradients of patches, SIFT descriptors are using instead the
+structure of the image.
+
+    \hypertarget{descriptor-matching}{%
+\subsubsection{Descriptor matching}\label{descriptor-matching}}
+
+SIFT descriptors are 128-dimensional vectors, and can be directly
+\emph{matched} to find correspondences between images. We will start
+with the simplest matching scheme (first nearest neighbour of
+descriptors in terms of Euclidean distance) and then add more
+sophisticated methods to eliminate any mismatches.
+
+    \hypertarget{task-1.4}{%
+\subsubsection{:: TASK 1.4 ::}\label{task-1.4}}
+
+For each descriptor in im1, assign a matching descriptor in im2 by
+picking its first nearest neighbour.
+
+Populate the second column of the matches vector.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}86}]:} \PY{p}{[}\PY{n}{frames1}\PY{p}{,} \PY{n}{descrs1}\PY{p}{]} \PY{o}{=} \PY{n}{cyvlfeat}\PY{o}{.}\PY{n}{sift}\PY{o}{.}\PY{n}{sift}\PY{p}{(}\PY{n}{rgb2gray}\PY{p}{(}\PY{n}{im1}\PY{p}{)}\PY{p}{,}\PY{n}{peak\PYZus{}thresh}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{)}
+         \PY{p}{[}\PY{n}{frames2}\PY{p}{,} \PY{n}{descrs2}\PY{p}{]} \PY{o}{=} \PY{n}{cyvlfeat}\PY{o}{.}\PY{n}{sift}\PY{o}{.}\PY{n}{sift}\PY{p}{(}\PY{n}{rgb2gray}\PY{p}{(}\PY{n}{im2}\PY{p}{)}\PY{p}{,}\PY{n}{peak\PYZus{}thresh}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}105}]:} \PY{n}{N\PYZus{}frames1} \PY{o}{=} \PY{n}{frames1}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+          \PY{n}{N\PYZus{}frames2} \PY{o}{=} \PY{n}{frames2}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+          
+          \PY{n}{matches}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{p}{(}\PY{n}{N\PYZus{}frames1}\PY{p}{,}\PY{l+m+mi}{2}\PY{p}{)}\PY{p}{,} \PY{n}{dtype}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{int}\PY{p}{)}
+          \PY{c+c1}{\PYZsh{} the first column of the matrix are the indices on image 1: 0,1,2,....,N\PYZus{}frames1\PYZhy{}1}
+          \PY{n}{matches}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]} \PY{o}{=} \PY{n+nb}{range}\PY{p}{(}\PY{n}{N\PYZus{}frames1}\PY{p}{)}
+          \PY{c+c1}{\PYZsh{} the second are the indices of frames closest on image 2 (matches)}
+          \PY{n}{matches}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]} \PY{o}{=} \PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{argmin}\PY{p}{(}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{(}\PY{n}{desc1} \PY{o}{\PYZhy{}} \PY{n}{desc2}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)} \PY{k}{for} \PY{n}{desc2} \PY{o+ow}{in} \PY{n}{descrs2}\PY{p}{]}\PY{p}{)} \PY{k}{for} \PY{n}{desc1} \PY{o+ow}{in} \PY{n}{descrs1}\PY{p}{]} 
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}106}]:} \PY{c+c1}{\PYZsh{} plot matches}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{concatenate}\PY{p}{(}\PY{p}{(}\PY{n}{im1}\PY{p}{,}\PY{n}{im2}\PY{p}{)}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+          \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{N\PYZus{}frames1}\PY{p}{)}\PY{p}{:}
+              \PY{n}{j}\PY{o}{=}\PY{n}{matches}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}
+              \PY{c+c1}{\PYZsh{} plot dots at feature positions}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{gca}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{p}{[}\PY{n}{frames1}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{im1}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{+}\PY{n}{frames2}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{n}{frames1}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{frames2}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{s}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,} \PY{n}{c}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+              \PY{c+c1}{\PYZsh{} plot lines}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{frames1}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{im1}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{+}\PY{n}{frames2}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{p}{,}\PY{p}{[}\PY{n}{frames1}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{frames2}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}\PY{n}{linewidth}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_25_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{improving-sift-matching-i-using-lowes-second-nearest-neighbour-test}{%
+\subsection{Improving SIFT matching (i) using Lowe's second nearest
+neighbour
+test}\label{improving-sift-matching-i-using-lowes-second-nearest-neighbour-test}}
+
+    Lowe introduced a second nearest neighbour (2nd NN) test to identify,
+and hence remove, ambiguous matches. The idea is to identify distinctive
+matches by a threshold on the ratio of first to second NN distances.
+
+The ratio is:
+\[NN_{ratio} = \frac{1^{st}\text{NN distance}}{2^{nd}\text{NN distance}}.\]
+
+    \hypertarget{task-1.5}{%
+\subsubsection{:: TASK 1.5 ::}\label{task-1.5}}
+
+\textbf{\emph{For each descriptor in im1, compute the ratio between the
+first and second nearest neighbour distances.}}
+
+\textbf{\emph{Populate the ratio vector.}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}107}]:} \PY{k}{def} \PY{n+nf}{range2}\PY{p}{(}\PY{n}{N}\PY{p}{,} \PY{n}{x}\PY{p}{)}\PY{p}{:}
+              \PY{l+s+sd}{\PYZdq{}\PYZdq{}\PYZdq{} Return the range from 0 to N without x\PYZdq{}\PYZdq{}\PYZdq{}}
+              \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{p}{:}
+                  \PY{k}{if} \PY{n}{i} \PY{o}{!=} \PY{n}{x}\PY{p}{:}
+                      \PY{k}{yield} \PY{n}{i}
+          
+          \PY{n}{first\PYZus{}NN} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{array}\PY{p}{(}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{(}\PY{n}{descrs1}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{descrs2}\PY{p}{[}\PY{n}{matches}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{N\PYZus{}frames1}\PY{p}{)}\PY{p}{]}\PY{p}{)}
+          \PY{n}{distances2} \PY{o}{=} \PY{p}{[}\PY{p}{[}\PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{p}{(}\PY{n}{descrs1}\PY{p}{[}\PY{n}{matches}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]} \PY{o}{\PYZhy{}} \PY{n}{descrs2}\PY{p}{[}\PY{n}{j}\PY{p}{]}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)} \PY{k}{for} \PY{n}{j} \PY{o+ow}{in} \PY{n}{range2}\PY{p}{(}\PY{n}{N\PYZus{}frames2}\PY{p}{,} \PY{n}{matches}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{)}\PY{p}{]} \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{N\PYZus{}frames1}\PY{p}{)}\PY{p}{]}
+          \PY{n}{second\PYZus{}NN} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{min}\PY{p}{(}\PY{n}{distances2}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+          
+          \PY{n}{ratio} \PY{o}{=} \PY{n}{first\PYZus{}NN}\PY{o}{/}\PY{n}{second\PYZus{}NN}
+\end{Verbatim}
+
+    The ratio vector will be now used to retain only the matches that are
+above a given threshold.
+
+A value of \(NN_{threshold} = 0.8\) is often a good compromise between
+losing too many matches and rejecting mismatches.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}108}]:} \PY{n}{NN\PYZus{}threshold}\PY{o}{=}\PY{l+m+mf}{0.8}
+          
+          \PY{n}{filtered\PYZus{}indices} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{flatnonzero}\PY{p}{(}\PY{n}{ratio}\PY{o}{\PYZlt{}}\PY{n}{NN\PYZus{}threshold}\PY{p}{)}
+          \PY{n}{filtered\PYZus{}matches} \PY{o}{=} \PY{n}{matches}\PY{p}{[}\PY{n}{filtered\PYZus{}indices}\PY{p}{,}\PY{p}{:}\PY{p}{]}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}110}]:} \PY{c+c1}{\PYZsh{} plot matches}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{concatenate}\PY{p}{(}\PY{p}{(}\PY{n}{im1}\PY{p}{,} \PY{n}{im2}\PY{p}{)}\PY{p}{,} \PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+          \PY{k}{for} \PY{n}{idx} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n+nb}{len}\PY{p}{(}\PY{n}{filtered\PYZus{}matches}\PY{p}{)}\PY{p}{)}\PY{p}{:}
+              \PY{n}{i}\PY{o}{=}\PY{n}{filtered\PYZus{}matches}\PY{p}{[}\PY{n}{idx}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}
+              \PY{n}{j}\PY{o}{=}\PY{n}{filtered\PYZus{}matches}\PY{p}{[}\PY{n}{idx}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}
+              \PY{c+c1}{\PYZsh{} plot dots at feature positions}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{gca}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{p}{[}\PY{n}{frames1}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{im1}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{+}\PY{n}{frames2}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{n}{frames1}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{frames2}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{s}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,} \PY{n}{c}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} 
+              \PY{c+c1}{\PYZsh{} plot lines}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{frames1}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{im1}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{+}\PY{n}{frames2}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{p}{,}\PY{p}{[}\PY{n}{frames1}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{frames2}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}\PY{n}{linewidth}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_32_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{improving-sift-matching-ii-by-geometric-verification}{%
+\subsection{Improving SIFT matching (ii) by geometric
+verification}\label{improving-sift-matching-ii-by-geometric-verification}}
+
+    In addition to the 2nd NN test, we can also require consistency between
+the matches and a geometric transformation between the images. For the
+moment we will look for matches that are consistent with a similarity
+transformation:
+
+\[\begin{bmatrix} x_2 \\ y_2 \end{bmatrix} = 
+sR(\theta) \begin{bmatrix} x_1 \\ y_1 \end{bmatrix} + \begin{bmatrix} t_x \\ t_y \end{bmatrix} \]
+
+which consists of a rotation by \(\theta\), an isotropic scaling
+(i.e.~same in all directions) by s, and a translation by a vector
+\((t_x, t_y)\). This transformation is specified by four parameters
+\((s,\theta,t_x,t_y)\) and can be computed from a single correspondence
+between SIFT detections in each image.
+
+    \hypertarget{task-1.6}{%
+\subsubsection{:: TASK 1.6 ::}\label{task-1.6}}
+
+Given a detected feature with parameters \((x_1, y_1, s_1, \theta_1)\)
+in image \(1\) matching a feature \((x_2, y_2, s_2, \theta_2)\) in image
+\(2\), work out how to find out the parameters \((t_x,t_y,s,\theta)\) of
+the transformation mapping points from image \(1\) to image \(2\).
+
+    \[\theta=\theta_2-\theta_1\] \[s=\frac{s_2}{s_1}\]
+\[\begin{bmatrix} t_x \\ t_y \end{bmatrix} = \begin{bmatrix} x_2-x_1. s_2/s_1 \\ y_2-y_1. s_2/s_1 \end{bmatrix}\]
+
+    The matches consistent with a similarity can then be found using the
+RANSAC algorithm, described by the following steps:
+
+For each tentative correspondence in turn:
+
+\begin{itemize}
+\tightlist
+\item
+  compute the similarity transformation;
+\item
+  map all the SIFT detections in one image to the other using this
+  transformation;
+\item
+  accept matches that are within a threshold distance to the mapped
+  detection (inliers);
+\item
+  count the number of accepted matches;
+\item
+  optionally, fit a more accurate affine transformation or homography to
+  the accepted matches and test re-validate the matches.
+\end{itemize}
+
+Finally, choose the transformation with the highest count of inliers
+
+After this algorithm the inliers are consistent with the transformation
+and are retained, and most mismatches should now be removed.
+
+    \hypertarget{task-1.7}{%
+\subsubsection{:: TASK 1.7 ::}\label{task-1.7}}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}111}]:} \PY{k}{def} \PY{n+nf}{ransac}\PY{p}{(}\PY{n}{frames1}\PY{p}{,}\PY{n}{frames2}\PY{p}{,}\PY{n}{matches}\PY{p}{,}\PY{n}{N\PYZus{}iters}\PY{o}{=}\PY{l+m+mi}{100}\PY{p}{,}\PY{n}{dist\PYZus{}thresh}\PY{o}{=}\PY{l+m+mi}{15}\PY{p}{)}\PY{p}{:}
+            \PY{n}{max\PYZus{}inliers} \PY{o}{=} \PY{l+m+mi}{0}
+            \PY{n}{tnf} \PY{o}{=} \PY{k+kc}{None}
+              
+            \PY{c+c1}{\PYZsh{} random sampling}
+            \PY{k}{for} \PY{n}{it} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{N\PYZus{}iters}\PY{p}{)}\PY{p}{:}
+                \PY{c+c1}{\PYZsh{} pick a random sample}
+                \PY{n}{i} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{random}\PY{o}{.}\PY{n}{randint}\PY{p}{(}\PY{l+m+mi}{0}\PY{p}{,}\PY{n}{frames1}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+                \PY{n}{x\PYZus{}1}\PY{p}{,} \PY{n}{y\PYZus{}1}\PY{p}{,} \PY{n}{s\PYZus{}1}\PY{p}{,} \PY{n}{theta\PYZus{}1} \PY{o}{=} \PY{n}{frames1}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{p}{:}\PY{p}{]}
+                \PY{n}{j} \PY{o}{=} \PY{n}{matches}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}
+                \PY{n}{x\PYZus{}2}\PY{p}{,} \PY{n}{y\PYZus{}2}\PY{p}{,} \PY{n}{s\PYZus{}2}\PY{p}{,} \PY{n}{theta\PYZus{}2} \PY{o}{=} \PY{n}{frames2}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{p}{:}\PY{p}{]}
+                
+                \PY{c+c1}{\PYZsh{} estimate transformation}
+                \PY{n}{theta} \PY{o}{=} \PY{n}{theta\PYZus{}2} \PY{o}{\PYZhy{}} \PY{n}{theta\PYZus{}1}
+                \PY{n}{s} \PY{o}{=} \PY{n}{s\PYZus{}2}\PY{o}{/}\PY{n}{s\PYZus{}1}
+                \PY{n}{t\PYZus{}x} \PY{o}{=} \PY{n}{x\PYZus{}2}\PY{o}{\PYZhy{}}\PY{n}{x\PYZus{}1} \PY{o}{*} \PY{n}{s\PYZus{}2}\PY{o}{/}\PY{n}{s\PYZus{}1}
+                \PY{n}{t\PYZus{}y} \PY{o}{=} \PY{n}{y\PYZus{}2}\PY{o}{\PYZhy{}}\PY{n}{y\PYZus{}1} \PY{o}{*} \PY{n}{s\PYZus{}2}\PY{o}{/}\PY{n}{s\PYZus{}1}
+                
+                \PY{c+c1}{\PYZsh{} evaluate estimated transformation}
+                \PY{n}{X\PYZus{}1} \PY{o}{=} \PY{n}{frames1}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}
+                \PY{n}{Y\PYZus{}1} \PY{o}{=} \PY{n}{frames1}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}
+                \PY{n}{X\PYZus{}2} \PY{o}{=} \PY{n}{frames2}\PY{p}{[}\PY{n}{matches}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}
+                \PY{n}{Y\PYZus{}2} \PY{o}{=} \PY{n}{frames2}\PY{p}{[}\PY{n}{matches}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}
+                
+                \PY{n}{X\PYZus{}1\PYZus{}prime} \PY{o}{=} \PY{n}{s}\PY{o}{*}\PY{p}{(}\PY{n}{X\PYZus{}1}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{cos}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{o}{\PYZhy{}}\PY{n}{Y\PYZus{}1}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{t\PYZus{}x}
+                \PY{n}{Y\PYZus{}1\PYZus{}prime} \PY{o}{=} \PY{n}{s}\PY{o}{*}\PY{p}{(}\PY{n}{X\PYZus{}1}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{sin}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{o}{+}\PY{n}{Y\PYZus{}1}\PY{o}{*}\PY{n}{np}\PY{o}{.}\PY{n}{cos}\PY{p}{(}\PY{n}{theta}\PY{p}{)}\PY{p}{)}\PY{o}{+}\PY{n}{t\PYZus{}y}
+                
+                \PY{n}{dist} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{p}{(}\PY{n}{X\PYZus{}1\PYZus{}prime}\PY{o}{\PYZhy{}}\PY{n}{X\PYZus{}2}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{o}{+}\PY{p}{(}\PY{n}{Y\PYZus{}1\PYZus{}prime}\PY{o}{\PYZhy{}}\PY{n}{Y\PYZus{}2}\PY{p}{)}\PY{o}{*}\PY{o}{*}\PY{l+m+mi}{2}\PY{p}{)}
+                
+                \PY{n}{inliers\PYZus{}indices} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{flatnonzero}\PY{p}{(}\PY{n}{dist}\PY{o}{\PYZlt{}}\PY{n}{dist\PYZus{}thresh}\PY{p}{)}
+                \PY{n}{num\PYZus{}of\PYZus{}inliers} \PY{o}{=} \PY{n+nb}{len}\PY{p}{(}\PY{n}{inliers\PYZus{}indices}\PY{p}{)}
+                
+                \PY{c+c1}{\PYZsh{} keep if best}
+                \PY{k}{if} \PY{n}{num\PYZus{}of\PYZus{}inliers}\PY{o}{\PYZgt{}}\PY{n}{max\PYZus{}inliers}\PY{p}{:}
+                  \PY{n}{max\PYZus{}inliers}\PY{o}{=}\PY{n}{num\PYZus{}of\PYZus{}inliers}
+                  \PY{n}{best\PYZus{}inliers\PYZus{}indices} \PY{o}{=} \PY{n}{inliers\PYZus{}indices}
+                  \PY{n}{tnf} \PY{o}{=} \PY{p}{[}\PY{n}{t\PYZus{}x}\PY{p}{,}\PY{n}{t\PYZus{}y}\PY{p}{,}\PY{n}{s}\PY{p}{,}\PY{n}{theta}\PY{p}{]}
+                  
+            \PY{k}{return} \PY{p}{(}\PY{n}{tnf}\PY{p}{,}\PY{n}{best\PYZus{}inliers\PYZus{}indices}\PY{p}{)}
+                
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}112}]:} \PY{n}{tnf}\PY{p}{,}\PY{n}{inliers\PYZus{}indices}\PY{o}{=}\PY{n}{ransac}\PY{p}{(}\PY{n}{frames1}\PY{p}{,}\PY{n}{frames2}\PY{p}{,}\PY{n}{matches}\PY{p}{)}
+          \PY{n}{filtered\PYZus{}matches} \PY{o}{=} \PY{n}{matches}\PY{p}{[}\PY{n}{inliers\PYZus{}indices}\PY{p}{,}\PY{p}{:}\PY{p}{]}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}113}]:} \PY{c+c1}{\PYZsh{} plot matches filtered with RANSAC}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{concatenate}\PY{p}{(}\PY{p}{(}\PY{n}{im1}\PY{p}{,}\PY{n}{im2}\PY{p}{)}\PY{p}{,}\PY{n}{axis}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}\PY{p}{)}
+          \PY{k}{for} \PY{n}{idx} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{filtered\PYZus{}matches}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}\PY{p}{:}
+              \PY{n}{i}\PY{o}{=}\PY{n}{filtered\PYZus{}matches}\PY{p}{[}\PY{n}{idx}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}
+              \PY{n}{j}\PY{o}{=}\PY{n}{filtered\PYZus{}matches}\PY{p}{[}\PY{n}{idx}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}
+              \PY{c+c1}{\PYZsh{} plot dots at feature positions}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{gca}\PY{p}{(}\PY{p}{)}\PY{o}{.}\PY{n}{scatter}\PY{p}{(}\PY{p}{[}\PY{n}{frames1}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{im1}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{+}\PY{n}{frames2}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{p}{[}\PY{n}{frames1}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{frames2}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,} \PY{n}{s}\PY{o}{=}\PY{l+m+mi}{5}\PY{p}{,} \PY{n}{c}\PY{o}{=}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)} 
+              \PY{c+c1}{\PYZsh{} plot lines}
+              \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{p}{[}\PY{n}{frames1}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,}\PY{n}{im1}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}\PY{o}{+}\PY{n}{frames2}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}\PY{p}{,}\PY{p}{[}\PY{n}{frames1}\PY{p}{[}\PY{n}{i}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{,}\PY{n}{frames2}\PY{p}{[}\PY{n}{j}\PY{p}{,}\PY{l+m+mi}{1}\PY{p}{]}\PY{p}{]}\PY{p}{,}\PY{n}{linewidth}\PY{o}{=}\PY{l+m+mf}{0.5}\PY{p}{)}
+          \PY{n}{plt}\PY{o}{.}\PY{n}{show}\PY{p}{(}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_41_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{part-2-compact-descriptors-for-image-retrieval}{%
+\section{Part 2: Compact descriptors for image
+retrieval}\label{part-2-compact-descriptors-for-image-retrieval}}
+
+    In large scale retrieval the goal is to match a query image to a large
+database of images (for example the WWW or Wikipedia).
+
+The quality of an image match is measured as the number of geometrically
+verified feature correspondences between the query and a database image.
+While the techniques discussed in Part 1 are sufficient to do this, in
+practice they require too much memory to store the SIFT descriptors for
+all the detections in all the database images.
+
+In this part we will see how we can compute a \emph{global} image
+descriptor from the set of SIFT descriptors using the
+bag-of-visual-words (BoVW) approach.
+
+Then, we will see how these global descriptors can be used to rapidly
+retrieve a shortlist of candidate database images given a query image.
+Finally, we will see how to re-rank the shortlist of candidates using a
+geometric verification technique that requires only the \emph{detector
+frames} and their assigned visual word indices; remember the SIFT
+descriptors are only used to compute the compact BoVW descriptors and
+then discarded.
+
+    \hypertarget{load-preprocessed-dataset-of-paintings}{%
+\subsection{Load preprocessed dataset of
+paintings}\label{load-preprocessed-dataset-of-paintings}}
+
+    We will now load the preprocessed dataset of paintings. The construction
+of this dataset has involved several steps.
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  SIFT features were extracted from all paintings in the dataset
+\item
+  A global vocabulary of SIFT descriptors was computed using K-means
+  clustering. These are the visual words of our dataset.
+\item
+  The SIFT features for each painting were assigned to the nearest word,
+  and a compact descriptor was generated for each painting. This compact
+  descriptor consists in the normalized histogram of words. The
+  histogram normalization itself involves 3 different steps:
+
+  \begin{itemize}
+  \item
+    \begin{enumerate}
+    \def\labelenumii{\alph{enumii})}
+    \tightlist
+    \item
+      TF-IDF weighting: each word is re-weighted according to its TF-IDF
+      value. This removes weights to words that are very common and
+      therefore not too descriptive.
+    \end{enumerate}
+  \item
+    \begin{enumerate}
+    \def\labelenumii{\alph{enumii})}
+    \setcounter{enumii}{1}
+    \tightlist
+    \item
+      Square-rooting: each element is square-rooted
+    \end{enumerate}
+  \item
+    \begin{enumerate}
+    \def\labelenumii{\alph{enumii})}
+    \setcounter{enumii}{2}
+    \tightlist
+    \item
+      L2-normalization: The whole histogram is L2-normalized.
+    \end{enumerate}
+  \end{itemize}
+\end{enumerate}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}2}]:} \PY{n}{imdb}\PY{o}{=}\PY{n}{loadmat}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{paintings\PYZus{}imdb\PYZus{}SIFT\PYZus{}10k\PYZus{}preprocessed.mat}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+        \PY{n}{feature\PYZus{}vocab}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{transpose}\PY{p}{(}\PY{n}{imdb}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{vocab}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{)}
+        \PY{n}{imdb\PYZus{}hists}\PY{o}{=}\PY{n}{imdb}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{index}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+        \PY{n}{imdb\PYZus{}tfidf}\PY{o}{=}\PY{n}{imdb}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{idf}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}
+        
+        \PY{n}{imdb\PYZus{}url} \PY{o}{=} \PY{k}{lambda} \PY{n}{idx}\PY{p}{:} \PY{n}{imdb}\PY{p}{[}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{images}\PY{l+s+s1}{\PYZsq{}}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{3}\PY{p}{]}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{[}\PY{n}{idx}\PY{p}{]}\PY{o}{.}\PY{n}{item}\PY{p}{(}\PY{p}{)}
+        
+        \PY{n}{num\PYZus{}words} \PY{o}{=} \PY{n}{feature\PYZus{}vocab}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{0}\PY{p}{]}
+        \PY{n}{num\PYZus{}paintings} \PY{o}{=} \PY{n}{imdb\PYZus{}hists}\PY{o}{.}\PY{n}{shape}\PY{p}{[}\PY{l+m+mi}{1}\PY{p}{]}
+        
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The vocabulary of SIFT features contains }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{  visual words}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{num\PYZus{}words}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The dictionary index contains }\PY{l+s+si}{\PYZpc{}s}\PY{l+s+s1}{ histograms corresponding to each painting in the dataset}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{num\PYZus{}paintings}\PY{p}{)}
+        \PY{n+nb}{print}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{The tdf\PYZhy{}idf vector has shape }\PY{l+s+s1}{\PYZsq{}}\PY{o}{+}\PY{n+nb}{str}\PY{p}{(}\PY{n}{imdb\PYZus{}tfidf}\PY{o}{.}\PY{n}{shape}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+The vocabulary of SIFT features contains 10000  visual words
+The dictionary index contains 1703 histograms corresponding to each painting in the dataset
+The tdf-idf vector has shape (10000, 1)
+
+    \end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}3}]:} \PY{n}{painting} \PY{o}{=} \PY{n}{imread}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{data/queries/mistery\PYZhy{}painting1.jpg}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        
+        \PY{p}{[}\PY{n}{frames}\PY{p}{,} \PY{n}{descrs}\PY{p}{]} \PY{o}{=} \PY{n}{cyvlfeat}\PY{o}{.}\PY{n}{sift}\PY{o}{.}\PY{n}{sift}\PY{p}{(}\PY{n}{rgb2gray}\PY{p}{(}\PY{n}{painting}\PY{p}{)}\PY{p}{,} \PY{n}{peak\PYZus{}thresh}\PY{o}{=}\PY{l+m+mf}{0.01}\PY{p}{)}
+        
+        \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{painting}\PY{p}{)}
+        \PY{n}{plotframes}\PY{p}{(}\PY{n}{frames}\PY{p}{,}\PY{n}{linewidth}\PY{o}{=}\PY{l+m+mi}{1}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_47_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{task-2.1}{%
+\subsubsection{:: TASK 2.1 ::}\label{task-2.1}}
+
+Construct a KDTree of the vocabulary for fast NN search. Then use the
+KDTree to find the closest word in the vocabulary to each descriptor of
+the query image.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}4}]:} \PY{k+kn}{from} \PY{n+nn}{sklearn}\PY{n+nn}{.}\PY{n+nn}{neighbors} \PY{k}{import} \PY{n}{KDTree}
+        
+        \PY{n}{tree} \PY{o}{=} \PY{n}{KDTree}\PY{p}{(}\PY{n}{feature\PYZus{}vocab}\PY{p}{)}              
+        \PY{n}{dist}\PY{p}{,} \PY{n}{ind} \PY{o}{=} \PY{n}{tree}\PY{o}{.}\PY{n}{query}\PY{p}{(}\PY{n}{descrs}\PY{p}{,} \PY{n}{k}\PY{o}{=}\PY{l+m+mi}{2}\PY{p}{)}                
+        \PY{n}{closest\PYZus{}words} \PY{o}{=} \PY{n}{feature\PYZus{}vocab}\PY{p}{[}\PY{n}{ind}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{]}
+        
+        \PY{n}{plt}\PY{o}{.}\PY{n}{plot}\PY{p}{(}\PY{n}{ind}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{,} \PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{+}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{xlabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ID word in painting}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+        \PY{n}{plt}\PY{o}{.}\PY{n}{ylabel}\PY{p}{(}\PY{l+s+s2}{\PYZdq{}}\PY{l+s+s2}{ID word in vocabulary}\PY{l+s+s2}{\PYZdq{}}\PY{p}{)}
+\end{Verbatim}
+
+            \begin{Verbatim}[commandchars=\\\{\}]
+{\color{outcolor}Out[{\color{outcolor}4}]:} Text(0,0.5,'ID word in vocabulary')
+\end{Verbatim}
+        
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_49_1.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{task-2.2}{%
+\subsubsection{:: TASK 2.2 ::}\label{task-2.2}}
+
+Compute the compact BoVW descriptor of the query image.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}30}]:} \PY{n}{query\PYZus{}hist}\PY{o}{=}\PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{num\PYZus{}words}\PY{p}{)}
+         
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n}{ind}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{:}
+             \PY{n}{query\PYZus{}hist}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{+}\PY{o}{=} \PY{l+m+mi}{1}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}31}]:} \PY{c+c1}{\PYZsh{} process histogram}
+         \PY{n}{query\PYZus{}hist} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{multiply}\PY{p}{(}\PY{n}{query\PYZus{}hist}\PY{p}{,} \PY{n}{imdb\PYZus{}tfidf}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{l+m+mi}{0}\PY{p}{]}\PY{p}{)}
+         \PY{n}{query\PYZus{}hist} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sqrt}\PY{p}{(}\PY{n}{query\PYZus{}hist}\PY{p}{)}
+         \PY{n}{query\PYZus{}hist} \PY{o}{=} \PY{n}{query\PYZus{}hist}\PY{o}{/}\PY{n}{np}\PY{o}{.}\PY{n}{linalg}\PY{o}{.}\PY{n}{norm}\PY{p}{(}\PY{n}{query\PYZus{}hist}\PY{p}{)}
+\end{Verbatim}
+
+    \hypertarget{task-2.3}{%
+\subsubsection{:: TASK 2.3 ::}\label{task-2.3}}
+
+Compute the matching score with each image from the database.
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}75}]:} \PY{n}{scores} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{zeros}\PY{p}{(}\PY{n}{num\PYZus{}paintings}\PY{p}{)}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{num\PYZus{}paintings}\PY{p}{)}\PY{p}{:}
+             \PY{n}{scores}\PY{p}{[}\PY{n}{i}\PY{p}{]} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{sum}\PY{p}{(}\PY{n+nb}{abs}\PY{p}{(}\PY{n}{query\PYZus{}hist} \PY{o}{\PYZhy{}} \PY{n}{np}\PY{o}{.}\PY{n}{ravel}\PY{p}{(}\PY{n}{imdb\PYZus{}hists}\PY{p}{[}\PY{p}{:}\PY{p}{,}\PY{n}{i}\PY{p}{]}\PY{o}{.}\PY{n}{todense}\PY{p}{(}\PY{p}{)}\PY{p}{)}\PY{p}{)}\PY{p}{)}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}73}]:} \PY{c+c1}{\PYZsh{} sort in descending order}
+         \PY{n}{scores\PYZus{}sorted\PYZus{}idx} \PY{o}{=} \PY{n}{np}\PY{o}{.}\PY{n}{argsort}\PY{p}{(}\PY{o}{\PYZhy{}}\PY{n}{scores}\PY{p}{)}
+         \PY{n}{scores\PYZus{}sorted} \PY{o}{=} \PY{n}{scores}\PY{o}{.}\PY{n}{ravel}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{n}{scores\PYZus{}sorted\PYZus{}idx}\PY{p}{]}
+\end{Verbatim}
+
+    \begin{Verbatim}[commandchars=\\\{\}]
+{\color{incolor}In [{\color{incolor}77}]:} \PY{c+c1}{\PYZsh{} plot top matches}
+         \PY{n}{N}\PY{o}{=}\PY{l+m+mi}{10}
+         \PY{n}{top\PYZus{}N\PYZus{}idx} \PY{o}{=} \PY{n}{scores\PYZus{}sorted\PYZus{}idx}\PY{o}{.}\PY{n}{ravel}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{p}{:}\PY{n}{N}\PY{p}{]}
+         \PY{n}{plt}\PY{o}{.}\PY{n}{figure}\PY{p}{(}\PY{n}{figsize}\PY{o}{=}\PY{p}{(}\PY{l+m+mi}{20}\PY{p}{,}\PY{l+m+mi}{15}\PY{p}{)}\PY{p}{)}
+         \PY{k}{for} \PY{n}{i} \PY{o+ow}{in} \PY{n+nb}{range}\PY{p}{(}\PY{n}{N}\PY{p}{)}\PY{p}{:}
+           \PY{c+c1}{\PYZsh{} download images}
+           \PY{n}{url} \PY{o}{=} \PY{n}{imdb\PYZus{}url}\PY{p}{(}\PY{n}{top\PYZus{}N\PYZus{}idx}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}      
+           \PY{k}{with} \PY{n}{urlopen}\PY{p}{(}\PY{n}{url}\PY{p}{)} \PY{k}{as} \PY{n}{file}\PY{p}{:}
+               \PY{n}{img} \PY{o}{=} \PY{n}{imread}\PY{p}{(}\PY{n}{file}\PY{p}{,} \PY{n}{mode}\PY{o}{=}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{RGB}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+           \PY{c+c1}{\PYZsh{} choose subplot}
+           \PY{n}{plt}\PY{o}{.}\PY{n}{subplot}\PY{p}{(}\PY{n+nb}{int}\PY{p}{(}\PY{n}{np}\PY{o}{.}\PY{n}{ceil}\PY{p}{(}\PY{n}{N}\PY{o}{/}\PY{l+m+mi}{5}\PY{p}{)}\PY{p}{)}\PY{p}{,}\PY{l+m+mi}{5}\PY{p}{,}\PY{n}{i}\PY{o}{+}\PY{l+m+mi}{1}\PY{p}{)}
+           \PY{c+c1}{\PYZsh{} plot}
+           \PY{n}{plt}\PY{o}{.}\PY{n}{imshow}\PY{p}{(}\PY{n}{img}\PY{p}{)}
+           \PY{n}{plt}\PY{o}{.}\PY{n}{axis}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{off}\PY{l+s+s1}{\PYZsq{}}\PY{p}{)}
+           \PY{n}{plt}\PY{o}{.}\PY{n}{title}\PY{p}{(}\PY{l+s+s1}{\PYZsq{}}\PY{l+s+s1}{score }\PY{l+s+si}{\PYZpc{}1.2f}\PY{l+s+s1}{\PYZsq{}} \PY{o}{\PYZpc{}} \PY{n}{scores\PYZus{}sorted}\PY{o}{.}\PY{n}{ravel}\PY{p}{(}\PY{p}{)}\PY{p}{[}\PY{n}{i}\PY{p}{]}\PY{p}{)}
+           
+\end{Verbatim}
+
+    \begin{center}
+    \adjustimage{max size={0.9\linewidth}{0.9\paperheight}}{output_56_0.png}
+    \end{center}
+    { \hspace*{\fill} \\}
+    
+    \hypertarget{authorship-statement}{%
+\subsection{AUTHORSHIP STATEMENT}\label{authorship-statement}}
+
+I declare that the preceding work was the sole result of my own effort
+and that I have not used any code or results from third-parties.
+
+Pierre-Louis Guhur
+
+
+    % Add a bibliography block to the postdoc
+    
+    
+    
+    \end{document}
