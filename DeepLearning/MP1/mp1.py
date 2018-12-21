@@ -1,3 +1,4 @@
+
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.patches as patches
@@ -6,7 +7,7 @@ from keras.utils import np_utils
 
 # On some implementations of matplotlib, you may need to change this value
 IMAGE_SIZE = 72
- 
+
 
 def plot_history(history):
     if 'acc' in history.history:
@@ -18,6 +19,7 @@ def plot_history(history):
         plt.ylabel('accuracy')
         plt.xlabel('epoch')
         plt.legend(['train', 'test'], loc='upper left')
+        plt.grid(True)
 
         plt.subplot(122)
     plt.plot(history.history['loss'])
@@ -26,10 +28,11 @@ def plot_history(history):
     plt.ylabel('loss')
     plt.xlabel('epoch')
     plt.legend(['train', 'test'], loc='upper left')
+    plt.grid(True)
     plt.show()
-    
-    
-    
+
+
+
 def generate_a_drawing(figsize, U, V, noise=0.0, reshape=False):
     fig = plt.figure(figsize=(figsize,figsize))
     ax = plt.subplot(111)
@@ -46,7 +49,7 @@ def generate_a_drawing(figsize, U, V, noise=0.0, reshape=False):
     return imdata
 
 def generate_a_rectangle(noise=0.0, free_location=False):
-    figsize = 1.0    
+    figsize = 1.0
     U = np.zeros(4)
     V = np.zeros(4)
     if free_location:
@@ -100,7 +103,7 @@ def generate_a_triangle(noise=0.0, free_location=False):
 
 def generate_triangles(n_samples, noise=0.0, free_location=False):
     figsize = 1.0
-    
+
     if free_location:
         U = np.random.random((3, n_samples))
         V = np.random.random((3, n_samples))
@@ -111,18 +114,18 @@ def generate_triangles(n_samples, noise=0.0, free_location=False):
         V = (middle+size, middle-size, middle-size)
     return U, V
 
- 
+
 def generate_dataset_classification(n_samples, noise=0.0, free_location=False):
     # Getting im_size:
     im_size = generate_a_rectangle().shape[0]
     X = np.zeros([n_samples,im_size])
     Y = np.zeros(n_samples)
-    
+
     for i in tqdm(range(n_samples), "Creating data: "):
         category = np.random.randint(3)
         if category == 0:
             X[i] = generate_a_rectangle(noise, free_location)
-        elif category == 1: 
+        elif category == 1:
             X[i] = generate_a_disk(noise, free_location)
         else:
             [X[i], V] = generate_a_triangle(noise, free_location)
@@ -140,7 +143,7 @@ def generate_dataset_regression(n_samples, noise=0.0, free_location=False):
     im_size = generate_a_triangle()[0].shape[0]
     X = np.zeros([n_samples,im_size])
     Y = np.zeros([n_samples, 6])
-    
+
     for i in tqdm(range(n_samples), "Creating data: "):
         [X[i], Y[i]] = generate_a_triangle(noise, free_location)
     X = (X + noise) / (255 + 2 * noise)
@@ -160,12 +163,13 @@ def visualize_prediction(x, y, show=True, fig=None):
     ax.add_patch(tri)
 
     plt.show()
-    
+
 def visualize_predictions(X, Y, ground_truth=None):
     fig, ax = plt.subplots(figsize=(20, 10))
     n_samples = len(X)
     for i in range(n_samples):
         ax = plt.subplot(1,n_samples, i+1)
+        plt.axis('off')
         I = X[i].reshape((IMAGE_SIZE,IMAGE_SIZE))
         ax.imshow(I, extent=[-0.15,1.15,-0.15,1.15],cmap='gray')
         ax.set_xlim([0,1])
@@ -173,15 +177,17 @@ def visualize_predictions(X, Y, ground_truth=None):
         xy = Y[i].reshape(3,2)
         tri = patches.Polygon(xy, closed=True, fill = False, edgecolor = 'r', linewidth = 5, alpha = 0.5)
         ax.add_patch(tri)
-        
+
         if ground_truth is not None:
             xy = ground_truth[i].reshape(3,2)
             tri = patches.Polygon(xy, closed=True, fill = False, edgecolor = 'g', linewidth = 5, alpha = 0.5)
             ax.add_patch(tri)
 
     plt.show()
-    
-   
+
+
+
+
 def visualize_denoising(X, Y, ground_truth=None):
     fig, ax = plt.subplots(figsize=(20, 10))
     n_samples = len(X)
@@ -198,8 +204,8 @@ def visualize_denoising(X, Y, ground_truth=None):
             I = ground_truth[i].reshape((IMAGE_SIZE,IMAGE_SIZE))
             ax.imshow(I, extent=[-0.15,1.15,-0.15,1.15],cmap='gray')
     plt.show()
-    
-    
+
+
 def visualize_pred_gt(x, y, y_pred):
     fig, ax = plt.subplots(figsize=(5, 5))
     I = x.reshape((IMAGE_SIZE,IMAGE_SIZE))
@@ -216,7 +222,7 @@ def visualize_pred_gt(x, y, y_pred):
 
     plt.show()
 
-    
+
 def generate_test_set_regression(n_samples, noise=0.0, free_location=False):
     np.random.seed(42)
     [X_test, Y_test] = generate_dataset_regression(n_samples, noise, free_location)
@@ -235,3 +241,46 @@ def generate_dataset_noise(n_samples, noise=20.0, free_location=False):
         img = generate_a_drawing(1.0, U[i], V[i], noise=noise, reshape=True)
         X[i] = (img + noise) / (255 + 2 * noise)
     return X, Y
+
+
+
+from keras.layers import Dense, Input
+from keras.layers import Conv2D, MaxPooling2D,Activation, UpSampling2D, Reshape
+from keras.layers import Dropout
+from keras.layers import Flatten
+from keras.layers import BatchNormalization
+from keras.layers import concatenate
+from keras.models import Model
+
+def regression_model(optimizer="sgd", input_shape=(IMAGE_SIZE, IMAGE_SIZE, 1)):
+
+    features = Input((input_shape, ), name = "input_features")
+    shape = int(input_shape**0.5)
+    reshaped = Reshape((shape, shape, 1))(features)
+
+    conv00 = BatchNormalization()(Conv2D(8, (3, 3), activation = "relu", padding = "same")(reshaped))
+    conv01 = BatchNormalization()(Conv2D(8, (3, 3), activation = "relu", padding = "same")(conv00))
+    pool0 = MaxPooling2D((2, 2))(conv01)
+
+    conv10 = BatchNormalization()(Conv2D(16, (3, 3), activation = "relu", padding = "same")(pool0))
+    conv11 = BatchNormalization()(Conv2D(16, (3, 3), activation = "relu", padding = "same")(conv10))
+    pool1 = MaxPooling2D((2, 2))(conv11)
+
+    conv20 = BatchNormalization()(Conv2D(32, (3, 3), activation = "relu", padding = "same")(pool1))
+    conv21 = BatchNormalization()(Conv2D(32, (3, 3), activation = "relu", padding = "same")(conv20))
+    pool2 = MaxPooling2D((2, 2))(conv21)
+
+    conv30 = BatchNormalization()(Conv2D(64, (3, 3), activation = "relu", padding = "same")(pool2))
+    conv31 = BatchNormalization()(Conv2D(64, (3, 3), activation = "relu", padding = "same")(conv30))
+    pool3 = MaxPooling2D((2, 2))(conv31)
+
+    flat = Flatten()(pool3)
+
+    dense0 = BatchNormalization()(Dense(256, activation = "relu")(flat))
+    dense1 = BatchNormalization()(Dense(128, activation = "relu")(dense0))
+    output = Dense(6, activation = "sigmoid", name = "output")(dense1)
+
+    model = Model(inputs = features, outputs = output)
+    model.compile(optimizer=optimizer, loss="mse")
+
+    return model
