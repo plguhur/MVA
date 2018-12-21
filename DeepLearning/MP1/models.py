@@ -8,7 +8,7 @@ from keras.layers import Conv2D, MaxPooling2D,Activation, UpSampling2D, Reshape
 from keras.layers import Dropout
 from keras.layers import Flatten
 from keras.layers import BatchNormalization
-from keras.layers import concatenate, Concatenate
+from keras.layers import concatenate
 from keras import optimizers
 from keras.layers import Dense
 from keras.models import Sequential, clone_model, Model
@@ -122,60 +122,38 @@ def regression_model(kernel_initializer="he_normal",
 def autoencoder_model(input_size=(72,72,1)):
 
     inputs = Input(input_size)
-    # conv1 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(inputs)
-    # conv1 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv1)
-    # pool1 = MaxPooling2D(pool_size=(2, 2))(conv1) # 36
-    # conv2 = Conv2D(128, 3, activation='relu', padding='same', kernel_initializer='he_normal')(pool1)
-    # conv2 = Conv2D(128, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv2)
-    # pool2 = MaxPooling2D(pool_size=(2, 2))(conv2) # 18
-    #
-    # conv3 = Conv2D(256, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(pool2)
-    # conv3 = Conv2D(256, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv3)
-    # drop3 = Dropout(0.5)(conv3)
-    #
-    # pool3 = MaxPooling2D(pool_size=(2, 2))(drop3) # 9
-    #
-    # conv4 = Conv2D(512, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(pool3)
-    # conv4 = Conv2D(512, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv4)
-    # drop4 = Dropout(0.5)(conv4)
-    #
-    # up5 = Conv2D(256, 2, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(UpSampling2D(size = (2,2))(drop4)) # 18
-    # merge5 = concatenate([drop3, up5], axis = 3)
-    # conv5 = Conv2D(256, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(merge5)
-    # conv5 = Conv2D(256, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv5)
-    #
-    # up8 = Conv2D(128, 2, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(UpSampling2D(size = (2,2))(drop3)) # 18
-    # merge8 = concatenate([conv2,up8], axis = 3)
-    # conv8 = Conv2D(128, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(merge8)
-    # conv8 = Conv2D(128, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv8)
-    # up9 = Conv2D(64, 2, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(UpSampling2D(size = (2,2))(conv8))
-    # merge9 = concatenate([conv1,up9], axis = 3)
-    # conv9 = Conv2D(64, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(merge9)
-    # conv9 = Conv2D(64, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv9)
-    # up9 = Conv2D(64, 2, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(UpSampling2D(size = (2,2))(conv8))
-    #
-    # conv10 = Conv2D(1, 1, activation='sigmoid')(conv9)
+    conv1 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(inputs)
+    conv1 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv1)
+    pool1 = MaxPooling2D(pool_size=(2, 2))(conv1) # 36
+    conv2 = Conv2D(128, 3, activation='relu', padding='same', kernel_initializer='he_normal')(pool1)
+    conv2 = Conv2D(128, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv2)
+    pool2 = MaxPooling2D(pool_size=(2, 2))(conv2) # 18
 
-    conv00 = BatchNormalization()(Conv2D(16, (3, 3), activation = "relu", padding = "same")(inputs))
-    conv01 = BatchNormalization()(Conv2D(32, (3, 3), activation = "relu", padding = "same")(conv00))
-    pool0 = MaxPooling2D((2, 2))(conv01)
+    conv3 = Conv2D(256, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(pool2)
+    conv3 = Conv2D(256, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv3)
+    drop3 = Dropout(0.5)(conv3)
 
-    conv10 = BatchNormalization()(Conv2D(32, (3, 3), activation = "relu", padding = "same")(pool0))
-    conv11 = BatchNormalization()(Conv2D(64, (3, 3), activation = "relu", padding = "same")(conv10))
-    pool1 = MaxPooling2D((2, 2))(conv11)
+    pool3 = MaxPooling2D(pool_size=(2, 2))(drop3) # 9
 
-    conv20 = BatchNormalization()(Conv2D(64, (3, 3), activation = "relu", padding = "same")(pool1))
-    conv21 = BatchNormalization()(Conv2D(128, (3, 3), activation = "relu", padding = "same")(conv20))
-    conv22 = BatchNormalization()(Conv2D(64, (3, 3), activation = "relu", padding = "same")(conv21))
+    conv4 = Conv2D(512, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(pool3)
+    conv4 = Conv2D(512, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv4)
+    drop4 = Dropout(0.5)(conv4)
 
-    up0 = Concatenate()([UpSampling2D((2, 2))(conv22), conv11])
-    conv20u = BatchNormalization()(Conv2D(64, (3, 3), activation = "relu", padding = "same")(up0))
-    conv21u = BatchNormalization()(Conv2D(32, (3, 3), activation = "relu", padding = "same")(conv20u))
+    up5 = Conv2D(256, 2, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(UpSampling2D(size = (2,2))(drop4)) # 18
+    merge5 = concatenate([drop3, up5], axis = 3)
+    conv5 = Conv2D(256, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(merge5)
+    conv5 = Conv2D(256, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv5)
 
+    up8 = Conv2D(128, 2, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(UpSampling2D(size = (2,2))(drop3)) # 18
+    merge8 = concatenate([conv2,up8], axis = 3)
+    conv8 = Conv2D(128, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(merge8)
+    conv8 = Conv2D(128, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv8)
+    up9 = Conv2D(64, 2, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(UpSampling2D(size = (2,2))(conv8))
+    merge9 = concatenate([conv1,up9], axis = 3)
+    conv9 = Conv2D(64, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(merge9)
+    conv9 = Conv2D(64, 3, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(conv9)
+    up9 = Conv2D(64, 2, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(UpSampling2D(size = (2,2))(conv8))
 
-    up1 = Concatenate()([UpSampling2D((2, 2))(conv21u), conv01])
-    conv20u = BatchNormalization()(Conv2D(32, (3, 3), activation = "relu", padding = "same")(up1))
-    conv21u = BatchNormalization()(Conv2D(16, (3, 3), activation = "relu", padding = "same")(conv20u))
-    conv22u = BatchNormalization()(Conv2D(1, (3, 3), activation = "relu", padding = "same")(conv21u))
+    conv10 = Conv2D(1, 1, activation='sigmoid')(conv9)
 
-    return inputs, conv22u
+    return inputs, conv10
