@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib.patches as patches
-from tqdm import tqdm
+from tqdm import tqdm, tqdm_notebook
 import numpy as np
 
 from keras.layers import Dense, Input
@@ -121,8 +121,12 @@ def regression_model(kernel_initializer="he_normal",
 
 def autoencoder_model(input_size=(72,72,1)):
 
-    inputs = Input(input_size)
-    conv1 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(inputs)
+    #inputs = Input(input_size)
+    inputs = Input((5184, ), name = "input_features")
+    shape = int(5184**0.5)
+    reshaped = Reshape((72, 72, 1))(inputs)
+
+    conv1 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(reshaped)
     conv1 = Conv2D(64, 3, activation='relu', padding='same', kernel_initializer='he_normal')(conv1)
     pool1 = MaxPooling2D(pool_size=(2, 2))(conv1) # 36
     conv2 = Conv2D(128, 3, activation='relu', padding='same', kernel_initializer='he_normal')(pool1)
@@ -155,5 +159,6 @@ def autoencoder_model(input_size=(72,72,1)):
     up9 = Conv2D(64, 2, activation = 'relu', padding = 'same', kernel_initializer = 'he_normal')(UpSampling2D(size = (2,2))(conv8))
 
     conv10 = Conv2D(1, 1, activation='sigmoid')(conv9)
+    conv10 = Flatten()(conv10)
 
     return inputs, conv10

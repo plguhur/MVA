@@ -2,7 +2,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.patches as patches
-from tqdm import tqdm
+from tqdm import tqdm, tqdm_notebook
 from keras.utils import np_utils
 
 # On some implementations of matplotlib, you may need to change this value
@@ -229,58 +229,28 @@ def generate_test_set_regression(n_samples, noise=0.0, free_location=False):
     return [X_test, Y_test]
 
 
-def generate_dataset_noise(n_samples, noise=20.0, free_location=False):
-    np.random.seed(42)
-    U, V = generate_triangles(n_samples, noise=0.0, free_location=free_location)
-    U = np.swapaxes(U, 0, 1)
-    V = np.swapaxes(V, 0, 1)
-    X = np.zeros((n_samples, IMAGE_SIZE, IMAGE_SIZE, 1))
-    Y = np.zeros((n_samples, IMAGE_SIZE, IMAGE_SIZE, 1))
-    for i in tqdm(range(n_samples)):
-        Y[i] = generate_a_drawing(1.0, U[i], V[i], noise=0.0, reshape=True)
-        img = generate_a_drawing(1.0, U[i], V[i], noise=noise, reshape=True)
-        X[i] = (img + noise) / (255 + 2 * noise)
-    return X, Y
+# def generate_dataset_noise(n_samples, noise=20.0, free_location=False):
+#     np.random.seed(42)
+#     U, V = generate_triangles(n_samples, noise=0.0, free_location=free_location)
+#     U = np.swapaxes(U, 0, 1)
+#     V = np.swapaxes(V, 0, 1)
+#     X = np.zeros((n_samples, IMAGE_SIZE, IMAGE_SIZE, 1))
+#     Y = np.zeros((n_samples, IMAGE_SIZE, IMAGE_SIZE, 1))
+#     for i in tqdm(range(n_samples)):
+#         Y[i] = generate_a_drawing(1.0, U[i], V[i], noise=0.0, reshape=True)
+#         img = generate_a_drawing(1.0, U[i], V[i], noise=noise, reshape=True)
+#         X[i] = (img + noise) / (255 + 2 * noise)
+#     return X, Y
 
+def generate_dataset_noise(n_samples, noise=20.0):
+    # Getting im_size:
+    im_size = generate_a_triangle()[0].shape[0]
+    Y = np.zeros([n_samples,im_size])
 
-
-from keras.layers import Dense, Input
-from keras.layers import Conv2D, MaxPooling2D,Activation, UpSampling2D, Reshape
-from keras.layers import Dropout
-from keras.layers import Flatten
-from keras.layers import BatchNormalization
-from keras.layers import concatenate
-from keras.models import Model
-
-def regression_model(optimizer="sgd", input_shape=(IMAGE_SIZE, IMAGE_SIZE, 1)):
-
-    features = Input((input_shape, ), name = "input_features")
-    shape = int(input_shape**0.5)
-    reshaped = Reshape((shape, shape, 1))(features)
-
-    conv00 = BatchNormalization()(Conv2D(8, (3, 3), activation = "relu", padding = "same")(reshaped))
-    conv01 = BatchNormalization()(Conv2D(8, (3, 3), activation = "relu", padding = "same")(conv00))
-    pool0 = MaxPooling2D((2, 2))(conv01)
-
-    conv10 = BatchNormalization()(Conv2D(16, (3, 3), activation = "relu", padding = "same")(pool0))
-    conv11 = BatchNormalization()(Conv2D(16, (3, 3), activation = "relu", padding = "same")(conv10))
-    pool1 = MaxPooling2D((2, 2))(conv11)
-
-    conv20 = BatchNormalization()(Conv2D(32, (3, 3), activation = "relu", padding = "same")(pool1))
-    conv21 = BatchNormalization()(Conv2D(32, (3, 3), activation = "relu", padding = "same")(conv20))
-    pool2 = MaxPooling2D((2, 2))(conv21)
-
-    conv30 = BatchNormalization()(Conv2D(64, (3, 3), activation = "relu", padding = "same")(pool2))
-    conv31 = BatchNormalization()(Conv2D(64, (3, 3), activation = "relu", padding = "same")(conv30))
-    pool3 = MaxPooling2D((2, 2))(conv31)
-
-    flat = Flatten()(pool3)
-
-    dense0 = BatchNormalization()(Dense(256, activation = "relu")(flat))
-    dense1 = BatchNormalization()(Dense(128, activation = "relu")(dense0))
-    output = Dense(6, activation = "sigmoid", name = "output")(dense1)
-
-    model = Model(inputs = features, outputs = output)
-    model.compile(optimizer=optimizer, loss="mse")
-
-    return model
+    for i in tqdm_notebook(range(n_samples)):
+        [Y[i], _] = generate_a_triangle(0.0, True)
+    noise /= 255.
+    Y /= 255.
+    X = Y + noise * (2 * np.random.random(im_size) - 1)
+    X = (X + noise) / (1. + 2 * noise)
+    return [X, Y]
