@@ -160,7 +160,7 @@ class incremental_k_centers:
             # c_rep absorbe c_add, c_add is now the new face update
             # centroids and V
             #################################################################
-            self.V[c_rep] += c_add
+            self.V[c_rep] += self.V[c_add]
             self.V[c_add] = 1
             self.centroids[c_add] = face
 
