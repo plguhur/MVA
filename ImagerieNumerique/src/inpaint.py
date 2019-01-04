@@ -46,12 +46,10 @@ def load_network(model_path="completionnet_places2.t7"):
 
 def random_mask(output_shape):
     # generate random holes
-    h, w = output_shape
+    w, h = output_shape
     M = torch.FloatTensor(1, h, w).fill_(0)
     nHoles = np.random.randint(1, 4)
-    print("n_holes", nHoles)
-    print('w: ', w)
-    print('h: ', h)
+    print("Random mask with", nHoles, "holes")
     for _ in range(nHoles):
         mask_w = np.random.randint(32, 128)
         mask_h = np.random.randint(32, 128)
@@ -68,6 +66,15 @@ def load_data(input_path, output_shape=None):
         input_img = cv2.resize(input_img, output_shape)
     I = torch.from_numpy(cvimg2tensor(input_img)).float()
     return I
+
+
+def post_processing(I, M, out):
+    M_3ch = torch.cat((M, M, M), 0)
+    target = tensor2cvimg(I.numpy())
+    source = tensor2cvimg(out.numpy())    # foreground
+    mask = tensor2cvimg(M_3ch.numpy())
+    out = blend(target, source, mask, offset=(0, 0))
+    return torch.from_numpy(cvimg2tensor(out))
 
 def load_mask(mask_path, output_shape=None):
     M =  cv2.imread(mask_path)
@@ -112,12 +119,7 @@ def inpainting(model, datamean, I, M, gpu=False, postproc=False):
     # post-processing
     if postproc:
         print('post-postprocessing...')
-        target = tensor2cvimg(I.numpy())
-        source = tensor2cvimg(out.numpy())    # foreground
-        mask = tensor2cvimg(M_3ch.numpy())
-        out = blend(target, source, mask, offset=(0, 0))
-
-        out = torch.from_numpy(cvimg2tensor(out))
+        out = post_processing(I, M, out)
 
     return out
 
