@@ -64,15 +64,15 @@ def random_mask(output_shape):
 # load data
 def load_data(input_path, output_shape=None):
     input_img = cv2.imread(input_path)
-    # resize to 2:3
-    # reshape = (input_img.shape[1], int(input_img.shape[1]*2/3))
     if output_shape is not None:
         input_img = cv2.resize(input_img, output_shape)
     I = torch.from_numpy(cvimg2tensor(input_img)).float()
     return I
 
-def load_mask(mask_path):
+def load_mask(mask_path, output_shape=None):
     M =  cv2.imread(mask_path)
+    if output_shape is not None:
+        M = cv2.resize(M, output_shape)
     M = torch.from_numpy(
                 cv2.cvtColor(M, cv2.COLOR_BGR2GRAY) / 255).float()
     M[M <= 0.2] = 0.0
@@ -112,9 +112,9 @@ def inpainting(model, datamean, I, M, gpu=False, postproc=False):
     # post-processing
     if postproc:
         print('post-postprocessing...')
-        target = input_img    # background
+        target = tensor2cvimg(I.numpy())
         source = tensor2cvimg(out.numpy())    # foreground
-        mask = input_mask
+        mask = tensor2cvimg(M_3ch.numpy())
         out = blend(target, source, mask, offset=(0, 0))
 
         out = torch.from_numpy(cvimg2tensor(out))
