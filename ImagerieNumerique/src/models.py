@@ -2,130 +2,146 @@ import torch
 import torch.nn as nn
 
 
-class _netG(nn.Module):
-    def __init__(self, opt):
-        super(_netG, self).__init__()
-        self.ngpu = opt.ngpu
+class NetCompletion(nn.Module):
+    def __init__(self):
+        super(NetCompletion, self).__init__()
         self.main = nn.Sequential(
-            # input is (nc) x 128 x 128
-            nn.Conv2d(opt.nc,opt.nef,4,2,1, bias=False),
-            nn.ReLU(0.2, inplace=True),
-            # state size: (nef) x 64 x 64
-            nn.Conv2d(opt.nef,opt.nef,4,2,1, bias=False),
-            nn.BatchNorm2d(opt.nef),
-            nn.ReLU(0.2, inplace=True),
-            # state size: (nef) x 32 x 32
-            nn.Conv2d(opt.nef,opt.nef*2,4,2,1, bias=False),
-            nn.BatchNorm2d(opt.nef*2),
-            nn.ReLU(0.2, inplace=True),
-            # state size: (nef*2) x 16 x 16
-            nn.Conv2d(opt.nef*2,opt.nef*4,4,2,1, bias=False),
-            nn.BatchNorm2d(opt.nef*4),
-            nn.ReLU(0.2, inplace=True),
-            # state size: (nef*4) x 8 x 8
-            nn.Conv2d(opt.nef*4,opt.nef*8,4,2,1, bias=False),
-            nn.BatchNorm2d(opt.nef*8),
-            nn.ReLU(0.2, inplace=True),
-            # state size: (nef*8) x 4 x 4
-            nn.Conv2d(opt.nef*8,opt.nBottleneck,4, bias=False),
-            # tate size: (nBottleneck) x 1 x 1
-            nn.BatchNorm2d(opt.nBottleneck),
-            nn.ReLU(0.2, inplace=True),
-            # input is Bottleneck, going into a convolution
-            nn.ConvTranspose2d(opt.nBottleneck, opt.ngf * 8, 4, 1, 0, bias=False),
-            nn.BatchNorm2d(opt.ngf * 8),
-            nn.ReLU(True),
-            # state size. (ngf*8) x 4 x 4
-            nn.ConvTranspose2d(opt.ngf * 8, opt.ngf * 4, 4, 2, 1, bias=False),
-            nn.BatchNorm2d(opt.ngf * 4),
-            nn.ReLU(True),
-            # state size. (ngf*4) x 8 x 8
-            nn.ConvTranspose2d(opt.ngf * 4, opt.ngf * 2, 4, 2, 1, bias=False),
-            nn.BatchNorm2d(opt.ngf * 2),
-            nn.ReLU(True),
-            # state size. (ngf*2) x 16 x 16
-            nn.ConvTranspose2d(opt.ngf * 2, opt.ngf, 4, 2, 1, bias=False),
-            nn.BatchNorm2d(opt.ngf),
-            nn.ReLU(True),
-            # state size. (ngf) x 32 x 32
-            nn.ConvTranspose2d(opt.ngf, opt.nc, 4, 2, 1, bias=False),
-            nn.Sigmoid()
-            # state size. (nc) x 64 x 64
+            nn.Conv2d(3, 64, kernel_size=5, stride=1),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+            # ------------------------------------------
+            nn.Conv2d(64, 128, kernel_size=3, stride=2),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+
+            nn.Conv2d(128, 128, kernel_size=3),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            # ------------------------------------------
+            nn.Conv2d(128, 256, 1, stride=2),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+
+            nn.Conv2d(256, 256, 1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+
+            nn.Conv2d(256, 256, 1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+
+            nn.Conv2d(256, 256, 1, dilation=2),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+
+            nn.Conv2d(256, 256, 1, dilation=4),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+
+            nn.Conv2d(256, 256, 1, dilation=8),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+
+            nn.Conv2d(256, 256, 1, dilation=16),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+
+            nn.Conv2d(256, 256, 1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+
+            nn.Conv2d(256, 256, 1),
+            nn.BatchNorm2d(256),
+            nn.ReLU(),
+            #------------------------------------------
+            nn.ConvTranspose2d(256, 128, kernel_size=4, stride=2),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+
+            nn.Conv2d(128, 128, kernel_size=3),
+            nn.BatchNorm2d(128),
+            nn.ReLU(),
+            #------------------------------------------
+            nn.ConvTranspose2d(128, 64, kernel_size=4, stride=2),
+            nn.BatchNorm2d(64),
+            nn.ReLU(),
+
+            nn.Conv2d(64, 32, kernel_size=3),
+            nn.BatchNorm2d(32),
+            nn.ReLU(),
+
+            nn.Conv2d(32, 3, kernel_size=3),
+            nn.Sigmoid(),
         )
 
     def forward(self, input):
-        if isinstance(input.data, torch.cuda.FloatTensor) and self.ngpu > 1:
-            output = nn.parallel.data_parallel(self.main, input, range(self.ngpu))
-        else:
-            output = self.main(input)
-        return output
+        return self.main(input)
 
 
-class _netD(nn.Module):
-    def __init__(self, opt):
-        super(_netlocalD, self).__init__()
-        self.ngpu = opt.ngpu
+class _NetContext(nn.Module):
+    def __init__(self):
+        super(_NetContext, self).__init__()
         kernel_size = 5
         stride = 2
-        self.local = nn.Sequential(
+        self.__local = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size, stride, bias=True),
-            nn.BatchNorm2d(),
+            nn.BatchNorm2d(64),
             nn.ReLU(),
 
             nn.Conv2d(64, 128, kernel_size, stride, bias=True),
-            nn.BatchNorm2d(),
+            nn.BatchNorm2d(128),
             nn.ReLU(),
 
             nn.Conv2d(128, 256, kernel_size, stride, bias=True),
-            nn.BatchNorm2d(),
+            nn.BatchNorm2d(256),
             nn.ReLU(),
 
             nn.Conv2d(256, 512, kernel_size, stride, bias=True),
-            nn.BatchNorm2d(),
+            nn.BatchNorm2d(512),
             nn.ReLU(),
 
             nn.Conv2d(512, 512, kernel_size, stride, bias=True),
-            nn.BatchNorm2d(),
-            nn.ReLU(),
-
-            nn.Linear(512, 1024),
-            nn.Sigmoid()
+            nn.BatchNorm2d(512),
+            nn.ReLU()
         )
 
-        self.global = nn.Sequential(
+        self.__global = nn.Sequential(
             nn.Conv2d(3, 64, kernel_size, stride, bias=True),
-            nn.BatchNorm2d(),
+            nn.BatchNorm2d(64),
             nn.ReLU(),
 
             nn.Conv2d(64, 128, kernel_size, stride, bias=True),
-            nn.BatchNorm2d(),
+            nn.BatchNorm2d(128),
             nn.ReLU(),
 
             nn.Conv2d(128, 256, kernel_size, stride, bias=True),
-            nn.BatchNorm2d(),
+            nn.BatchNorm2d(256),
             nn.ReLU(),
 
             nn.Conv2d(256, 512, kernel_size, stride, bias=True),
-            nn.BatchNorm2d(),
+            nn.BatchNorm2d(512),
             nn.ReLU(),
 
             nn.Conv2d(512, 512, kernel_size, stride, bias=True),
-            nn.BatchNorm2d(),
+            nn.BatchNorm2d(512),
             nn.ReLU(),
 
             nn.Conv2d(512, 512, kernel_size, stride, bias=True),
-            nn.BatchNorm2d(),
-            nn.ReLU(),
-
-            nn.Linear(512, 1024),
-            nn.Sigmoid()
+            nn.BatchNorm2d(512),
+            nn.ReLU()
         )
 
     def forward(self, input):
-        if isinstance(input.data, torch.cuda.FloatTensor) and self.ngpu > 1:
-            output = nn.parallel.data_parallel(self.main, input, range(self.ngpu))
-        else:
-            output = self.main(input)
+        x1 = self.__local(input)
+        x1 = x1.view(x1.size(0), -1)
+        x1 = nn.Linear(x1.size(-1), 1024)(x1)
+        x1 = nn.ReLU()(nn.BatchNorm1d(1024)(x1))
 
-        torch.cat([self.local, self.global])
-        return output.view(-1, 1)
+        x2 = self.__global(input)
+        x2 = x2.view(x2.size(0), -1)
+        x2 = nn.Linear(x2.size(-1), 1024)(x2)
+        x2 = nn.ReLU()(nn.BatchNorm1d(1024)(x2))
+
+        x = torch.cat([x1, x2])
+        x = nn.Linear(1024, 1)(x)
+        return nn.Sigmoid()(x)
