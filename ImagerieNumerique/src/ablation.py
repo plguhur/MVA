@@ -8,7 +8,7 @@ from torch.autograd import Variable
 
 from src.models import completionnet_places2
 
-# This was obtained from https://github.com/clcarwin/convert_torch_to_pytorch 
+# This was obtained from https://github.com/clcarwin/convert_torch_to_pytorch
 completionnet_ablation = lambda x: nn.Sequential( # Sequential,
 	nn.Conv2d(4,64,(5, 5),(1, 1),(2, 2)),
 	nn.BatchNorm2d(64),
@@ -98,3 +98,7 @@ if __name__ == "__main__":
     A.load_state_dict(torch.load('completionnet_places2.pth'))
     B = completionnet_ablation(0.1)
     copy_weights(A, B)
+    B.eval()
+    for m in B.modules():
+      if m.__class__.__name__.startswith('Dropout'):
+        m.train()
