@@ -2,77 +2,64 @@ import torch
 import torch.nn as nn
 
 
+completionnet_places2 = nn.Sequential( # Sequential,
+	nn.Conv2d(4,64,(5, 5),(1, 1),(2, 2)),
+	nn.BatchNorm2d(64),
+	nn.ReLU(),
+	nn.Conv2d(64,128,(3, 3),(2, 2),(1, 1)),
+	nn.BatchNorm2d(128),
+	nn.ReLU(),
+	nn.Conv2d(128,128,(3, 3),(1, 1),(1, 1)),
+	nn.BatchNorm2d(128),
+	nn.ReLU(),
+	nn.Conv2d(128,256,(3, 3),(2, 2),(1, 1)),
+	nn.BatchNorm2d(256),
+	nn.ReLU(),
+	nn.Conv2d(256,256,(3, 3),(1, 1),(1, 1),(1, 1),1),
+	nn.BatchNorm2d(256),
+	nn.ReLU(),
+	nn.Conv2d(256,256,(3, 3),(1, 1),(1, 1),(1, 1),1),
+	nn.BatchNorm2d(256),
+	nn.ReLU(),
+	nn.Conv2d(256,256,(3, 3),(1, 1),(2, 2),(2, 2),1),
+	nn.BatchNorm2d(256),
+	nn.ReLU(),
+	nn.Conv2d(256,256,(3, 3),(1, 1),(4, 4),(4, 4),1),
+	nn.BatchNorm2d(256),
+	nn.ReLU(),
+	nn.Conv2d(256,256,(3, 3),(1, 1),(8, 8),(8, 8),1),
+	nn.BatchNorm2d(256),
+	nn.ReLU(),
+	nn.Conv2d(256,256,(3, 3),(1, 1),(16, 16),(16, 16),1),
+	nn.BatchNorm2d(256),
+	nn.ReLU(),
+	nn.Conv2d(256,256,(3, 3),(1, 1),(1, 1),(1, 1),1),
+	nn.BatchNorm2d(256),
+	nn.ReLU(),
+	nn.Conv2d(256,256,(3, 3),(1, 1),(1, 1),(1, 1),1),
+	nn.BatchNorm2d(256),
+	nn.ReLU(),
+	nn.ConvTranspose2d(256,128,(4, 4),(2, 2),(1, 1),(0, 0)),
+	nn.BatchNorm2d(128),
+	nn.ReLU(),
+	nn.Conv2d(128,128,(3, 3),(1, 1),(1, 1)),
+	nn.BatchNorm2d(128),
+	nn.ReLU(),
+	nn.ConvTranspose2d(128,64,(4, 4),(2, 2),(1, 1),(0, 0)),
+	nn.BatchNorm2d(64),
+	nn.ReLU(),
+	nn.Conv2d(64,32,(3, 3),(1, 1),(1, 1)),
+	nn.BatchNorm2d(32),
+	nn.ReLU(),
+	nn.Conv2d(32,3,(3, 3),(1, 1),(1, 1)),
+	nn.Sigmoid(),
+)
+
+
 class _NetCompletion(nn.Module):
     def __init__(self):
         super(_NetCompletion, self).__init__()
-        self.main = nn.Sequential(
-            nn.Conv2d(4, 64, kernel_size=5, stride=1),
-            nn.BatchNorm2d(64),
-            nn.ReLU(),
-            # ------------------------------------------
-            nn.Conv2d(64, 128, kernel_size=3, stride=2),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-
-            nn.Conv2d(128, 128, kernel_size=3),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-            # ------------------------------------------
-            nn.Conv2d(128, 256, 1, stride=2),
-            nn.BatchNorm2d(256),
-            nn.ReLU(),
-
-            nn.Conv2d(256, 256, 1, dilation=1),
-            nn.BatchNorm2d(256),
-            nn.ReLU(),
-
-            nn.Conv2d(256, 256, 1, dilation=1),
-            nn.BatchNorm2d(256),
-            nn.ReLU(),
-
-            nn.Conv2d(256, 256, 1, dilation=2),
-            nn.BatchNorm2d(256),
-            nn.ReLU(),
-
-            nn.Conv2d(256, 256, 1, dilation=4, padding=4),
-            nn.BatchNorm2d(256),
-            nn.ReLU(),
-
-            nn.Conv2d(256, 256, 1, dilation=8, padding=8),
-            nn.BatchNorm2d(256),
-            nn.ReLU(),
-
-            nn.Conv2d(256, 256, 1, dilation=16, padding=16),
-            nn.BatchNorm2d(256),
-            nn.ReLU(),
-
-            nn.Conv2d(256, 256, 1),
-            nn.BatchNorm2d(256),
-            nn.ReLU(),
-
-            nn.Conv2d(256, 256, 1),
-            nn.BatchNorm2d(256),
-            nn.ReLU(),
-            #------------------------------------------
-            nn.ConvTranspose2d(256, 128, kernel_size=4, stride=2),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-
-            nn.Conv2d(128, 128, kernel_size=3),
-            nn.BatchNorm2d(128),
-            nn.ReLU(),
-            #------------------------------------------
-            nn.ConvTranspose2d(128, 64, kernel_size=4, stride=2),
-            nn.BatchNorm2d(64),
-            nn.ReLU(),
-
-            nn.Conv2d(64, 32, kernel_size=3),
-            nn.BatchNorm2d(32),
-            nn.ReLU(),
-
-            nn.Conv2d(32, 3, kernel_size=3),
-            nn.Sigmoid(),
-        )
+        self.main = completionnet_places2
 
     def forward(self, input):
         # Input is the image with the mask concatenated
