@@ -2,11 +2,11 @@ import torch
 import torch.nn as nn
 
 
-class NetCompletion(nn.Module):
+class _NetCompletion(nn.Module):
     def __init__(self):
-        super(NetCompletion, self).__init__()
+        super(_NetCompletion, self).__init__()
         self.main = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size=5, stride=1),
+            nn.Conv2d(4, 64, kernel_size=5, stride=1),
             nn.BatchNorm2d(64),
             nn.ReLU(),
             # ------------------------------------------
@@ -22,11 +22,11 @@ class NetCompletion(nn.Module):
             nn.BatchNorm2d(256),
             nn.ReLU(),
 
-            nn.Conv2d(256, 256, 1),
+            nn.Conv2d(256, 256, 1, dilation=1),
             nn.BatchNorm2d(256),
             nn.ReLU(),
 
-            nn.Conv2d(256, 256, 1),
+            nn.Conv2d(256, 256, 1, dilation=1),
             nn.BatchNorm2d(256),
             nn.ReLU(),
 
@@ -34,15 +34,15 @@ class NetCompletion(nn.Module):
             nn.BatchNorm2d(256),
             nn.ReLU(),
 
-            nn.Conv2d(256, 256, 1, dilation=4),
+            nn.Conv2d(256, 256, 1, dilation=4, padding=4),
             nn.BatchNorm2d(256),
             nn.ReLU(),
 
-            nn.Conv2d(256, 256, 1, dilation=8),
+            nn.Conv2d(256, 256, 1, dilation=8, padding=8),
             nn.BatchNorm2d(256),
             nn.ReLU(),
 
-            nn.Conv2d(256, 256, 1, dilation=16),
+            nn.Conv2d(256, 256, 1, dilation=16, padding=16),
             nn.BatchNorm2d(256),
             nn.ReLU(),
 
@@ -75,6 +75,7 @@ class NetCompletion(nn.Module):
         )
 
     def forward(self, input):
+        # Input is the image with the mask concatenated
         return self.main(input)
 
 
@@ -84,64 +85,64 @@ class _NetContext(nn.Module):
         kernel_size = 5
         stride = 2
         self.__local = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size, stride, bias=True),
+            nn.Conv2d(3, 64, kernel_size, stride),
             nn.BatchNorm2d(64),
             nn.ReLU(),
 
-            nn.Conv2d(64, 128, kernel_size, stride, bias=True),
+            nn.Conv2d(64, 128, kernel_size, stride),
             nn.BatchNorm2d(128),
             nn.ReLU(),
 
-            nn.Conv2d(128, 256, kernel_size, stride, bias=True),
+            nn.Conv2d(128, 256, kernel_size, stride),
             nn.BatchNorm2d(256),
             nn.ReLU(),
 
-            nn.Conv2d(256, 512, kernel_size, stride, bias=True),
+            nn.Conv2d(256, 512, kernel_size, stride),
             nn.BatchNorm2d(512),
             nn.ReLU(),
 
-            nn.Conv2d(512, 512, kernel_size, stride, bias=True),
+            nn.Conv2d(512, 512, kernel_size, stride),
             nn.BatchNorm2d(512),
             nn.ReLU()
         )
 
         self.__global = nn.Sequential(
-            nn.Conv2d(3, 64, kernel_size, stride, bias=True),
+            nn.Conv2d(3, 64, kernel_size, stride),
             nn.BatchNorm2d(64),
             nn.ReLU(),
 
-            nn.Conv2d(64, 128, kernel_size, stride, bias=True),
+            nn.Conv2d(64, 128, kernel_size, stride),
             nn.BatchNorm2d(128),
             nn.ReLU(),
 
-            nn.Conv2d(128, 256, kernel_size, stride, bias=True),
+            nn.Conv2d(128, 256, kernel_size, stride),
             nn.BatchNorm2d(256),
             nn.ReLU(),
 
-            nn.Conv2d(256, 512, kernel_size, stride, bias=True),
+            nn.Conv2d(256, 512, kernel_size, stride),
             nn.BatchNorm2d(512),
             nn.ReLU(),
 
-            nn.Conv2d(512, 512, kernel_size, stride, bias=True),
+            nn.Conv2d(512, 512, kernel_size, stride),
             nn.BatchNorm2d(512),
             nn.ReLU(),
 
-            nn.Conv2d(512, 512, kernel_size, stride, bias=True),
+            nn.Conv2d(512, 512, kernel_size, stride),
             nn.BatchNorm2d(512),
             nn.ReLU()
         )
 
-    def forward(self, input):
-        x1 = self.__local(input)
+    def forward(self, x1, x2):
+        x1 = self.__local(x1)
         x1 = x1.view(x1.size(0), -1)
         x1 = nn.Linear(x1.size(-1), 1024)(x1)
         x1 = nn.ReLU()(nn.BatchNorm1d(1024)(x1))
 
-        x2 = self.__global(input)
+        x2 = self.__global(x2)
         x2 = x2.view(x2.size(0), -1)
         x2 = nn.Linear(x2.size(-1), 1024)(x2)
         x2 = nn.ReLU()(nn.BatchNorm1d(1024)(x2))
 
-        x = torch.cat([x1, x2])
-        x = nn.Linear(1024, 1)(x)
+        x = torch.cat([x1, x2], 1)
+        x = nn.Linear(2048, 1)(x)
         return nn.Sigmoid()(x)

@@ -3,6 +3,7 @@
 Icon?
 out.png
 mask.png
+dataset/cifar10/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

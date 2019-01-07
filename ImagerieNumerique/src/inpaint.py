@@ -44,20 +44,22 @@ def load_network(model_path="completionnet_places2.t7"):
     datamean = data.mean
     return model, datamean
 
-def random_mask(output_shape):
-    # generate random holes
+def random_mask(output_shape, n_holes=-1):
+    """ generate random holes """
+    assert len(output_shape) == 2
     w, h = output_shape
-    M = torch.FloatTensor(1, h, w).fill_(0)
-    nHoles = np.random.randint(1, 4)
-    print("Random mask with", nHoles, "holes")
-    for _ in range(nHoles):
-        mask_w = np.random.randint(32, 128)
-        mask_h = np.random.randint(32, 128)
-        assert h > mask_h or w > mask_w
-        px = np.random.randint(0, w-mask_w)
-        py = np.random.randint(0, h-mask_h)
-        M[:, py:py+mask_h, px:px+mask_w] = 1
+    M = torch.FloatTensor(n_samples, h, w).fill_(0)
+    for i in range(n_samples):
+        if n_holes == -1:
+            n_holes = np.random.randint(1, 4)
+        for _ in range(n_holes):
+            mask_w = np.random.randint(32, w)
+            mask_h = np.random.randint(32, h)
+            px = np.random.randint(0, w-mask_w)
+            py = np.random.randint(0, h-mask_h)
+            M[:, py:py+mask_h, px:px+mask_w] = 1
     return M
+
 
 # load data
 def load_data(input_path, output_shape=None):
@@ -124,11 +126,41 @@ def inpainting(model, datamean, I, M, gpu=False, postproc=False):
     return out
 
 
+def inpainting2(model, datamean, I, M, gpu=False, postproc=False):
+    """ Inpainting function with a batch I """
+    assert I.size() == M.size()
+    n_samples, n_ch, h, w = I.size()
+    I -= datamean.repeat(n_samples, h, w, 1).transpose(1,3)
+
+    Im = I * (M*(-1)+1)
+    # set up input
+    input = torch.cat((Im, M[:,:1,:,:]), 1).float()
+    # input = input.view(n_samples, n_ch+1, h, w)
+
+    if gpu:
+        print('using GPU...')
+        model.cuda()
+        input = input.cuda()
+
+    # evaluate
+    res = model.forward(input)[0].cpu()
+
+    # make out
+    I += datamean.repeat(n_samples, h, w, 1).transpose(1,3)
+
+    out = res.float()*M.float() + I.float()*(M*(-1)+1).float()
+
+    # post-processing
+    if postproc:
+        raise NotImplementedError()
+
+    return out
+
+
 if __name__ == "__main__":
 
     model, datamean = load_network()
     I = load_data("images/bridge.jpg", output_shape=(600, 400))
-    # I = load_data("images/example.png")
     M = random_mask(I.shape[1:])
     out = inpainting(model, datamean, I, M)
 

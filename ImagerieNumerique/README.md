@@ -1,6 +1,11 @@
 # MVA Project for Computer Vision
 
-# Organisation
+# Installation
+
+```
+pip install -r requirements.txt 
+pip install -e .
+```
 
 ## Rédaction du rapport
 
