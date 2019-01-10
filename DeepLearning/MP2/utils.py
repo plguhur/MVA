@@ -1,18 +1,21 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-def decode_with_labels(path):
+def decode_with_labels(path, split=True):
     with open(path, 'r') as f:
         lines = f.readlines()
     label = [int(line[0]) for line in lines]
-    words = [line[2:].split() for line in lines]
+    words = [line[2:].split() for line in lines] if split \
+                else [line[2:] for line in lines]
     return words, label
 
-def decode_without_labels(path):
+def decode_without_labels(path, split=True):
     with open(path, 'r') as f:
         lines = f.readlines()
-    words = [line[2:].split() for line in lines]
-    return words
+    if split:
+        return [line[2:].split() for line in lines]
+    else:
+        return [line[2:] for line in lines]
 
 
 def plot_history(history):
