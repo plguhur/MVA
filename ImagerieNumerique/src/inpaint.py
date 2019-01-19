@@ -48,6 +48,7 @@ def random_mask(output_shape, n_holes=-1):
     """ generate random holes """
     assert len(output_shape) == 2
     w, h = output_shape
+    n_samples = 1
     M = torch.FloatTensor(n_samples, h, w).fill_(0)
     for i in range(n_samples):
         if n_holes == -1:
@@ -89,7 +90,7 @@ def load_mask(mask_path, output_shape=None):
     M = M.view(1, M.size(0), M.size(1))
     return M
 
-def inpainting(model, datamean, I, M, gpu=False, postproc=False):
+def inpainting(model, datamean, I, M, gpu=False, postproc=False, skip=False):
 
     assert I.size(1) == M.size(1) and I.size(2) == M.size(2)
 
@@ -98,7 +99,7 @@ def inpainting(model, datamean, I, M, gpu=False, postproc=False):
 
     # make mask_3ch
     M_3ch = torch.cat((M, M, M), 0)
-
+    fill = np.max(M.data.numpy())
     Im = I * (M_3ch*(-1)+1)
     # set up input
     input = torch.cat((Im, M), 0)
@@ -110,13 +111,17 @@ def inpainting(model, datamean, I, M, gpu=False, postproc=False):
         input = input.cuda()
 
     # evaluate
-    res = model.forward(input)[0].cpu()
+    if not skip:
+        res = model.forward(input)[0].cpu()
 
-    # make out
-    for i in range(3):
-        I[i, :, :] = I[i, :, :] + datamean[i]
-
-    out = res.float()*M_3ch.float() + I.float()*(M_3ch*(-1)+1).float()
+        # make out
+        for i in range(3):
+            I[i, :, :] = I[i, :, :] + datamean[i]
+        out = res.float()*(M_3ch.float()/float(fill)) + I.float()*(M_3ch*(-1.)+float(fill)).float()
+    else:
+        for i in range(3):
+            I[i, :, :] = I[i, :, :] + datamean[i]
+        out = I.float()*(fill + (-1.)*M_3ch).float()
 
     # post-processing
     if postproc:
