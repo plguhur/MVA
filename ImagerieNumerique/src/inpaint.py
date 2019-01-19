@@ -99,7 +99,8 @@ def inpainting(model, datamean, I, M, gpu=False, postproc=False, skip=False):
 
     # make mask_3ch
     M_3ch = torch.cat((M, M, M), 0)
-    fill = np.max(M.data.numpy())
+
+    fill = float(np.max(M.data.numpy()))
     Im = I * (M_3ch*(-1)+1)
     # set up input
     input = torch.cat((Im, M), 0)
@@ -117,7 +118,7 @@ def inpainting(model, datamean, I, M, gpu=False, postproc=False, skip=False):
         # make out
         for i in range(3):
             I[i, :, :] = I[i, :, :] + datamean[i]
-        out = res.float()*(M_3ch.float()/float(fill)) + I.float()*(M_3ch*(-1.)+float(fill)).float()
+        out = res.float()*(M_3ch/fill).float() + I.float()*(M_3ch*(-1.)+float(fill)).float()
     else:
         for i in range(3):
             I[i, :, :] = I[i, :, :] + datamean[i]
