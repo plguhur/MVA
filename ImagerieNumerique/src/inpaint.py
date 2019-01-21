@@ -90,7 +90,7 @@ def load_mask(mask_path, output_shape=None):
     M = M.view(1, M.size(0), M.size(1))
     return M
 
-def inpainting(model, datamean, I, M, gpu=False, postproc=False, skip=False):
+def inpainting(model, datamean, I, M, gpu=False, postproc=False, skip=False, masking=True):
 
     assert I.size(1) == M.size(1) and I.size(2) == M.size(2)
 
@@ -101,7 +101,9 @@ def inpainting(model, datamean, I, M, gpu=False, postproc=False, skip=False):
     M_3ch = torch.cat((M, M, M), 0)
 
     fill = float(np.max(M.data.numpy()))
-    Im = I * (M_3ch*(-1)+1)
+
+    Im = I * (M_3ch*(-1)+1) if masking else I# * (M_3ch*(-1)+1) + 
+
     # set up input
     input = torch.cat((Im, M), 0)
     input = input.view(1, input.size(0), input.size(1), input.size(2)).float()
