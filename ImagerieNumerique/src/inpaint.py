@@ -80,15 +80,24 @@ def post_processing(I, M, out):
     return torch.from_numpy(cvimg2tensor(out))
 
 def post_processing2(I, M, out):
-    M_3ch = torch.cat((M, M, M), 0)
-    # I = I * (M_3ch*(-1)+1)
-    # out = out * M_3ch
     src = (out.data.numpy()*255.).transpose((1,2,0)).astype(np.uint8)
     mask = (M.data.numpy()*255.)[0, :,:].astype(np.uint8)
-    dst = (I.data.numpy()*255.).transpose((1,2,0)).astype(np.uint8)
+    dst = (out.data.numpy()*255.).transpose((1,2,0)).astype(np.uint8)
+    # Prefilling
+    dst = cv2.inpaint(dst,mask,3,cv2.INPAINT_TELEA)
     # The location of the center of the src in the dst
     width, height, channels = dst.shape #FIXME
     center = (height//2, width//2)
+    # im2, contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, \
+    #                                 cv2.CHAIN_APPROX_SIMPLE)
+    # x,y,w,h = cv2.boundingRect(contours[0])
+    # print(x,y,w,h)
+    # center = (y + h//2, x +w//2)
+    # print(center)
+    # dst = dst[y:y+h, x:x+w]
+    # mask = mask[y:y+h, x:x+w]
+    # out = cv2.rectangle(dst,(x,y),(x+w,y+h),(0,255,0),2)
+    # Poisson blending
     out = cv2.seamlessClone(src, dst, mask, center, cv2.NORMAL_CLONE)
     out = torch.from_numpy(np.asarray(out).transpose((2,0,1)).astype(float)/255.0).float()
     return out
