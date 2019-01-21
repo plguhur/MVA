@@ -79,6 +79,20 @@ def post_processing(I, M, out):
     out = blend(target, source, mask, offset=(0, 0))
     return torch.from_numpy(cvimg2tensor(out))
 
+def post_processing2(I, M, out):
+    M_3ch = torch.cat((M, M, M), 0)
+    # I = I * (M_3ch*(-1)+1)
+    # out = out * M_3ch
+    src = (out.data.numpy()*255.).transpose((1,2,0)).astype(np.uint8)
+    mask = (M.data.numpy()*255.)[0, :,:].astype(np.uint8)
+    dst = (I.data.numpy()*255.).transpose((1,2,0)).astype(np.uint8)
+    # The location of the center of the src in the dst
+    width, height, channels = dst.shape #FIXME
+    center = (height//2, width//2)
+    out = cv2.seamlessClone(src, dst, mask, center, cv2.NORMAL_CLONE)
+    out = torch.from_numpy(np.asarray(out).transpose((2,0,1)).astype(float)/255.0).float()
+    return out
+
 def load_mask(mask_path, output_shape=None):
     M =  cv2.imread(mask_path)
     if output_shape is not None:
@@ -102,7 +116,7 @@ def inpainting(model, datamean, I, M, gpu=False, postproc=False, skip=False, mas
 
     fill = float(np.max(M.data.numpy()))
 
-    Im = I * (M_3ch*(-1)+1) if masking else I# * (M_3ch*(-1)+1) + 
+    Im = I * (M_3ch*(-1)+1) if masking else I# * (M_3ch*(-1)+1) +
 
     # set up input
     input = torch.cat((Im, M), 0)
@@ -129,7 +143,8 @@ def inpainting(model, datamean, I, M, gpu=False, postproc=False, skip=False, mas
     # post-processing
     if postproc:
         print('post-postprocessing...')
-        out = post_processing(I, M, out)
+
+        out = post_processing2(I, M, out)
 
     return out
 
