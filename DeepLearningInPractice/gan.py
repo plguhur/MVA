@@ -7,14 +7,13 @@ import matplotlib.pyplot as plt
 
 import torchvision.transforms as transforms
 from torchvision.utils import save_image
-
-from torch.utils.data import DataLoader
-from torchvision import datasets
 from torch.autograd import Variable
-
+from torchsummary import summary
 import torch.nn as nn
 import torch.nn.functional as F
 import torch
+
+from models import Generator, LinearDiscriminator, ConvDiscriminator
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--n_epochs', type=int, default=10002, help='number of epochs of training')
@@ -46,53 +45,6 @@ os.makedirs(models, exist_ok=True)
 
 cuda = True if torch.cuda.is_available() else False
 
-class Generator(nn.Module):
-    def __init__(self):
-        super(Generator, self).__init__()
-
-        def block(in_feat, out_feat, normalize=True):
-            layers = [nn.Linear(in_feat, out_feat)]
-            if normalize:
-                layers.append(nn.BatchNorm1d(out_feat, 0.8))
-            layers.append(nn.LeakyReLU(0.2, inplace=True))
-            return layers
-
-        self.model = nn.Sequential(
-            *block(opt.latent_dim, 128, normalize=False),
-            *block(128, 256),
-            *block(256, 512),
-            *block(512, 1024),
-            nn.Linear(1024, opt.dim)
-            # nn.Tanh()
-        )
-
-    def generate(self, batchlen):
-        z = torch.normal(torch.zeros(batchlen, PRIOR_N), 1.0)
-        return self.forward(z)
-
-    def forward(self, z):
-        img = self.model(z)
-        img = img.view(img.size(0), opt.dim)
-        return img
-
-class Discriminator(nn.Module):
-    def __init__(self):
-        super(Discriminator, self).__init__()
-
-        self.model = nn.Sequential(
-            nn.Linear(opt.dim, 512),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Linear(512, 256),
-            nn.LeakyReLU(0.2, inplace=True),
-            nn.Linear(256, 1),
-            nn.Sigmoid()
-        )
-
-    def forward(self, img):
-        img_flat = img.view(img.size(0), -1)
-        validity = self.model(img_flat)
-
-        return validity
 
 # Loss function
 adversarial_loss = torch.nn.BCELoss()
@@ -106,23 +58,15 @@ if not(opt.no_reload) and os.path.isfile(gen_filename) and \
     discriminator = torch.load(disc_filename)
 else:
     print("Instanciating generator and discriminator")
-    generator = Generator()
-    discriminator = Discriminator()
+    generator = Generator(opt)
+    discriminator = ConvDiscriminator(opt)
+    #print(summary(discriminator, (1, opt.latent_dim)))
 
 if cuda:
     generator.cuda()
     discriminator.cuda()
     adversarial_loss.cuda()
 
-# Configure data loader
-# os.makedirs('../../data/mnist', exist_ok=True)
-# dataloader = torch.utils.data.DataLoader(
-#     datasets.MNIST('../../data/mnist', train=True, download=True,
-#                    transform=transforms.Compose([
-#                        transforms.ToTensor(),
-#                        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-#                    ])),
-#     batch_size=opt.batch_size, shuffle=True)
 
 # Optimizers
 optimizer_G = torch.optim.Adam(generator.parameters(), lr=opt.lr, betas=(opt.b1, opt.b2))
