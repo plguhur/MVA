@@ -1,0 +1,3 @@
+[submodule "DeepLearningInPractice/blogs"]
+	path = DeepLearningInPractice/blogs
+	url = https://github.com/aadilh/blogs.git
