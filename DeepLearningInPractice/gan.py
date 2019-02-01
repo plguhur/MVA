@@ -1,7 +1,10 @@
+# This code is inspired by:
+# https://github.com/eriklindernoren/PyTorch-GAN/blob/master/implementations/gan/gan.py
+
 import argparse
 import os
-import numpy as np
 import math
+import numpy as np
 
 import matplotlib.pyplot as plt
 
@@ -148,7 +151,7 @@ for epoch in range(opt.start, opt.n_epochs):
         gen_batch = gen_batch.cpu().data.numpy()
         plt.clf()
         plt.scatter(real_batch[:,0], real_batch[:,1], s=2.0, label='real data')
-        plt.scatter(gen_batch[:,0], gen_batch[:,1], s=2.0, label='fake data')
+        plt.scatter(gen_batch[:,0], gen_batch[:,1], s=2.0, label='fake data', alpha=0.1)
         plt.legend()
         filename = os.path.join(plots, f"results-{epoch}.png")
         plt.savefig(filename)
