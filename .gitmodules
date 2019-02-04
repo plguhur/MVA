@@ -1,3 +1,6 @@
 [submodule "DeepLearningInPractice/blogs"]
 	path = DeepLearningInPractice/blogs
 	url = https://github.com/aadilh/blogs.git
+[submodule "MVA_2019_SL"]
+	path = MVA_2019_SL
+	url = https://github.com/edupoux/MVA_2019_SL.git
