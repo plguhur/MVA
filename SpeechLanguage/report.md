@@ -56,4 +56,84 @@ We can observe that the train WER and the test WER are closed, or, in other word
 
 
 
-## Classifying a correlated sequence of voice command
+## Classifying a correlated sequence of voice command with a beam search
+
+Voice commands have a certain structure: the presence of a word has implication on the following words.
+Another possibility consists in learning a language model prior to decoding a sequence of words.
+
+### Building a language model
+
+The language model can be learned with a n-gram model. Here, we focus on the bigram model, whose equations are recalled in the notebook.
+
+The language model is then built as a transition matrix $T[i,j] = P(W_j|W_i)$. Given the limited size of the dictionary (30 words), the matrix remains small and no sparsity algorithm is required.
+
+Because two words are missing in the ngrams ("bed" and "dog"), while other words only appear with certain words ("eight" with "right"), many zeroes appear in the transition matrix. This is a limitation, in the meaning that it excludes some paths to be visited. It might lead to systematic errors as explained in Question 2.9. Instead, I used a Laplacian smoothing with a degree of 1.
+
+### Building the beam search
+
+
+The beam search is a first possibility to improve the decoding. For each word, the $K$ best possibilities for the next word are kept.
+
+To improve the numerical stability of the beam search, I used `-log` instead of direct probabilities.
+
+However, such algorithm does not use the transition matrix. Instead, I suggest to do a beam search with the transition matrix. This method is referred later as \emph{BeamTransition}.
+
+We want to find the most likely sequence of words:
+$$P(\hat{W}) = P(O|W)P(W),$$
+where $P(O|W)$ is the likelihood probability and $P(W)$ is the language model.
+
+Assuming independence in the distribution of the likelihood and the bigram model, we have:
+$$P(O|W) = \prod_i P(O_i|W_i),$$
+$$P(W) = P(W_1)P(W_2|W_1)...P(W_{N}|W_{N-1}).$$
+
+Therefore, we obtain that:
+$$P(\hat{W}) = \left[P(O_1|W_1)P(W_1)\right] \left[P(O_2|W_2)P(W_2|W_1)\right] ...\left[P(O_N|W_N)P(W_{N}|W_{N-1})\right].$$
+
+And using the equations:
+$$P(X_i|W_i)  \propto P_{\text{discriminator single word}}(W_i|X_i),$$
+and,
+$P(W_i) = \text{cst}$
+we finally get:
+$$P(\hat{W}) \propto P_{disc}(W_1|O_1) \left[P_{disc}(W_2|O_2)P(W_2|W_1)\right] ...\left[P_{disc}(W_N|O_N)P(W_{N}|W_{N-1})\right].$$
+
+Hence, we can do a beam search using "P_{disc}(W_i|O_i)P(W_i|W_{i-1})" instead of "P_{disc}(W_i|O_i)".
+
+Both methods still suffer from the causality assumption: a word is only decoded with former and latter words. The results are the following with a beam size of 5:
+
+| Set | Beam search | \emph{BeamTransition} |
+|---+---+---|
+| Training | $48.4\%$ | $40.7\%$ |
+| Testing | $48.5\%$ | $39.2\%$ |
+
+Therefore, the beam search improved results over the greedy algorithm, but using the transition matrix in the beam search has slightly improved further the results.
+
+It is noticeable that results in the training and testing sets are particularly closed. This might be also explained by the similarities between both sets. In particular, they have the same transition matrices.
+
+
+
+## Classifying a correlated sequence of voice command with a Viterbi algorithm
+
+The Viterbi algorithm is much stronger than the \emph{BeamTransition} algorithm, because it relies on a forward-backward method.
+In particular, the \emph{BeamTransition} algorithm is not able to deal with errors in the first word.
+
+The Viterbi algorithm consists in two steps:
+
+- updating the probabilities of the most probable state sequence:
+$$V_{t,k} = \max _{x\in S}\left(\mathrm {P} {\big (}y_{t}\ |\ k{\big )}\cdot a_{x,k}\cdot V_{t-1,x}\right)$$
+
+- updating consequently the states:
+$$V_{t,k}=\arg\max _{x\in S}\left(\mathrm {P} {\big (}y_{t}\ |\ k{\big )}\cdot a_{x,k}\cdot V_{t-1,x}\right).$$
+
+
+The obtained results are once again improved:
+
+| Set | Viterbi |
+|---+---|
+| Training | $27.9\%$ |
+| Testing | $29.4\%$ |
+
+## Conclusion
+
+The report shown preliminary methods for automatic speech recognition. It was assumed all along that the words can easily be segmented.
+
+A new method based on the beam search was proposed, but it does not win against the Viterbi algorithm, as it is only forward.
