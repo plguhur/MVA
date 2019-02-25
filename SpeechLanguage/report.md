@@ -29,12 +29,13 @@ I train several classifiers to learn the representation between the sound featur
 | Classifier | MFCC | Mel-filterbanks |
 |---+---+---|
 | Logistic regression | $34.2\%$ | $29.0\%$ |
-| MLP | $68.8\%$ | $54.0\%$ |
+| MLP | $76.7\%$ | $54.0\%$ |
+| DNN | $75.1\% | $60.1\%$ |
 | Random forest | $61.6\%$ | $56.8\%$ |
 
 
 Hyper-parameters were tuned in order to match best results.
-The multi-layer perceptron (MLP) has 700 hidden layers. The logistic regression has a tolerance of 0.001, using the LBFGS solver. The random forest has a maximum of depth of $10$, and $500$ estimators.
+The multi-layer perceptron (MLP) has 700 hidden layers. The logistic regression has a tolerance of 0.001, using the LBFGS solver. The random forest has a maximum of depth of $10$, and $500$ estimators. I also trained a deep neural network with Keras, but it overfitted.
 
 In this setting, MFCCs seem to outperform Mel-filterbanks. However, it depends on the choice of the hyper-parameters. One explanation is related to the correlation inside the Mel-filterbanks.
 
@@ -45,7 +46,7 @@ Now, the challenge is to decode a sequence of speech commands. We will compare s
 
 To begin with, we consider the case where all words in the sequence are non-correlated. This means that the sequence is made from words picked randomly with a uniform distribution.
 
-In this case, the decoding consists in decoding the sequence words by words independently with on the classifier trained before. This is equivalent in doing a greedy algorithm, namely an algorithm that optimizes locally without considering a global structure.
+In this case, the decoding consists in decoding the sequence words by words independently with on the classifier trained before. This is equivalent in doing a greedy algorithm, namely an algorithm that optimizes locally without considering a global structure. The greedy algorithm chooses at each step the word that maximises the decoding.
 
 Doing so achieves a WER of:
 
