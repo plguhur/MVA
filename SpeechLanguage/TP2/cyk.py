@@ -8,24 +8,26 @@ Parse a sentence using the CYK algorithm
 """
 
 
-from utils import load, save, load_grammar
+from utils import *
 from argparse import ArgumentParser
 from pathlib import Path
 import os
-
+from pcfg import learning_pcfg
+from nltk import word_tokenize 
 from nltk.grammar import induce_pcfg, Nonterminal, is_nonterminal
               
+    
 class CYK:
     def __init__(self,grammar):
-	
+
         self.non_terminal_dic = dict()
         self.terminals_dic = dict()
-        self.grammar = load_grammar(grammar)
+        self.grammar = grammar
         self.non_terminal = set()
         self.leaves_rules = set()
         self.unary_rules = set()
         self.binary_rules = set()
-	
+
         self.nonTerminal()
         self.binaryRules()
         self.leavesRules()
@@ -59,7 +61,6 @@ class CYK:
                 self.binary_rules.add(prod)
 
     
-
     def backtrack(self,sentence,nodes,begin,end,label):
         begin_ = begin
         end_ = end
@@ -138,49 +139,64 @@ class CYK:
 
 
 
-def parsing(parser, file_in, file_out):
-    sentences = load(filename)
-    sentences = list(map(lambda x: x.split(), sentences))
+def parsing(parser, corrector, sentences, file_out):
     parses = []
 
-    for sentence in sentences:
-        count += 1
-        print('Sentence number',count,'is in process...')
-        t = parser.parse(sentence)
-        if t is None:
-            print('Not found in the Grammar:', sentence)
-        else:
-            prediction = ' '.join(str(t).split())
-            parses.append(prediction)
+    for i, sentence in enumerate(sentences):
+        sentence = word_tokenize(sentence)
+        s = [""] + sentence + [""]
+        replacements = {corrector(s[i-1], s[i], s[i+1]):s[i] 
+                             for i in range(1, len(sentence)+1)}
+#         print("To parse...", sentence)
+#         print("Replaced by...", list(replacements.keys()))
+        t = parser.parse(list(replacements.keys()))
+        prediction = ' '.join(str(t).split())
+#         print("Parse...", prediction)
+        for leaf_pos in t.treepositions('leaves'):
+            t[leaf_pos] = replacements[t[leaf_pos]]
+        prediction = ' '.join(str(t).split())
+#         print("Replaced parse...", prediction)
+        parses.append(prediction)
+        
     save(parses, file_out)
 
 
 if __name__ == "__main__":
 
     parser = ArgumentParser(description="Parse a sentence using CYK algorithm")
-    parser.add_argument("--grammar", "-g", 
-            default=Path("results/grammar/trainset.txt"),
-            type=Path, help="Path to grammar")
-    parser.add_argument("--sentences", "-s", 
+    parser.add_argument("--database", "-d", 
+            default=Path("data/sequoia-corpus+fct.mrg_strict"),
+            type=Path, help="Path to SEQUOIA database")
+    parser.add_argument("--eval", "-e", 
             default=Path("results/eval/"),
-            type=Path, help="Path to sentences")
+            type=Path, help="Path to output evaluation sentences")
     parser.add_argument("--output", "-o", 
             default=Path("results/parse"), type=Path, 
-            help="Path to sentences")
+            help="Path to output parsing")
+    parser.add_argument("--split", "-s", 
+           default=Path("results/split"), 
+           type=Path, help="Path to splitting database")
+ 
+
     args = parser.parse_args()
     print(args)
 
-    cyk = CYK(args.grammar)
-    os.makedirs(args.output, exist_ok=True)
+    dataset = Dataset(args.database)
+    os.makedirs(args.eval, exist_ok=True)
+    os.makedirs(args.split, exist_ok=True)
+
+    db = Dataset(args.database)
+    trainset = db.get_grammar(TRAINING)
+    grammar = learning_pcfg(trainset)
+    cyk = CYK(grammar)
 
     print("Training set...")
-    parsing(cyk, args.sentences / "trainset.txt", \
-		 args.output / "trainset.txt")
+    train_stcs = db.get_sentences(TRAINING)
+    parsing(cyk, train_stcs, \
+        args.output / "trainset.txt")
+    save(train_stcs, args.eval / "trainset.txt")
 
     print("Validation set...")
-    parsing(cyk, args.sentences / "validset.txt", \
-		 args.output / "validset.txt")
+    
 
     print("Test set...")
-    parsing(cyk, args.sentences / "testset.txt", \
-		 args.output / "testset.txt")

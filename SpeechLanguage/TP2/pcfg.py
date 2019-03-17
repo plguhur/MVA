@@ -16,29 +16,8 @@ import os
 from nltk.grammar import induce_pcfg, Nonterminal
 
 
-def chomsky_normal_form(grammar):
-    new_rule = dict(rules)
-    for rule in rules:
-        list_of_nn_symbols = rules[rule]
-        for set_of_symbols in list_of_nn_symbols:
-            if len(set_of_symbols)>2:
-                new_rule[rule].remove(set_of_symbols)
-                new_symbol = list(set_of_symbols)
-                while len(new_symbol)!=2:
-                    concatenation = tuple([new_symbol[0],new_symbol[1]])
-                    new_symbol = [new_symbol[0] +'+' +new_symbol[1]] + new_symbol[2:]
-                    new_rule[new_symbol[0]] =  set()
-                    new_rule[new_symbol[0]].add(concatenation)
-                    new_probabilities_rules[tuple_proba] = 1
-                
-                
-                new_rule[rule].add(tuple(new_symbol))
-    return new_rule
 
 
-def learning_PCFG(rules):
-    S = Nonterminal('SENT')
-    return induce_pcfg(S, rules).productions()
 
 
               
@@ -56,15 +35,15 @@ if __name__ == "__main__":
 
     print("Training set...")
     trainset = dataset.get_grammar(TRAINING)
-    grammar = learning_PCFG(trainset)
+    grammar = learning_pcfg(trainset)
     save(grammar, args.output / "trainset.txt")
 
     print("Validation set...")
     validset = dataset.get_grammar(VALIDATION)
-    grammar = learning_PCFG(validset)
+    grammar = learning_pcfg(validset)
     save(grammar, args.output / "validset.txt")
 
     print("Test set...")
     testset = dataset.get_grammar(TESTING)
-    grammar = learning_PCFG(testset)
+    grammar = learning_pcfg(testset)
     save(grammar, args.output / "testset.txt")
