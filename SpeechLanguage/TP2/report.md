@@ -11,7 +11,7 @@ Dataset was extracted from the SEQUOIA database.
 In formal language theory, a grammar is a set of production rules that describe how to form strings from the language's alphabet according to the language's syntax. 
 In the Chomsky hierarchy, context-free grammar (CFG) relates to a certain type of grammar, in which the left-hand side of each production rule consists of only a single nonterminal symbol.
 
-Probabilistic context-free grammar assigns to each production rule a probability, such that the probability of a derivation is the product of the probabilities of the productions used in that derivation.
+A [robabilistic context-free grammar (PCFG) assigns to each production rule a probability, such that the probability of a derivation is the product of the probabilities of the productions used in that derivation.
 
 The first task was to parse the SEQUOIA dataset. For example, for the sentence: 
 
@@ -21,81 +21,51 @@ The functional labels are first ignored, such that the sentence becomes:
 
 ```    ( (SENT (PP (P En) (NP (NC 1996))) (PONCT ,) (NP (DET la) (NC municipalité)) (VN (V étudie)) (NP (DET la) (NC possibilité) (PP (P d') (NP (DET une) (NC construction) (AP (ADJ neuve))))) (PONCT .))) ```
 
-Then, the sentence is recursevily transformed as a tree structure. I used 
+Then, the sentence is recursively transformed as a tree structure. I used here the function `ntlk.fromstring`.
 
 
 
-terminaux grâce au caractère ’(’, et sur la création d’un
-niveau associé à chaque symbole dans la phrase en faisant un décompte des parenthèses de la gauche vers la
-droite (’(’ rajoute +1 et ’)’ -1) l’idée était de faire l’association A → BCDE que si B,C,D et E ont un niveau
-immédiatement supérieur à celui de A (=niv(A) + 1 et
-si aucun autre symbole du niveau égale à celui de A n’est
-présent entre A et les éléments non-terminaux BCDE. En
-ayant associé un niveau à chaque symbole non-terminal
-j’arrive à récupérer toutes les règles nécessaires dans les
-lignes SEQUOIA. J’ai beaucoup jonglé avec les structures
-de données présentes dans python dict, set et tuple. Dans
-ma lecture j’ai crée un dict de règles qui a un symbole non-terminal (clé) associe un set de tuple contenant
-toutes les manières de séparer le symbole clé du dictionnaire. De la même manière j’ai créé un dictionnaire qui à
-toutes les ancres (vocabulaires) associe un set de symboles terminaux avec lesquelles ils ont été directement associés.
 
-Ce quatrième TD a pour but de créer un parser probabiliste pour l’étiquetage morpho-syntaxique. Cela consiste
-à associer aux différents mots d’une phrase les éléments
-syntatiques auxquels ils se réfèrent implicitement. On
-veut par exemple à un haut niveau détecter les verbes,
-les noms (etc) mais on veut également pouvoir faire
-des regroupement plus importants. Cet algorithme sera
-basé sur la base de données SEQUOIA treebank v6.0.
-La majorité des préceptes utilisés seront justifiés dans
-l’ouvrage référence du cours [1]
-Exemple de phrase :
-parse
-Au cours de la cérémonie d’inauguration. −→
-( (SENT (PP (P Au cours de) (NP (DET la) (NC
-cérémonie) (PP (P d’) (NP (NC inauguration)))))
-(PONCT .)))
+# 2. Learning the model 
 
-2. L’apprentissage du modèle
+To build a parser based on PCFG and CYK, we need first to build rules, transform them in the normal Chomsky form and finally estimate the associated probabilities to each rule. 
 
-2.2. Créer les probabilités pour le PCFG
+The estimation is done statistically by taking the frequency of each rule. An important size of the trainig set is then assumed.
+In practice, this is not the case. This is all the more an issue, than some words appear in the training, but in the testing. 
 
-Le but du TD est de crée un parser basé sur l’algorithme
-CYK (Cocke-Younger-Kasami) et le modèle PCFG (Probabilistic Context-Free Grammar). Afin d’appliquer l’algorithme CYK nous devons construire les règles et les
-probabilités associées à chacune de ses règles pour notre
-PCFG. Afin de pouvoir effectuer cette opération plusieurs
-étapes ont été nécessaires.
+# 3. Dealing with out-of-vocabulary (OOV) words
 
-Afin d’associer des probabilités aux différentes règles
-précedemment extraites on utilise la méthode simple
-décrite dans [1]. On aura la règle suivante :
-Count(α → β)
-P (α → β) = P
-γ Count(α → γ)
-où α, β, γ correspond à des symboles quelconques.
+The corpus contains several challenges: some words are not frequent enough to appear both on the training set and the testing set, whereas other words have spelling errors (such as "barisienne" instead of "parisienne"). 
 
-2.1. Lire le fichier SEQUOIA
+To deal with OOV words, I used first the "Polyglot" library, which provides an embedding for a large corpus of French words. Unfortunately, more than 40% of words in the testing set were not present in this corpus. 
+That is why, I extended the search of OOV words by several manners:
 
-2.3. Transformer dans la forme normale de Chomsky
+- words are tested with different upper and lower cases
+- numbers are transformed with a unique unicode symbol
+- each combination of 1-Levenshtein distance is tested
 
-Lire le fichier SEQUOIA est surement la partie la plus
-longue et la plus complexe du TD. Afin de lire le fichier et
-d’extraire les règles présentes dans chaque phrases plusieurs options sont possibles. La première serait d’utilier le module Tree de NLTK qui extrait directement
-les règles dans une phrase donnée. Mais puisque le but
-du TD et de créer le parser il me paraissait plus judicieux de tout faire de zéro, cela permettait également
-d’apporter de la flexibilité et d’ajuster le script de lecture en fonction des besoins. L’algorithme de lecture que
-j’ai créé est basé sur : le repérage des symboles non-
+If the word is finally found on the Polyglot's corpus, I searched its $K$ nearest neighbors with the L2-distance. I manually set $K=5$, as it produces reasonable words; however, $K$ could also be chosen as the one providing the best overall result. Because most of these neighbors are not in the training set, I had to generate of all possibilites in the training set of these neighbors.
 
-Pour appliquer la version probabilisée de CYK, il faut
-que toutes nos règles soit dans la forme normale de Chomsky. Je gère les ’units production’ ([1] chap 12) directement lors de ma lecture de fichier : puisque je fais ma lecture des règles de gauche à droite, lorsque je vois que la
-règle sera une unit production je n’ajoute pas la règle et
-je remplace la chaine α → β (=unit production), β → γ
-par la chaine α → γ et tout cela se repercute dans les
-associations suivantes dans la phrase parcourue (pour le
-vocabulaire en particulier).
-0
 
-créé il me semble donc raisonnable d’analyser quelques
-exemples tiréd parmis la base de test.
+For example, if the testing set contains the word "markting", I first generate all words distant from "markting" by one in the Levenshtein distance (such that "merkting", "marktin", "marketing"...), then I keep only those which are present in Polyglot's corpus (here it is only "marketing"). The KNN of "marketing" are: "marketing", "management", "média", "logistique", "design". Then, I search in the training set whether these words, or some similar words close by a Levenshtein distance of 1, exist or nots. This creates a pool of candidate word. 
+
+I search
+If the wor
+Not found 
+
+# 5. Further work
+
+This work was particularly interesting to execute for the OOV words, as it allows to find new ideas. 
+It also opens new questions. For example, I only corrected OOV words during the testing phase, assuming that errors appearing in the training set would not matter. Indeed, if the training set contains "markting" instead of "marketing", all words "marketing" in the testing set will be transformed as "markting". However, this assumption is not always followed. For example, the word "merketing" would not be corrected as it has a Levenshtein distance of 2 to "markting", but it would have be corected with a better training set; similarly, numbers should all be encoded as special characters during the training and the testing. 
+
+I should also consider words where a space is missing. For example, "thatmovie" could be split into two words, by testing each splitting possibility, until Polyglot testifies the existence of the two words.
+
+-> cut words
+
+
+After that, we applu the probabilistic version of CYK algorithm (Cocke-Younger-Kasami).
+The
+# 3. Making the 
 
 Je gère les règles avec plus de 2 éléments en sortie en
 faisant des fusions itératives tel que : A → BCD avec

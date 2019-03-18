@@ -170,6 +170,13 @@ class OOV:
         self.build_transition_matrix(sentences, _lambda=0.1)
         self.embedding = Embedding()
         self.words = self.word2idx.keys()
+        self.words_by_length = {}
+        for word in self.words:
+            n_letters = len(re.sub("[^a-z]", "", word))
+            if n_letters in self.words_by_length:
+                self.words_by_length[n_letters] += [word]
+            else:
+                self.words_by_length[n_letters] = [word]
     
     def build_word2idx(self, sentences):
         words = [preprocess(s) for s in sentences]
@@ -238,16 +245,21 @@ class OOV:
         if neighbors is not None:
             for neighbor in neighbors:
                 candidates += generate_neighbors(word, self.word2idx.keys())
-
+        
         # If we still have nothing, we just pray:
         if candidates == []:   
-            candidates = [self.find_best_guess(before, word, after)]
+            candidates = self.find_best_guess2(before, word, after)
             
-        
         return self.find_best_candidate(before, candidates, after)
 
     
     def find_best_guess(self, before, word, after):
+        """ This function outputs only "," """
+        if not before in self.words:
+            before = ""
+        if not after in self.words:
+            after = ""
+            
         if before == "" and after == "":
             idx = np.argmax(np.diag(self.transition_matrix))
         elif before == "":
@@ -260,7 +272,14 @@ class OOV:
             likelihood = self.transition_matrix[self.word2idx[before], :]   \
                   *self.transition_matrix[:, self.word2idx[after]]
             idx = np.argmax(likelihood)
-        return self.idx2word[idx]
+        return [self.idx2word[idx]]
+    
+    
+    def find_best_guess2(self, before, word, after):
+        """ We really don't know the word so we try to find a word with the same number of letter """
+        n_letters = len(re.sub("[^a-z]", "", word))
+        candidates = self.words_by_length[n_letters]
+        return candidates
         
             
     def find_best_candidate(self, before, candidates,  after):
@@ -269,8 +288,13 @@ class OOV:
         >>> find_best_candidate(["formation", "qui", "propos"], "la", "intra-procedurale", 
         'formation'
         """
+        if not before in self.words:
+            before = ""
+        if not after in self.words:
+            after = ""
+            
         cand_idx = [self.word2idx[c] for c in candidates]
-        
+
         if before == "" and after == "":
             scores = [self.transition_matrix[c, c] for c in cand_idx]
         elif before == "":
