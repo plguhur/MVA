@@ -220,7 +220,7 @@ class CYK:
 
                       
                       
-def parsing(parser, corrector, sentences, file_out):
+def parsing(parser, corrector, sentences, file_out=""):
     parses = []
 
     for i, sentence in enumerate(tqdm(sentences)):
@@ -239,8 +239,10 @@ def parsing(parser, corrector, sentences, file_out):
             prediction = ' '.join(str(t).split())
 #         print("Replaced parse...", prediction)
         parses.append(prediction)
-        
-    save(parses, file_out)
+
+    if file_out != "":        
+        save(parses, file_out)
+    return parses
 
 
 if __name__ == "__main__":

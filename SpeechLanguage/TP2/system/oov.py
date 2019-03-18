@@ -72,8 +72,8 @@ def generate_neighbors(word, dico,
 
 class Embedding:
     
-    def __init__(self, pickle_file=Path("data") / "polyglot-fr.pkl"):
-        self.load_polyglot()
+    def __init__(self, pickle_file=Path("system") / "data" / "polyglot-fr.pkl"):
+        self.load_polyglot(pickle_file)
         
         # Special tokens
         self.Token_ID = {"<UNK>": 0, "<S>": 1, "</S>":2, "<PAD>": 3}
