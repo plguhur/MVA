@@ -1,0 +1,32 @@
+\section{Experiments}
+\label{sec:xp}
+
+This Section presents some experiments obtained with the previously described method.
+
+
+\subsection{Evaluation setup}
+
+During the training, I used mixtures and individual sources from the
+DSD100 (Demixing Secrets Dataset 100), a dataset containing 100 songs that have been mixed using professional digital audio workstations.
+%In order to augment the number of samples, each songs were split into 20 seconds segments as done in \cite{chandna2017monoaural}. -> I don't think it makes sense here as we do not use \tau.
+A Gaussian window of length 4096 samples was employed. For signals sampled at 44.1 kHz, the frames correspond to 92 ms. Hop size was taken at 1024, providing an overlap of 75\% across frames.
+
+Metrics: SDR, MSE
+
+
+%good to keep:
+%https://github.com/faroit/dsdtools 
+
+
+
+overfitting?
+impact of shuffling
+
+
+influence of parameters
+- time context
+- window length
+- hop size
+
+directly on the wave format
+https://github.com/francesclluis/source-separation-wavenet

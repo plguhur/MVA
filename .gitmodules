@@ -4,3 +4,6 @@
 [submodule "MVA_2019_SL"]
 	path = MVA_2019_SL
 	url = https://github.com/edupoux/MVA_2019_SL.git
+[submodule "Audio/source-separation-wavenet"]
+	path = Audio/source-separation-wavenet
+	url = https://github.com/francesclluis/source-separation-wavenet.git

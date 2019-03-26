@@ -1,0 +1,36 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{mathtools}
+\usepackage{smartdiagram}
+\usepackage{tikz}
+\tikzstyle{line} = [draw, -latex']
+\tikzstyle{block} =  [rectangle, draw, fill=blue!20, 
+    text width=5em, text centered, rounded corners, minimum height=2em]
+\title{Neural Network Approach in Music Source Separation}
+\author{pierre-louis.guhur }
+\date{February 2019}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+    Given a mixture of signals, source separation aims at finding each of the original signal.
+    Music is one of the important application field of source separation, as each instrument has a specific signature. 
+    However, the challenge remains open. Neural networks seem promising to classify short term audio samples among a panel of given instruments. 
+    A deep analysis of the audio properties provide a clearer understanding of required pre-processing steps. 
+\end{abstract}
+
+\input{1.Intro.tex}
+\input{2.Background.tex}
+\input{3.Experiments.tex}
+\input{4.Related.tex}
+
+Further improvements: training all 4 instruments at the same time, changing the window, conv on STFT, data augmentation, weights initialization
+ 
+{\small
+\bibliographystyle{abbrv}
+\bibliography{biblio}
+}
+ 
+\end{document}
