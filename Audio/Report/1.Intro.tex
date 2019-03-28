@@ -1,26 +1,36 @@
 \section{Introduction}
 
-Source separation is a well-known research field in audio processing. It aims at recovering original signals on a mixture made of them.
-In addition to the difficulty of the task itself, research in source separation is also motivated for its applications in automatic
+Source separation is a well-known research field in audio processing.
+It aims at recovering original signals on a mixture made of them.
+In addition to the difficulty of the task itself, research in source separation
+ is also motivated for its applications in automatic
 speech recognition, and fundamental frequency estimation.
-This research field has different setup. For example, in the case of blind signal separation,~\cite{comon2010handbook} the algorithm does not know the number of sources. 
+This research field has different setup. For example, in the case of blind
+signal separation,~\cite{comon2010handbook} the algorithm does not know the number of sources.
 
 In this report, we focus on the case of music source separation.
-Observing a mixture of several audio signals $s_j$ at the discrete time index $n$: 
-$$x(n) = \sum_{j\in \mathcal{J}} {s_j(n)},$$ 
-the mission consists of finding estimates $\hat{s}_j$ of $s_j$. 
-Recent papers investigated the use of deep neural networks (DNN), in order to regress amplitude features of each estimated signals $\hat{s}_j$ using  short-therm audio samples.
+Observing a mixture of several audio signals $s_j$ at the discrete time index $n$:
+$$x(n) = \sum_{j\in \mathcal{J}} {s_j(n)},$$
+the mission consists of finding estimates $\hat{s}_j$ of $s_j$.
+Recent papers investigated the use of deep neural networks (DNN),
+ in order to regress amplitude features of each estimated signals $\hat{s}_j$ using  short-therm audio samples.
 
-% #TODO add figure like Fig.1 
+While the ideas of using dense or recurrent neural networks for music-based applications were
+already proposed  by Todd \cite{Todd1988} and Lewis \cite{Lewis1988} in 1988,
+music source separation became particularly popular from 2014
+thanks to challenges proposed by MIREX and SiSEC.
 
-The originality of Muth et al.'s approach \cite{muth2018improving} is to successfully employ the phase as in an input feature in the prediction of the amplitude of each estimated signal $\hat{s}_j$.
-In particular, they show that an adequate pre-processing step allows them to enhance state-of-the-art results on the DSD100 dataset.
+The originality of Muth et al.'s approach \cite{muth2018improving} is to
+successfully employ the phase as in an input feature in the prediction of
+the amplitude of each estimated signal $\hat{s}_j$.
+In particular, they show that an adequate pre-processing step allows
+them to enhance state-of-the-art results on the DSD100 dataset.
 
-The DSD100 dataset is composed of 100 songs split half between the training set and the testing set. For each song, the mixture signal and the original source signals (vocals, drums, bass, and other) are given.
-This dataset is widely used in the literature, since the creation of a SiSEC challenge. 
+The DSD100 dataset is composed of 100 songs split half
+between the training set and the testing set. For each song, the mixture signal
+and the original source signals (vocals, drums, bass, and other) are given.
 
-The first Section of this report dedicates itself to the use a DNN-based approach for separating musical sources. Then, experiments are presented, which lead to an analysis of the approach's limit.  
-Finally, enhancements inspired by recent papers are proposed. 
-
-
-
+The first Section of this report dedicates itself to the use a DNN-based approach
+ for separating musical sources. Then, experiments are presented,
+  which lead to an analysis of the approach's limit.  
+Finally, enhancements inspired by recent papers are proposed.

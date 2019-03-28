@@ -4,7 +4,7 @@
 \usepackage{smartdiagram}
 \usepackage{tikz}
 \tikzstyle{line} = [draw, -latex']
-\tikzstyle{block} =  [rectangle, draw, fill=blue!20, 
+\tikzstyle{block} =  [rectangle, draw, fill=blue!20,
     text width=5em, text centered, rounded corners, minimum height=2em]
 \title{Neural Network Approach in Music Source Separation}
 \author{pierre-louis.guhur }
@@ -16,9 +16,9 @@
 
 \begin{abstract}
     Given a mixture of signals, source separation aims at finding each of the original signal.
-    Music is one of the important application field of source separation, as each instrument has a specific signature. 
-    However, the challenge remains open. Neural networks seem promising to classify short term audio samples among a panel of given instruments. 
-    A deep analysis of the audio properties provide a clearer understanding of required pre-processing steps. 
+    Music is one of the important application field of source separation, as each instrument has a specific signature.
+    However, the challenge remains open. Neural networks seem promising to classify short term audio samples among a panel of given instruments.
+    A deep analysis of the audio properties provide a clearer understanding of required pre-processing steps.
 \end{abstract}
 
 \input{1.Intro.tex}
@@ -26,11 +26,32 @@
 \input{3.Experiments.tex}
 \input{4.Related.tex}
 
-Further improvements: training all 4 instruments at the same time, changing the window, conv on STFT, data augmentation, weights initialization
- 
+
+\section{Conclusion}
+
+Since the emergence of deep learning algorithms, music source separation has gained
+a strong interest in the literature.
+Most of the algorithms are using an STFT representation of the mixture signal,
+instead of its waveform.
+Predicting the phase is difficult due to discontinuous shape.
+However, the phase of the mixture is a correct approximation of each source's phase.
+State-of-the-art methods focus then in predicting the magnitude of each source.
+
+In this perspective, the contribution of Muth et al. consists in using phase features
+as an input to the DNNs. The phase can not be used directly, but its frequency
+and temporal derivatives can help to recover the magnitude of each source signal.
+This affirmation relies on an analytical relation between these derivatives and
+the magnitude.
+
+In this report, we investigated their contribution, showing how to correct the
+distributions of the phase features, but also how to improve the DNN to limit
+overfitting. Experiments provided satisfying results, but remained incomplete
+for long-term patterns such as fading.
+
+
 {\small
 \bibliographystyle{abbrv}
 \bibliography{biblio}
 }
- 
+
 \end{document}

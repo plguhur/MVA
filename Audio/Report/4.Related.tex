@@ -1,15 +1,23 @@
-\section{Related work}
+\section{Further work}
 \label{sec:related}
-% https://github.com/ybayle/awesome-deep-learning-music/blob/master/README.md
 
-While the ideas of using MLP and RNN for music-based applications were already proposed  by Todd \cite{Todd1988} and Lewis \cite{Lewis1988} in 1988,  music source separation became particularly popular from 2014 thanks to the ``Singing Voice Separation" challenge proposed by MIREX.
+The numerous research papers driven by the challenges SiSEC and MIREX
+developed new ideas for separating musical sources with DNNs.
 
+Several papers adapted technics from research in image recognition
+into music source separation, such as convolution
+layers \cite{chandna2017monoaural} or data augmentation~\cite{uhlich2017improving}.
 
+Takahashi et al.~\cite{takahashi2018phasenet} refutes the use of the mixture phase for each source's
+phase. Because the phase is difficult to predict, they assumed that the phase
+can take discrete values, such that the problem becomes a classification one.
 
-Chandna et al. \cite{chandna2017monoaural} are using a convolutional neural network between the time $\tau$ and the frequency $f$.
+The best results so far were attained by Takahashi et al. in another paper~\cite{takahashi2018mmdenselstm}.
+They are using a recurrent neural network, a bidirectional LSTM, combined to
+dense layers, to predict the magnitude of each source given the magnitude of the
+mixture signal.
 
-Time frequency masking
-
-
-
-Let the neural network discovers more invariances in data structures thanks to data augmentation/data generation.
+Another interesting attempt to solve this challenge is proposed by Lluis et al.
+\cite{lluis2018end}. The authors train an end-to-end neural network to predict each source
+directly from the mixture waveform. The key ideas of their method consists in
+using large dilatation combined with residual connections.
