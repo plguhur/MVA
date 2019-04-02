@@ -7,3 +7,6 @@
 [submodule "Audio/source-separation-wavenet"]
 	path = Audio/source-separation-wavenet
 	url = https://github.com/francesclluis/source-separation-wavenet.git
+[submodule "DeepLearningInPractice/TP3/ladder"]
+	path = DeepLearningInPractice/TP3/ladder
+	url = git@github.com:plguhur/ladder.git

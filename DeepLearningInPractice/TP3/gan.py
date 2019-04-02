@@ -6,12 +6,16 @@ import torch.nn.parallel
 import torch.backends.cudnn as cudnn
 import torch.optim as optim
 import torch.utils.data
-import torchvision.datasets as dset
+import torchvision
 import torchvision.transforms as transforms
 import torchvision.utils as vutils
 from tqdm import tqdm_notebook as tqdm
+from tqdm import tnrange
+from utils import SubSTL10, SubCIFAR10
+import numpy as np
 
-cudnn.benchmark = True
+# cudnn.benchmark = True
+stl_classes = ("plane", "bird", "car", "cat", "deer", "dog", "horse", "monkey", "ship", "truck")
 
 # custom weights initialization called on netG and netD
 def weights_init(m):
@@ -115,7 +119,7 @@ def build_dcgan(device, nz=100, nc=3, ngf=64, ndf=64):
 
 
 def train_gan_an_epoch(dataloader, netG, optimizerG, netD, optimizerD, criterion, 
-                       device, nz=100, silent=False, output=""):
+                       device, nz=100, silent=False, out_models=None, epoch=0):
     
     real_label = 1
     fake_label = 0
@@ -162,9 +166,9 @@ def train_gan_an_epoch(dataloader, netG, optimizerG, netD, optimizerD, criterion
             t.update()
             
             # do checkpointing
-            if os.path.isdir(output):
-                torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (output, epoch))
-                torch.save(netD.state_dict(), '%s/netD_epoch_%d.pth' % (output, epoch))
+            if out_models is not None and epoch % 10 == 0:
+                torch.save(netG.state_dict(), '%s/netG_epoch_%d.pth' % (out_models, epoch))
+                torch.save(netD.state_dict(), '%s/netD_epoch_%d.pth' % (out_models, epoch))
     
     return errD.item(), errG.item()
 
@@ -232,3 +236,47 @@ def export_gan_result(dataloader, netG, netD, device, output, epoch, nz=100):
     vutils.save_image(fake.detach(),
         '%s/fake_samples_epoch_%03d.png' % (output, epoch),
            normalize=True)
+    
+    
+def finetune_gan(label, nc=3, nz=100, input_size=64, n_epochs=400, batch_size=32, prefix="ft", classes=(), generator=SubCIFAR10, **kwargs):
+    print("Fine-tuning of ", classes[label])
+    out_img = os.path.join("results", f"{prefix}-{classes[label]}")
+    out_models = os.path.join("models", f"{prefix}-{classes[label]}")
+
+    os.makedirs(out_img, exist_ok=True)
+    os.makedirs(out_models, exist_ok=True)
+
+    # Building models and optimizers
+    device = torch.device("cuda:0" if torch.cuda.is_available() 
+                          else "cpu")
+    netG, optimizerG, netD, optimizerD = build_dcgan(
+        device, nz, nc, input_size, input_size)
+    criterion = nn.BCELoss()
+    netG.load_state_dict(torch.load("models/stl10/netG_epoch_4140.pth"))
+    netD.load_state_dict(torch.load("models/stl10/netD_epoch_4140.pth"))
+
+    # Loading data
+    transform = transforms.Compose(
+        [transforms.RandomResizedCrop(input_size, scale=(.95,1.),
+         transforms.RandomHorizontalFlip(),
+         transforms.ToTensor(),
+         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        ])
+    dataset = generator("datasets", label=label, transform=transform, download=True)
+    dataloader = torch.utils.data.DataLoader(dataset, batch_size=batch_size)
+
+
+    disc_loss = np.zeros(n_epochs, dtype=float)
+    gen_loss = np.zeros(n_epochs, dtype=float)
+
+
+    with tnrange(n_epochs) as t:
+        for i in t:
+            disc_loss[i], gen_loss[i] = train_gan_an_epoch(
+                dataloader, netG, optimizerG, 
+                netD, optimizerD, criterion, device, nz=nz, 
+                silent=True, out_models=out_models, epoch=i)
+            export_gan_result(dataloader, netG, netD, device, 
+                              out_img, i, nz=nz)
+            t.set_postfix(disc_loss=disc_loss[i], 
+                          gen_loss=gen_loss[i])

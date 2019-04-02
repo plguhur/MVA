@@ -4,14 +4,24 @@ import torch
 from torch import nn
 from tqdm import tqdm_notebook as tqdm
 import matplotlib.pyplot as plt
+import torchvision
 from torchvision import datasets, models, transforms
 from torchvision.datasets.cifar import CIFAR10
+import numpy as np
+
+cifar_classes = ('plane', 'car', 'bird', 'cat',
+           'deer', 'dog', 'frog', 'horse', 'ship', 'truck')
 
 class SubCIFAR10(CIFAR10):
-    def __init__(self, root, offset=0, length=100, **kwargs):
+    def __init__(self, root, offset=0, length=100, label=-1, **kwargs):
         self.offset = offset
         self.length = length
         super().__init__(root, **kwargs)
+        if label >= 0:
+            labels = np.array(self.targets)
+            mask = labels == label
+            self.data = self.data[mask]
+            self.targets = labels[mask].tolist()
         
     def __getitem__(self, index):
         return super().__getitem__(index % self.length + self.offset)
@@ -20,7 +30,22 @@ class SubCIFAR10(CIFAR10):
         return self.length
     
     
-def train_an_epoch(net, criterion, trainloader, optimizer, device, silent=False):
+class SubSTL10(torchvision.datasets.STL10):
+    """ This subclass allows to return only images with ONE given label """
+    def __init__(self, *args, label=-1, split="train", **kwargs):
+        super(SubSTL10, self).__init__(*args, **kwargs)
+
+        if not isinstance(label, int) or label < 0:
+            raise ValueError("Please provide an acceptable label index")
+        if split != "train":
+            raise ValueError("Only works with annotated labels")
+            
+        self.data = self.data[self.labels == label]
+        self.labels = self.labels[self.labels == label]
+        
+    
+    
+def train_an_epoch(net, criterion, trainloader, optimizer, device, silent=False, callback=lambda x: x, **kwargs):
     net.train()
     train_loss = 0
     correct = 0
@@ -30,7 +55,7 @@ def train_an_epoch(net, criterion, trainloader, optimizer, device, silent=False)
 
             inputs, targets = inputs.to(device), targets.to(device)
             optimizer.zero_grad()
-            outputs = net(inputs)
+            outputs = net(callback(inputs, **kwargs))
             loss = criterion(outputs, targets)
             loss.backward()
             optimizer.step()
@@ -45,7 +70,7 @@ def train_an_epoch(net, criterion, trainloader, optimizer, device, silent=False)
     return loss.data.tolist()
 
             
-def test(net, testloader, criterion, device, silent=False):
+def test(net, testloader, criterion, device, silent=False, callback=lambda x:x, **kwargs):
     net.eval()
     test_loss = 0
     correct = 0
@@ -55,7 +80,7 @@ def test(net, testloader, criterion, device, silent=False):
         with tqdm(range(len(testloader)), disable=silent) as t:
             for batch_idx, (inputs, targets) in enumerate(testloader):
                 inputs, targets = inputs.to(device), targets.to(device)
-                outputs = net(inputs)
+                outputs = net(callback(inputs, **kwargs))
                 loss = criterion(outputs, targets)
 
                 test_loss += loss.item()
@@ -149,7 +174,11 @@ def initialize_model(model_name, num_classes, feature_extract, use_pretrained=Tr
 
 
 
-
+def splines(image):
+    image = warp_images(image,
+                          (0, 0, h - 1, w - 1), interpolation_order=1, approximate_grid=2)
+    image = np.transpose(image, axes=(1, 2, 0)).copy()
+    return image
 
 
 def plot_history(**kwargs):
@@ -161,9 +190,30 @@ def plot_history(**kwargs):
         plt.grid(True)
         plt.title(key)
     plt.show()
-        
+
     
-def get_loaders(input_size=32, train_transform=None, test_transform=None, batch_size=10):
+def imshow(img):
+    img = img / 2 + 0.5     # unnormalize
+    npimg = img.numpy()
+    plt.imshow(np.transpose(npimg, (1, 2, 0)))
+    
+def plot_examples(trainloader):
+    dataiter = iter(trainloader)
+    images, labels = next(dataiter)
+    plt.figure(figsize=(20,10))
+
+    plt.subplot(121)
+    plt.grid(False)
+    imshow(torchvision.utils.make_grid(images))
+
+    plt.subplot(122)
+    plt.hist(labels, bins=len(cifar_classes), rwidth=0.9, color='#607c8e')
+    ax = plt.gca()
+    plt.xticks(np.arange(len(cifar_classes))*0.9+0.5, cifar_classes, rotation=45, rotation_mode="anchor", ha="right")
+    plt.show()
+
+    
+def get_loaders(input_size=32, train_transform=None, test_transform=None, batch_size=10, callback=SubCIFAR10, **kwargs):
     if train_transform is None:
         train_transform = transforms.Compose(
             [transforms.RandomResizedCrop(input_size),
@@ -178,10 +228,10 @@ def get_loaders(input_size=32, train_transform=None, test_transform=None, batch_
              transforms.ToTensor(),
              transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
             ])
-    trainset = SubCIFAR10("datasets", download=True, transform=train_transform)
+    trainset = callback("datasets", download=True, transform=train_transform, **kwargs)
     trainloader = torch.utils.data.DataLoader(trainset, batch_size=batch_size)
-    validset = SubCIFAR10("datasets", download=True, transform=test_transform, offset=100, length=1000)
+    validset = callback("datasets", download=True, transform=test_transform, offset=100, length=1000, **kwargs)
     validloader = torch.utils.data.DataLoader(validset, batch_size=batch_size)
-    testset = SubCIFAR10("datasets", download=True, transform=test_transform, offset=100, length=50000)
+    testset = callback("datasets", download=True, transform=test_transform, offset=100, length=50000, **kwargs)
     testloader = torch.utils.data.DataLoader(validset, batch_size=batch_size)
     return trainloader, validloader, testloader
